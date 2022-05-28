@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "462249976642",
+    "project_id": "feastique",
+    "storage_bucket": "feastique.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462249976642:android:3e722f67f7a101dc3d5edb",
+        "android_client_info": {
+          "package_name": "com.example.feastique"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462249976642-egg674q5am463u88hb36jr8gt943ubp1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoMqKAFF4peONrDXl0j9-GSmr1yoccBGU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462249976642-egg674q5am463u88hb36jr8gt943ubp1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
