@@ -1,6 +1,8 @@
 
+import 'package:feastique/screens/home_page/components/map_page/map_provider.dart';
 import 'package:feastique/widgets/app_drawer/app_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'components/components.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,21 +16,26 @@ class _HomePageState extends State<HomePage> {
   int _selectedScreenIndex = 0;
   List<Widget> _screens = <Widget>[
     DiscoverPage(),
-    MapPage(),
+    ChangeNotifierProvider<MapProvider>(
+      create: (_) => MapProvider(),
+      builder: (context, _) {
+        return MapPage();
+      }
+    ),
     SearchPage()
   ];
   List<BottomNavigationBarItem> _screenLabels = <BottomNavigationBarItem>[
     BottomNavigationBarItem(
+      label: "Acasă",
+      icon: Icon(Icons.home)
+    ),
+    BottomNavigationBarItem(
       label: "Descoperă",
-      icon: Icon(Icons.remove_red_eye)
-    ),
-    BottomNavigationBarItem(
-      label: "Hartă",
-      icon: Icon(Icons.map)
-    ),
-    BottomNavigationBarItem(
-      label: "Căutare",
       icon: Icon(Icons.search)
+    ),
+    BottomNavigationBarItem(
+      label: "Profil",
+      icon: Icon(Icons.person)
     ),
     // BottomNavigationBarItem(
     //   label: "Evenimente",
