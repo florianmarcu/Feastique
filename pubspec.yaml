@@ -27,6 +27,10 @@ dependencies:
     path: ./packages/authentication
   provider:
   google_maps_flutter:
+  cloud_firestore:
+  firebase_storage:
+  flutter_map:
+  latlong:
 
 
 dev_dependencies:
