@@ -4,8 +4,9 @@ Color _secondaryColor = Color(0xFF556b2e);
 Color _highlightColor = Colors.white;
 Color _primaryColor = Color(0xFFeec584);
 Color _accentColor = Color(0xFF764248);
-/// A lighter black
-Color _textColor = Colors.black.withOpacity(0.65);
+/// The color of the text, used in TextTheme
+Color _textColor = Colors.black;
+Color _splashColor = Colors.black.withOpacity(0.65);
 
 double? textScaleFactor;
 
@@ -38,9 +39,25 @@ TextTheme _textTheme = TextTheme(
   headline6: TextStyle(
     color: _highlightColor
   ),
-  // button: TextStyle(
-  //   fontSize: 20*(1/textScaleFactor!)
-  // )
+  /// Small text in TextButton
+  headline5: TextStyle(
+    color: _highlightColor,
+    fontSize: 20,
+    fontStyle: FontStyle.italic,
+    fontWeight: FontWeight.bold
+  ),
+  /// Large text within body
+  headline4: TextStyle(
+    color: _textColor,
+    fontSize: 30,
+    fontWeight: FontWeight.bold
+  ),
+  /// Large text in TextButton
+  headline3: TextStyle(
+    color: _highlightColor,
+    fontSize: 40,
+    fontWeight: FontWeight.bold
+  ),
 );
 
 ButtonThemeData _buttonTheme = ButtonThemeData(
@@ -97,7 +114,9 @@ TextButtonThemeData _textButtonTheme = TextButtonThemeData(
     backgroundColor: MaterialStateProperty.all<Color>(
       _primaryColor
     ),
-    
+    overlayColor: MaterialStateProperty.all<Color>(
+      _splashColor
+    ),
     padding: MaterialStateProperty.all<EdgeInsets>(
       EdgeInsets.symmetric(vertical: 15, horizontal: 30)
     ),
@@ -163,7 +182,9 @@ AppBarTheme _appBarTheme = AppBarTheme(
   elevation: 0,
   backgroundColor: _primaryColor,
   titleTextStyle: TextStyle(
-    color: _highlightColor
+    color: _highlightColor,
+    fontSize: 20,
+    fontFamily: 'Raleway'
   )
 );
 
