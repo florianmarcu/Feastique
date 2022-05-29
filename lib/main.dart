@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feastique/config/theme.dart';
 import 'package:feastique/models/models.dart';
 import 'package:flutter/material.dart';
@@ -40,4 +41,25 @@ Future<void> config() async{
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Firebase.initializeApp();
+  // FirebaseOptions firebaseOptions = const FirebaseOptions(
+  //   appId: '1:1009284415459:web:3fe12199aeadcfcf326ad6',
+  //   apiKey: 'AIzaSyBeApv-LQI5lDvkZUFD-5yiMLu55KOe6Bo',
+  //   projectId: 'hyuga-app',
+  //   messagingSenderId: '1009284415459',
+  //   storageBucket: 'hyuga-app.appspot.com'
+  // );
+  // await Firebase.initializeApp(name: "hyuga",options: firebaseOptions);
+  //await fillDb();
+}
+
+fillDb() async{
+  var query = await FirebaseFirestore.instance.collection('places').get();
+  query.docs.forEach((doc) async{ 
+    var data = doc.data();
+    
+    data.remove("ambiance");
+    await FirebaseFirestore.instance.collection('places').doc(doc.id).set(
+      data,
+    );
+  });
 }
