@@ -29,8 +29,9 @@ dependencies:
   google_maps_flutter:
   cloud_firestore:
   firebase_storage:
-  flutter_map:
-  latlong:
+  firebase_app_check:
+  flutter_map: # TO BE REMOVED
+  latlong: # TO BE REMOVED
 
 
 dev_dependencies:
@@ -49,9 +50,11 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/icons/intimate.png
+    - assets/icons/social-friendly.png
+    - assets/icons/filter.png
+    - assets/icons/list.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
