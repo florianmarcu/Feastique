@@ -1,18 +1,16 @@
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class Place{
-  final int? score; // Dynamic (depends on the score of the category)
-  final String? id; // Imported from the database
-  final String? name; // Imported from the database
-  final Future<Image>? image; // Imported from the database
+  final String id; // Imported from the database
+  final String name; // Imported from the database
+  final Future<Image> image; // Imported from the database
   final String? description; // Imported from the database
-  final GeoPoint? location; // Imported from the database
-  final int? cost; // Imported from the database
-  final int? capacity;
+  final GeoPoint location; // Imported from the database
+  final int cost; // Imported from the database
+  final String ambience;
+  final int capacity;
   final Map<String,dynamic>? discounts;
   //final Future<List<Uint8List>> images; // The Place images from Firebase Storage
   final Future<String>? address; // The Street&No of the Place
@@ -31,19 +29,18 @@ class Place{
   Image? finalImage;
 
   Place({
-    this.cost,
-    this.score, 
-    this.id,
-    this.name,
-    this.image,
-    this.description,
-    this.location,
-    this.capacity,
+    required this.cost,
+    required this.id,
+    required this.name,
+    required this.image,
+    required this.description,
+    required this.location,
+    required this.ambience,
+    required this.capacity,
     this.discounts,
-    //this.images,
     this.address,
     this.reference,
-    this.schedule,
+    required  this.schedule,
     this.deals,
     this.menu,
     this.hasOpenspace,
@@ -53,7 +50,7 @@ class Place{
     this.phoneNumber,
     this.tipMessage
   }){
-    image!.then((image) => finalImage = image);
+    image.then((image) => finalImage = image);
   }
 }
 
@@ -63,12 +60,12 @@ Place docToPlace(DocumentSnapshot doc){
     var place = doc.data() as Map<String, dynamic>;
     return Place(
       cost: place['cost'],
-      score: place['score'],
       id: doc.id,
       image: profileImage,
       name: place['name'],
       location:place['location'],
       description: place['description'],
+      ambience: place['ambience'],
       capacity: place['capacity'],
       discounts: place['discounts'],
       address: address,
@@ -85,28 +82,24 @@ Place docToPlace(DocumentSnapshot doc){
     );
   }
 
-  Future<Image> _getImage(String? fileName) async {
-      Uint8List? imageFile;
-      int maxSize = 10*1024*1024;
-      String pathName = 'photos/europe/bucharest/$fileName';
-      print(pathName);
-      var storageRef = FirebaseStorage.instance.ref().child(pathName);
-      imageFile = await storageRef.child('$fileName'+'_profile.jpg').getData(maxSize);
-      return Image.memory(
-        imageFile!,
-        fit: BoxFit.fill,
-        frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
-          if (wasSynchronouslyLoaded) {
-            return child;
+  Future<Image> _getImage(String? placeId) async {
+        var image = await FirebaseStorage.instance.ref("places/${placeId}/0.jpg")
+        .getData();
+        return Image.memory(
+          image!,
+          fit: BoxFit.fill,
+          frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
+            if (wasSynchronouslyLoaded) {
+              return child;
+            }
+            return AnimatedOpacity(
+              child: child,
+              opacity: frame == null ? 0 : 1,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+            );
           }
-          return AnimatedOpacity(
-            child: child,
-            opacity: frame == null ? 0 : 1,
-            duration: Duration(milliseconds: 200),
-            curve: Curves.easeOut,
-          );
-        }
-      );
+        );
   }
 
 
