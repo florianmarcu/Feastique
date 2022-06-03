@@ -1,80 +1,54 @@
+import 'package:flutter/gestures.dart';
 
-import 'package:feastique/screens/home_page/components/map_page/map_provider.dart';
-import 'package:feastique/widgets/app_drawer/app_drawer.dart';
+import 'components/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'components/components.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-
-  int _selectedScreenIndex = 0;
-  List<Widget> _screens = <Widget>[
-    DiscoverPage(),
-    ChangeNotifierProvider<MapProvider>(
-      create: (_) => MapProvider(),
-      builder: (context, _) {
-        return MapPage();
-      }
-    ),
-    SearchPage()
-  ];
-  List<BottomNavigationBarItem> _screenLabels = <BottomNavigationBarItem>[
-    BottomNavigationBarItem(
-      label: "Acasă",
-      icon: Icon(Icons.home)
-    ),
-    BottomNavigationBarItem(
-      label: "Descoperă",
-      icon: Icon(Icons.search)
-    ),
-    BottomNavigationBarItem(
-      label: "Profil",
-      icon: Icon(Icons.person)
-    ),
-    // BottomNavigationBarItem(
-    //   label: "Evenimente",
-    //   icon: Icon(Icons.event)
-    // ),
-    // BottomNavigationBarItem(
-    //   label: "Profil",
-    //   icon: Icon(Icons.person)
-    // ),
-    
-  ];
+class HomePage extends StatelessWidget {
+  const HomePage({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedScreenIndex,
-        items: _screenLabels,
-        onTap: (index) => setState(()=>_selectedScreenIndex = index),
-      ),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Center(child: Text(_screenLabels[_selectedScreenIndex].label!,)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.elliptical(210, 30),
-            bottomRight: Radius.elliptical(210, 30)
-          )            
+    return Theme(
+      data: _buildTheme(context),
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+
+        child: Center(
+          child: ScrollConfiguration(
+            behavior: ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
+            child: ListView(
+              padding: EdgeInsets.only(bottom: 50, left: 20, right: 20),
+              //crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 140),
+                // Text(
+                //   "Bună!",
+                //   style: Theme.of(context).textTheme.headline3,
+                // ),
+                // Text(
+                //   "Rezervă o masă prin aplicație și bucură-te de ofertele exclusive!",
+                //   style: Theme.of(context).textTheme.headline6,
+                // ),
+                Text(
+                  "Ai rămas fără idei?",
+                  style: Theme.of(context).textTheme.headline3,
+                ),
+                SizedBox(height: 12,),
+                TextButton( /// 'Find the perfect place' button
+                  onPressed: (){},
+                  child: Container(
+                    height: 150,
+                    width: MediaQuery.of(context).size.width*0.8,
+                    child: Center(child: Text("Găsește localul perfect"))
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        toolbarHeight: 70,
-      ),
-      drawer: AppDrawer(),
-      body: Center(
-        child: IndexedStack(
-          children: _screens,
-          index: _selectedScreenIndex
-        )
       ),
     );
   }
+
+  ThemeData _buildTheme(BuildContext context) => Theme.of(context).copyWith(textButtonTheme: textButtonTheme(context));
 }
