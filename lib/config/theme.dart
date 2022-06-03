@@ -6,7 +6,7 @@ Color _primaryColor = Color(0xFFeec584);
 Color _accentColor = Color(0xFF764248);
 /// The color of the text, used in TextTheme
 Color _textColor = Colors.black;
-Color _splashColor = Colors.black.withOpacity(0.65);
+Color _splashColor = Colors.grey[300]!;
 
 double? textScaleFactor;
 
@@ -14,9 +14,10 @@ ThemeData theme(BuildContext context){
   textScaleFactor = MediaQuery.textScaleFactorOf(context);
   return ThemeData(
     accentColor: _accentColor,
+    splashColor: _splashColor,
     primaryColor: _primaryColor,
     highlightColor: _highlightColor,
-    canvasColor: Colors.white.withOpacity(0.90),
+    canvasColor: Colors.grey[200],
     fontFamily: 'Raleway',
     iconTheme: _iconTheme,
     inputDecorationTheme: _inputDecorationTheme,
@@ -35,9 +36,12 @@ TextTheme _textTheme = TextTheme(
   subtitle1: TextStyle(
     color: _highlightColor
   ),
-  /// Should be for text within AppBar?
+  /// Should be for text within AppBar? (NOT YET)
+  /// Used for Place's name throughout the app
   headline6: TextStyle(
-    color: _highlightColor
+    color: _textColor,
+    fontSize: 25,
+    fontWeight: FontWeight.bold
   ),
   /// Small text in TextButton
   headline5: TextStyle(
@@ -46,14 +50,39 @@ TextTheme _textTheme = TextTheme(
     fontStyle: FontStyle.italic,
     fontWeight: FontWeight.bold
   ),
-  /// Large text within body
+  /// Used inside "Detail" class
+  /// Same size as overline but with FontWeight.bold
+  labelMedium: TextStyle(
+    color: _textColor,
+    fontSize: 15,
+    fontWeight: FontWeight.bold
+  ),
+  /// Small white text used within text buttons (in filter)
+  caption: TextStyle(
+    color: _highlightColor,
+    fontSize: 12,
+  ),
+  /// Used inside "Detail" class
+  /// Same size as labelMedium but without FontWeight.bold
+  overline: TextStyle(
+    letterSpacing: 0,
+    color: _textColor,
+    fontSize: 13,
+  ),
+  /// Text within AppBar
   headline4: TextStyle(
+    color: _highlightColor,
+    fontSize: 22,
+    fontWeight: FontWeight.bold
+  ),
+  /// Large text within body
+  headline3: TextStyle(
     color: _textColor,
     fontSize: 30,
     fontWeight: FontWeight.bold
   ),
   /// Large text in TextButton
-  headline3: TextStyle(
+  headline2: TextStyle(
     color: _highlightColor,
     fontSize: 40,
     fontWeight: FontWeight.bold
@@ -172,7 +201,8 @@ InputDecorationTheme _inputDecorationTheme = InputDecorationTheme(
 BottomNavigationBarThemeData _bottomNavigationBarTheme = BottomNavigationBarThemeData(
   elevation: 0,
   selectedItemColor: _primaryColor,
-  backgroundColor: Colors.grey[200],
+  // backgroundColor: Colors.grey[200],
+  backgroundColor: _highlightColor,
   selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
   unselectedLabelStyle: TextStyle(color: Colors.black.withOpacity(0.65))
   // unselectedItemColor: Colors.black.withOpacity(0.65),
