@@ -19,6 +19,7 @@ class Place{
   final DocumentReference? reference;
   final Map<String,dynamic>? schedule;
   final Map<String,dynamic>? deals;
+  final List<String>? types;
   final String? menu; // A link to a webpage containing the Place's menu
   final bool? hasOpenspace;
   final bool? hasReservations;
@@ -42,6 +43,7 @@ class Place{
     this.reference,
     required  this.schedule,
     this.deals,
+    this.types,
     this.menu,
     this.hasOpenspace,
     this.hasReservations,
@@ -72,6 +74,7 @@ Place docToPlace(DocumentSnapshot doc){
       reference: place.containsKey('manager_reference') ? place['manager_reference']: null,
       schedule: place.containsKey('schedule') ? place['schedule']: null,
       deals: place.containsKey('deals') ? place['deals']: null,
+      types: place.containsKey('types') ? place['types'] : [],
       menu: place.containsKey('menu') ? place['menu']: null,
       hasOpenspace: place.containsKey('open_space') ? place['open_space']: null,
       hasReservations: place.containsKey('reservations') ? place['reservations']: null,
