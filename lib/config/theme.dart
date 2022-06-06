@@ -28,7 +28,8 @@ ThemeData theme(BuildContext context){
     buttonTheme: _buttonTheme,
     appBarTheme: _appBarTheme,
     snackBarTheme: _snackBarTheme,
-    bottomNavigationBarTheme: _bottomNavigationBarTheme
+    bottomNavigationBarTheme: _bottomNavigationBarTheme,
+    floatingActionButtonTheme: _floatingActionButtonTheme
   );
 }
 TextTheme _textTheme = TextTheme(
@@ -227,4 +228,12 @@ SnackBarThemeData _snackBarTheme = SnackBarThemeData(
   contentTextStyle: TextStyle(
     fontFamily: "Raleway"
   )
+);
+
+FloatingActionButtonThemeData _floatingActionButtonTheme = FloatingActionButtonThemeData(
+  splashColor: _splashColor,
+  backgroundColor: _primaryColor,
+  hoverColor: Colors.black,
+  focusColor: Colors.black,
+  disabledElevation: 0,
 );
