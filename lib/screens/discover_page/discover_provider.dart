@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feastique/config/constants.dart';
 import 'package:feastique/models/models.dart';
 import 'package:feastique/screens/place_page/place_page.dart';
 import 'package:feastique/screens/place_page/place_provider.dart';
@@ -11,6 +12,8 @@ class DiscoverPageProvider with ChangeNotifier{
   /// The 'places' to be displayed on the Map
   /// They will change according to the filters applied by the users
   List<Place> places = [];
+  /// The list of  all 'places', to be filtered everytime we apply filters
+  List<Place> allPlaces = [];
   Set<Marker> markers = {};
   List<Place> placesList = [];
   String viewType = 'map';
@@ -25,8 +28,18 @@ class DiscoverPageProvider with ChangeNotifier{
   
   /// Method that fetches all the places and information about them from the database
   Future<void> getData() async{
-    places = await FirebaseFirestore.instance.collection('places').get()
+    /// Instantiate active filters with no 'false' for each field
+    activeFilters = {
+      "types": kFilters['types']!.map((e) => false).toList(),
+      "ambiences": kFilters['ambiences']!.map((e) => false).toList(),
+      "costs": kFilters['costs']!.map((e) => false).toList(),
+    };
+    /// Get all available places from Firestore
+    allPlaces = await FirebaseFirestore.instance.collection('places').get()
     .then((query) => places = query.docs.map(docToPlace).toList());
+    /// Instantiate displayed places with all places
+    places = allPlaces;
+    /// Map displayed places to Markers
     markers = _mapPlacesToMarkers(places);
 
     // placesList = await FirebaseFirestore.instance.collection('places').limit(10).get()
@@ -40,13 +53,43 @@ class DiscoverPageProvider with ChangeNotifier{
   //   .then((query) => places = query.docs.map(docToPlace).toList());
   // }
 
-  ///TODO
-  void filterByAmbiance(String ambiance) async{
+  void filter(Map<String, List<bool>> filters){
+
+    activeFilters = filters;
     
-  }
+    Map<String, List<String>> finalFilters = {"types" : [], "ambiences" : [], "costs": []};
+    kFilters.forEach((key, list) {
+      for(int i = 0; i < list.length; i++)
+      if(filters[key]![i])
+        finalFilters[key]!.add(list[i]);
+    });
+    print(finalFilters);
 
-  void filter(String key){
+    places = allPlaces;
+    
+    filters.forEach((key, list) {
+      for(int i = 0; i < list.length; i++){
+        if(list[i]){
+          var value = kFilters[key]![i];          
+          switch(key){
+            case "types":
+              places.removeWhere((place) => !place.types!.contains(value));
+            break;
+            case "ambiences":
+              places.removeWhere((place) => place.ambience != value);
+            break;
+            case "costs":
+              places.removeWhere((place) => place.cost.toString() != value);
+            break;
+          }
+        }
+      }
+    });
 
+    _mapPlacesToMarkers(places);
+
+    notifyListeners();
+    
   }
 
   void changeViewType() async{

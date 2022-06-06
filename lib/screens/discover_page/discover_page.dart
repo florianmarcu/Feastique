@@ -56,10 +56,9 @@ class _DiscoverPageState extends State<DiscoverPage> with TickerProviderStateMix
                             ).animate(_animation),
                           );
                         },
-                        pageBuilder: ((context, animation, secondaryAnimation) => ChangeNotifierProvider(
-                          create: (context) => DiscoverPageProvider(context),
-                          builder:( context, child) =>FiltersPopUpPage(),
-                          
+                        pageBuilder: ((context, animation, secondaryAnimation) => ChangeNotifierProvider.value(
+                          value: provider,
+                          builder: (context, child) => FiltersPopUpPage()
                         )
                       ));
                       // showGeneralDialog(

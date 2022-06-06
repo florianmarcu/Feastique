@@ -1,6 +1,9 @@
 import 'package:authentication/authentication.dart';
 import 'package:feastique/models/models.dart';
 import 'package:feastique/screens/authentication_page/authentication_page.dart';
+import 'package:feastique/screens/discover_page/discover_provider.dart';
+import 'package:feastique/screens/home_page/home_provider.dart';
+import 'package:feastique/screens/profile_page/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

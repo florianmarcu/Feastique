@@ -11,14 +11,42 @@ class FiltersPopUpPage extends StatefulWidget {
 class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
   
   final _filters = kFilters;
-  var _selectedTypes = kFilters['types']!.map((e) => false).toList();
-  var _scrollPhysics = ScrollPhysics();
+  // var _selectedTypes = kFilters['types']!.map((e) => false).toList();
+  // var _selectedAmbiences = kFilters['ambiences']!.map((e) => false).toList();
+  // var _selectedCosts = kFilters['costs']!.map((e) => false).toList();
+  List<bool> _selectedTypes = [];
+  List<bool> _selectedAmbiences = [];
+  List<bool> _selectedCosts = [];
+  var _filtersSelected = false;
   
   @override
   Widget build(BuildContext context) {
     var provider = context.watch<DiscoverPageProvider>();
+    var selectedFilters = context.watch<DiscoverPageProvider>().activeFilters;
+    _selectedTypes = selectedFilters['types'];
+    _selectedAmbiences = selectedFilters['ambiences'];
+    _selectedCosts = selectedFilters['costs'];
+    _filtersSelected = _selectedTypes.fold(false, (prev, curr) => prev || curr) || _selectedAmbiences.fold(false, (prev, curr) => prev || curr) || _selectedCosts.fold(false, (prev, curr) => prev || curr);
     return Scaffold(
       extendBodyBehindAppBar: true,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 0,
+        shape: ContinuousRectangleBorder(),
+        backgroundColor: _filtersSelected
+        ? Theme.of(context).primaryColor
+        : Theme.of(context).primaryColor.withOpacity(0.6),
+        onPressed: _filtersSelected 
+        ? () {
+          provider.filter({"types": _selectedTypes, "ambiences" : _selectedAmbiences, "costs": _selectedCosts});
+          Navigator.pop(context);
+        } 
+        : null,
+        label: Container(
+          width: MediaQuery.of(context).size.width,
+          child: Text("Aplică", textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline4,),
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Theme.of(context).canvasColor,
         centerTitle: true,
@@ -53,13 +81,11 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
         child: Align(
           alignment: Alignment.center,
           child: ListView(
-            //shrinkWrap: true,
             children: [
               SizedBox(height: MediaQuery.of(context).size.height*0.05,),
               Text("Specific", style: Theme.of(context).textTheme.labelMedium, textAlign: TextAlign.center,),
               SizedBox(height: MediaQuery.of(context).size.height*0.05,),
               Container(
-                //color: Colors.red,
                 height: 150,
                 child: GridView.builder(
                   shrinkWrap: true,
@@ -69,14 +95,10 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
                   itemCount: _filters['types']!.length,
                   itemBuilder: (context, index){
                     return Container(
-                      //width: 30,
-                      // decoration: BoxDecoration(
-                      // color: Colors.red,
-                      //   borderRadius: BorderRadius.circular(30)
-                      // ),
                       child: ChoiceChip(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                         side: BorderSide(width: 1, color: Theme.of(context).primaryColor),
+                        pressElevation: 0,
                         selectedColor: Theme.of(context).primaryColor,
                         backgroundColor: Theme.of(context).canvasColor,
                         labelStyle: Theme.of(context).textTheme.overline!,
@@ -87,24 +109,77 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
                             _selectedTypes[index] = selected;
                           });
                         },
-                        // value: index, 
-                        // groupValue: index, 
-                        // title: Text(_filters['types']![index], style: Theme.of(context).textTheme.overline,),
-                        // onChanged: (index){
-                          
-                        // }
                       ),
                     );
                   }
                 ),
+              ),
+              Text("Atmosferă", style: Theme.of(context).textTheme.labelMedium, textAlign: TextAlign.center,),
+              SizedBox(height: MediaQuery.of(context).size.height*0.05,),
+              Container(
+                height: 150,
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 80,mainAxisExtent: 50), 
+                  itemCount: _filters['ambiences']!.length,
+                  itemBuilder: (context, index){
+                    return Container(
+                      child: ChoiceChip(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        side: BorderSide(width: 1, color: Theme.of(context).primaryColor),
+                        pressElevation: 0,
+                        selectedColor: Theme.of(context).primaryColor,
+                        backgroundColor: Theme.of(context).canvasColor,
+                        labelStyle: Theme.of(context).textTheme.overline!,
+                        label: Text(kAmbiences[_filters['ambiences']![index]]!,),
+                        selected: _selectedAmbiences[index],
+                        onSelected: (selected){
+                          setState(() {
+                            _selectedAmbiences[index] = selected;
+                          });
+                        },
+                      ),
+                    );
+                  }
+                ),
+              ),
+              Text("Preț", style: Theme.of(context).textTheme.labelMedium, textAlign: TextAlign.center,),
+              SizedBox(height: MediaQuery.of(context).size.height*0.05,),
+              Container(
+                height: 150,
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 80,mainAxisExtent: 50), 
+                  itemCount: _filters['costs']!.length,
+                  itemBuilder: (context, index){
+                    return ChoiceChip(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      side: BorderSide(width: 1, color: Theme.of(context).primaryColor),
+                      pressElevation: 0,
+                      selectedColor: Theme.of(context).primaryColor,
+                      backgroundColor: Theme.of(context).canvasColor,
+                      labelStyle: Theme.of(context).textTheme.overline!,
+                      label: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(int.parse(_filters['costs']![index]), (index) => 
+                        Container(
+                          child: Text('\$', textAlign: TextAlign.center),
+                        )
+                      )),
+                      selected: _selectedCosts[index],
+                      onSelected: (selected){
+                        setState(() {
+                          _selectedCosts[index] = selected;
+                        });
+                      },
+                    );
+                  }
+                ),
               )
-              // ToggleButtons(
-              //   isSelected: _selectedTypes,
-              //   children: _filters["types"]!.map<Widget>((type) =>  Container(
-              //       child: Text("${type.toUpperCase()}")
-              //     )
-              //   ).toList(),
-              // ),
             ],
           ),
         ),

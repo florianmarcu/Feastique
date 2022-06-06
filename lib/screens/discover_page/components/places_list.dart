@@ -32,12 +32,15 @@ class _PlacesListState extends State<PlacesList> {
   @override
   Widget build(BuildContext context) {
     var places = context.watch<DiscoverPageProvider>().places;
+    setState(() {
+      _places = places;
+    });
+    //_loadPlaces(places);
     _scrollController.addListener(() {
       if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent){
         _loadMorePlaces(places);
       }
     });
-    _loadPlaces(places);
     // print(places.length);
     // setState(() {
     //   _places = places;
@@ -46,6 +49,7 @@ class _PlacesListState extends State<PlacesList> {
     return ScrollConfiguration(
       behavior: ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
       child: ListView.separated(
+        cacheExtent: 10,
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top, left: 30, right: 30, bottom: 30),
         controller: _scrollController,
         itemCount: _places.length + 1,
@@ -119,7 +123,7 @@ class _PlacesListState extends State<PlacesList> {
                               child: Column(children: [
                                 Row(
                                   children: [
-                                    Text(place.name, style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 22*(1/MediaQuery.textScaleFactorOf(context)))),
+                                    Text(place.name.length < 25 ? place.name : place.name.substring(0,22) + "...", maxLines: 2, style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 22*(1/MediaQuery.textScaleFactorOf(context)))),
                                     Spacer(),
                                     Row(children: List.generate(place.cost, (index) => 
                                       Container(
@@ -157,6 +161,7 @@ class _PlacesListState extends State<PlacesList> {
       }
     setState(() {
       _places.addAll(temp);
+      print(_places);
     });
   }
   
