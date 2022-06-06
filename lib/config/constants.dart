@@ -10,7 +10,7 @@ const Map<String, List<String>> kFilters = {
     "coffee",
     "beer"
   ],
-  "ambiances": [
+  "ambiences": [
     "calm", 
     "social-friendly"
   ],
@@ -21,3 +21,5 @@ const Map<String, List<String>> kFilters = {
     "4"
   ]
 };
+
+const kAmbiences = {"calm": "intimă", "social-friendly": "socială"};
