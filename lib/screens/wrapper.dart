@@ -1,6 +1,7 @@
 import 'package:authentication/authentication.dart';
 import 'package:feastique/models/models.dart';
 import 'package:feastique/screens/authentication_page/authentication_page.dart';
+import 'package:feastique/screens/authentication_page/authentication_provider.dart';
 import 'package:feastique/screens/discover_page/discover_provider.dart';
 import 'package:feastique/screens/home_page/home_provider.dart';
 import 'package:feastique/screens/profile_page/profile_provider.dart';
@@ -21,7 +22,10 @@ class Wrapper extends StatelessWidget {
     print(Authentication.currentUser);
     // Logged out
     if(user == null)
-      return AuthenticationPage();
+      return ChangeNotifierProvider(
+        create: (context) => AuthenticationPageProvider(),
+        child: AuthenticationPage()
+      );
     // Logged in
     else 
       return WrapperHomePage();
