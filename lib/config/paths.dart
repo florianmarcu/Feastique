@@ -10,6 +10,28 @@ String asset(String fileName){
       return "assets/icons/filter.png";
     case 'list':
       return "assets/icons/list.png";
+    case 'no-results-found':
+      return "assets/icons/no-results-found.png";
+    case 'map':
+      return "assets/icons/map.png";
+    case 'cuisine':
+      return "assets/icons/cuisine.png";
+    case 'edit':
+      return "assets/icons/edit.png";
+    case 'time':
+      return "assets/icons/time.png";
+    case 'calendar':
+      return "assets/icons/calendar.png";
+    case 'user':
+      return "assets/icons/user.png";
+    case 'detail':
+      return "assets/icons/detail.png";
+    case 'phone':
+      return "assets/icons/phone.png";
+    case 'place':
+      return "assets/icons/place.png";
+    case 'question':
+      return "assets/icons/question.png";
     default: return "";
   }
 }
