@@ -8,7 +8,7 @@ Color _accentColor = Color(0xFF764248);
 Color _textColor = Colors.black;
 Color _splashColor = Colors.grey[300]!;
 
-double? textScaleFactor;
+double? textScaleFactor = 1;
 
 ThemeData theme(BuildContext context){ 
   textScaleFactor = MediaQuery.textScaleFactorOf(context);
@@ -41,13 +41,13 @@ TextTheme _textTheme = TextTheme(
   /// Used for Place's name throughout the app
   headline6: TextStyle(
     color: _textColor,
-    fontSize: 25,
+    fontSize: 20*(1/textScaleFactor!),
     fontWeight: FontWeight.bold
   ),
   /// Small text in TextButton
   headline5: TextStyle(
     color: _highlightColor,
-    fontSize: 20,
+    fontSize: 20*(1/textScaleFactor!),
     fontStyle: FontStyle.italic,
     fontWeight: FontWeight.bold
   ),
@@ -55,37 +55,37 @@ TextTheme _textTheme = TextTheme(
   /// Same size as overline but with FontWeight.bold
   labelMedium: TextStyle(
     color: _textColor,
-    fontSize: 15,
+    fontSize: 15*(1/textScaleFactor!),
     fontWeight: FontWeight.bold
   ),
   /// Small white text used within text buttons (in filter)
   caption: TextStyle(
     color: _highlightColor,
-    fontSize: 12,
+    fontSize: 12*(1/textScaleFactor!),
   ),
   /// Used inside "Detail" class
   /// Same size as labelMedium but without FontWeight.bold
   overline: TextStyle(
     letterSpacing: 0,
     color: _textColor,
-    fontSize: 13,
+    fontSize: 13*(1/textScaleFactor!),
   ),
   /// Text within AppBar
   headline4: TextStyle(
     color: _highlightColor,
-    fontSize: 22,
+    fontSize: 22*(1/textScaleFactor!),
     fontWeight: FontWeight.bold
   ),
   /// Large text within body
   headline3: TextStyle(
     color: _textColor,
-    fontSize: 30,
+    fontSize: 30*(1/textScaleFactor!),
     fontWeight: FontWeight.bold
   ),
   /// Large text in TextButton
   headline2: TextStyle(
     color: _highlightColor,
-    fontSize: 40,
+    fontSize: 40*(1/textScaleFactor!),
     fontWeight: FontWeight.bold
   ),
 );
@@ -170,13 +170,16 @@ IconThemeData _iconTheme = IconThemeData(
 );
 
 TextSelectionThemeData _textSelectionTheme = TextSelectionThemeData(
-  cursorColor: _secondaryColor,
-  selectionHandleColor: _secondaryColor,
-  selectionColor: _secondaryColor
+  cursorColor: _primaryColor,
+  selectionHandleColor: _primaryColor,
+  selectionColor: _primaryColor
+  // cursorColor: _secondaryColor,
+  // selectionHandleColor: _secondaryColor,
+  // selectionColor: _secondaryColor
 );
 
 InputDecorationTheme _inputDecorationTheme = InputDecorationTheme(
-  focusColor: _secondaryColor,
+  focusColor: _primaryColor,
   fillColor: _accentColor,
   filled: true,
   floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -214,7 +217,7 @@ AppBarTheme _appBarTheme = AppBarTheme(
   backgroundColor: _primaryColor,
   titleTextStyle: TextStyle(
     color: _highlightColor,
-    fontSize: 20,
+    fontSize: 20*(1/textScaleFactor!),  
     fontFamily: 'Raleway'
   )
 );
