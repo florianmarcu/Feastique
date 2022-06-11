@@ -30,8 +30,7 @@ dependencies:
   cloud_firestore:
   firebase_storage:
   firebase_app_check:
-  flutter_map: # TO BE REMOVED
-  latlong: # TO BE REMOVED
+  intl: 
 
 
 dev_dependencies:
@@ -55,6 +54,17 @@ flutter:
     - assets/icons/social-friendly.png
     - assets/icons/filter.png
     - assets/icons/list.png
+    - assets/icons/no-results-found.png
+    - assets/icons/map.png
+    - assets/icons/cuisine.png
+    - assets/icons/edit.png
+    - assets/icons/time.png
+    - assets/icons/calendar.png
+    - assets/icons/user.png
+    - assets/icons/detail.png
+    - assets/icons/phone.png
+    - assets/icons/place.png
+    - assets/icons/question.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
