@@ -25,7 +25,7 @@ class WrapperHomePage extends StatefulWidget {
 
 class _WrapperHomePageState extends State<WrapperHomePage> {
 
-  int _selectedScreenIndex = 0;
+  int _selectedScreenIndex = 1;
   List<Widget> _screens = <Widget>[
     ChangeNotifierProvider<HomePageProvider>(
       create: (context) => HomePageProvider(),
