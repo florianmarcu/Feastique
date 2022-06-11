@@ -1,9 +1,14 @@
+import 'package:feastique/screens/new_reservation_popup_page/new_reservation_popup_page.dart';
+import 'package:feastique/screens/new_reservation_popup_page/new_reservation_popup_provider.dart';
 import 'package:feastique/screens/place_page/components/tiles/detail.dart';
 import 'package:feastique/screens/place_page/place_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class PlacePage extends StatefulWidget {
+
+  final BuildContext context;
+
+  PlacePage(this.context);
 
   @override
   State<PlacePage> createState() => _PlacePageState();
@@ -17,6 +22,9 @@ class _PlacePageState extends State<PlacePage> {
     keepScrollOffset: true,
     initialScrollOffset: 0
   );
+  ScrollController? _dayScrollController;
+  ScrollController? _hourScrollController;
+  ScrollController? _peopleNoScrollController;
 
   @override
   void initState() {
@@ -30,8 +38,51 @@ class _PlacePageState extends State<PlacePage> {
 
   @override
   Widget build(BuildContext context) {
-    var place = context.watch<PlaceProvider>().place;
+    var provider = context.watch<PlaceProvider>();
+    var place = provider.place;
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 0, 
+        shape: ContinuousRectangleBorder(),
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: () {
+          showModalBottomSheet(
+            context: context, 
+            // elevation: 0,
+            isScrollControlled: true,
+            backgroundColor: Theme.of(context).primaryColor,
+            barrierColor: Colors.black.withOpacity(0.35),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+            builder: (context) => ChangeNotifierProvider<NewReservationPopupProvider>(
+              create:(context) => NewReservationPopupProvider(place),
+              child: Container(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Column( 
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(30),
+                      child: Container(height: 4, width: 40, margin: EdgeInsets.symmetric(vertical: 4), decoration: BoxDecoration(color: Theme.of(context).canvasColor,borderRadius: BorderRadius.circular(30),)),
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+                      child: Container(
+                        color: Theme.of(context).canvasColor,
+                        child: NewReservationPopupPage(context)
+                      )
+                    ),
+                  ],
+                ),
+              )
+            )
+          );
+        },
+        label: Container(
+          width: MediaQuery.of(context).size.width,
+          child: Text("Rezervă o masă", textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 20),),
+        ),
+      ),
       body:  CustomScrollView(
         controller: _scrollController,
         slivers: [
