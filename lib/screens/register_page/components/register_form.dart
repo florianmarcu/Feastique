@@ -1,13 +1,12 @@
-import 'package:authentication/authentication.dart';
 import 'package:feastique/screens/authentication_page/authentication_provider.dart';
+import 'package:feastique/screens/register_page/register_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-class LogInForm extends StatelessWidget{
-  
+class RegisterForm extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    var provider = context.watch<AuthenticationPageProvider>();
+    var provider = context.watch<RegisterPageProvider>();
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,8 +37,8 @@ class LogInForm extends StatelessWidget{
           ),
           SizedBox(height: 30,),
           TextButton(
-            onPressed: () => provider.logIn(context),
-            child: Text("Log in"),
+            onPressed: () => provider.register(context),
+            child: Text("Înregistrare"),
           )
         ],
       )

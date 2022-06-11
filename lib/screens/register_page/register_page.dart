@@ -1,14 +1,14 @@
 import 'package:feastique/screens/authentication_page/components/log_in_form.dart';
-import 'package:feastique/screens/discover_page/discover_provider.dart';
-import 'package:feastique/screens/register_page/register_page.dart';
+import 'package:feastique/screens/register_page/components/register_form.dart';
 import 'package:feastique/screens/register_page/register_provider.dart';
 import 'package:flutter/material.dart';
 
-class AuthenticationPage extends StatelessWidget {
-  const AuthenticationPage({ Key? key }) : super(key: key);
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var provider = context.watch<RegisterPageProvider>();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -37,15 +37,15 @@ class AuthenticationPage extends StatelessWidget {
               //mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 /// TODO: Bagat animatie care ridica textul si da reveal la Login Form
-                Text("Bun venit!", style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),),
+                Text("Înregistrare", style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),),
                 SizedBox(height: 20),
-                LogInForm(),
+                RegisterForm(),
                 SizedBox(height: 25),
                 Padding(
                   padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05),
                   child: Text.rich(TextSpan(
                     children: [
-                      TextSpan(text: "Nu ai cont?"),
+                      TextSpan(text: "Ai deja cont?"),
                       WidgetSpan(child: SizedBox(width: 20)),
                       WidgetSpan(child: TextButton(
                         style: Theme.of(context).textButtonTheme.style!.copyWith(
@@ -54,17 +54,14 @@ class AuthenticationPage extends StatelessWidget {
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           minimumSize: MaterialStateProperty.all<Size>(Size.zero)
                         ),
-                        child: Text("Înregistrare", style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                        child: Text("Log in", style: Theme.of(context).textTheme.labelMedium!.copyWith(
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.normal,
                           color: Theme.of(context).accentColor
                         )),
-                        onPressed: () => Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => ChangeNotifierProvider(
-                            create: (context) => RegisterPageProvider(),
-                            child: RegisterPage()
-                          )
-                        )),
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
                       ),)
                     ],
                   ),),
