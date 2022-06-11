@@ -1,7 +1,7 @@
 import 'package:feastique/config/paths.dart';
 import 'package:feastique/screens/discover_page/components/filters_popup.dart';
-import 'package:feastique/screens/discover_page/components/places_list.dart';
-import 'package:feastique/screens/discover_page/components/places_map.dart';
+import 'package:feastique/screens/discover_page/components/places_list/places_list.dart';
+import 'package:feastique/screens/discover_page/components/places_map/places_map.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 //import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -22,6 +22,7 @@ class _DiscoverPageState extends State<DiscoverPage> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     var provider = context.watch<DiscoverPageProvider>();
+    var isLoading = provider.isLoading;
     var viewType = provider.viewType;
     var viewTypeText = viewType == "map" ? "Listă" : "Hartă";
     return Scaffold(
@@ -86,7 +87,9 @@ class _DiscoverPageState extends State<DiscoverPage> with TickerProviderStateMix
                   TextButton.icon(
                     style: Theme.of(context).textButtonTheme.style!.copyWith(padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 10, vertical: 0))),
                     label: Text(viewTypeText, style: Theme.of(context).textTheme.caption,),
-                    icon: Image.asset(asset('list'), width: 15, color: Theme.of(context).highlightColor,),
+                    icon: viewType == 'map'
+                    ? Image.asset(asset('list'), width: 15, color: Theme.of(context).highlightColor,)
+                    : Image.asset(asset('map'), width: 15, color: Theme.of(context).highlightColor,),
                     onPressed: () => provider.changeViewType()
                   ),
                 ],
@@ -95,10 +98,25 @@ class _DiscoverPageState extends State<DiscoverPage> with TickerProviderStateMix
           ],
         )
       ),
-      body: viewType == "map" 
-      ? PlacesMap()
-      : PlacesList()
-      
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Stack(children: [
+          viewType == "map" 
+          ? PlacesMap()
+          : PlacesList(),
+          isLoading
+          ? Positioned(
+            child: Container(
+              height: 5,
+              width: MediaQuery.of(context).size.width,
+              child: LinearProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
+            ), 
+            bottom: MediaQuery.of(context).padding.bottom,
+          )
+          : Container(),
+        ]),
+      )
     );
     // return FlutterMap(
     //   options: MapOptions(

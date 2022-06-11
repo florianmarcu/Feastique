@@ -19,7 +19,7 @@ class Place{
   final DocumentReference? reference;
   final Map<String,dynamic>? schedule;
   final Map<String,dynamic>? deals;
-  final List<String>? types;
+  final List<dynamic>? types;
   final String? menu; // A link to a webpage containing the Place's menu
   final bool? hasOpenspace;
   final bool? hasReservations;

@@ -11,34 +11,35 @@ class FiltersPopUpPage extends StatefulWidget {
 class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
   
   final _filters = kFilters;
-  // var _selectedTypes = kFilters['types']!.map((e) => false).toList();
-  // var _selectedAmbiences = kFilters['ambiences']!.map((e) => false).toList();
-  // var _selectedCosts = kFilters['costs']!.map((e) => false).toList();
-  List<bool> _selectedTypes = [];
-  List<bool> _selectedAmbiences = [];
-  List<bool> _selectedCosts = [];
-  var _filtersSelected = false;
-  
+  Map<String, List<bool>> _currSelectedFilters = {"types": [], "ambiences": [], "costs": []};
+  //var _prevFiltersSelected = false;
+  var _currFiltersSelected = false;
+
   @override
   Widget build(BuildContext context) {
     var provider = context.watch<DiscoverPageProvider>();
-    var selectedFilters = context.watch<DiscoverPageProvider>().activeFilters;
-    _selectedTypes = selectedFilters['types'];
-    _selectedAmbiences = selectedFilters['ambiences'];
-    _selectedCosts = selectedFilters['costs'];
-    _filtersSelected = _selectedTypes.fold(false, (prev, curr) => prev || curr) || _selectedAmbiences.fold(false, (prev, curr) => prev || curr) || _selectedCosts.fold(false, (prev, curr) => prev || curr);
+    var prevSelectedFilters = context.read<DiscoverPageProvider>().activeFilters;
+    //_prevFiltersSelected = prevSelectedFilters['types'].fold(false, (prev, curr) => prev || curr) || prevSelectedFilters['ambiences'].fold(false, (prev, curr) => prev || curr) || prevSelectedFilters['costs'].fold(false, (prev, curr) => prev || curr);
+    /// If the current filters are not initialized, initialize them with a copy of the previously selected filters
+    if(_currSelectedFilters['types']!.isEmpty || _currSelectedFilters['ambiences']!.isEmpty || _currSelectedFilters['costs']!.isEmpty){
+      _currSelectedFilters['types'] = List.from(prevSelectedFilters['types']); 
+      _currSelectedFilters['ambiences'] = List.from(prevSelectedFilters['ambiences']); 
+      _currSelectedFilters['costs'] = List.from(prevSelectedFilters['costs']);
+    }
+    _currFiltersSelected = _currSelectedFilters['types']!.fold(false, (prev, curr) => prev || curr) || _currSelectedFilters['ambiences']!.fold(false, (prev, curr) => prev || curr) || _currSelectedFilters['costs']!.fold(false, (prev, curr) => prev || curr);
+    print("$prevSelectedFilters SELECTED FILTERS");
     return Scaffold(
       extendBodyBehindAppBar: true,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton.extended(
-        elevation: 0,
+        elevation: 0, 
         shape: ContinuousRectangleBorder(),
-        backgroundColor: _filtersSelected
+        backgroundColor: _currFiltersSelected
         ? Theme.of(context).primaryColor
         : Theme.of(context).primaryColor.withOpacity(0.6),
-        onPressed: _filtersSelected 
+        onPressed: _currFiltersSelected 
         ? () {
-          provider.filter({"types": _selectedTypes, "ambiences" : _selectedAmbiences, "costs": _selectedCosts});
+          provider.filter({"types": _currSelectedFilters['types']!, "ambiences" : _currSelectedFilters['ambiences']!, "costs": _currSelectedFilters['costs']!});
           Navigator.pop(context);
         } 
         : null,
@@ -68,10 +69,16 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
               padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 0, vertical: 0)),
               backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).canvasColor)
             ),
-            onPressed: (){},
+            onPressed: _currFiltersSelected 
+            ? (){
+              provider.removeFilters();
+              Navigator.pop(context);
+            }
+            : null,
             child: Text("Șterge filtre", style: Theme.of(context).textTheme.labelMedium!.copyWith(
               decoration: TextDecoration.underline,
-              fontWeight: FontWeight.normal
+              fontWeight: FontWeight.normal,
+              color: _currFiltersSelected ? Theme.of(context).textTheme.labelMedium!.color :  Theme.of(context).textTheme.labelMedium!.color!.withOpacity(0.4)
             ),),
           )
         ],
@@ -84,14 +91,15 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
             children: [
               SizedBox(height: MediaQuery.of(context).size.height*0.05,),
               Text("Specific", style: Theme.of(context).textTheme.labelMedium, textAlign: TextAlign.center,),
-              SizedBox(height: MediaQuery.of(context).size.height*0.05,),
+              SizedBox(height: MediaQuery.of(context).size.height*0.03,),
               Container(
-                height: 150,
+                height: (_filters['types']!.length/4 + 1) * 50,
                 child: GridView.builder(
+                  cacheExtent: 0,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.symmetric(horizontal: 20),
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 80,mainAxisExtent: 50), 
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 110, mainAxisExtent: 50, crossAxisSpacing: 10), 
                   itemCount: _filters['types']!.length,
                   itemBuilder: (context, index){
                     return Container(
@@ -103,10 +111,10 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
                         backgroundColor: Theme.of(context).canvasColor,
                         labelStyle: Theme.of(context).textTheme.overline!,
                         label: Text(_filters['types']![index],),
-                        selected: _selectedTypes[index],
+                        selected: _currSelectedFilters['types']![index],
                         onSelected: (selected){
                           setState(() {
-                            _selectedTypes[index] = selected;
+                            _currSelectedFilters['types']![index] = selected;
                           });
                         },
                       ),
@@ -114,11 +122,13 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
                   }
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).size.height*0.03,),
               Text("Atmosferă", style: Theme.of(context).textTheme.labelMedium, textAlign: TextAlign.center,),
-              SizedBox(height: MediaQuery.of(context).size.height*0.05,),
+              SizedBox(height: MediaQuery.of(context).size.height*0.03,),
               Container(
-                height: 150,
+                height: (_filters['ambiences']!.length/5 + 1) * 50,
                 child: GridView.builder(
+                  cacheExtent: 0,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.symmetric(horizontal: 20),
@@ -134,10 +144,10 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
                         backgroundColor: Theme.of(context).canvasColor,
                         labelStyle: Theme.of(context).textTheme.overline!,
                         label: Text(kAmbiences[_filters['ambiences']![index]]!,),
-                        selected: _selectedAmbiences[index],
+                        selected: _currSelectedFilters['ambiences']![index],
                         onSelected: (selected){
                           setState(() {
-                            _selectedAmbiences[index] = selected;
+                            _currSelectedFilters['ambiences']![index] = selected;
                           });
                         },
                       ),
@@ -146,10 +156,11 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
                 ),
               ),
               Text("Preț", style: Theme.of(context).textTheme.labelMedium, textAlign: TextAlign.center,),
-              SizedBox(height: MediaQuery.of(context).size.height*0.05,),
+              SizedBox(height: MediaQuery.of(context).size.height*0.03,),
               Container(
-                height: 150,
+                height: (_filters['costs']!.length/5 + 1) * 50,
                 child: GridView.builder(
+                  cacheExtent: 0,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.symmetric(horizontal: 20),
@@ -170,10 +181,10 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
                           child: Text('\$', textAlign: TextAlign.center),
                         )
                       )),
-                      selected: _selectedCosts[index],
+                      selected: _currSelectedFilters['costs']![index],
                       onSelected: (selected){
                         setState(() {
-                          _selectedCosts[index] = selected;
+                          _currSelectedFilters['costs']![index] = selected;
                         });
                       },
                     );

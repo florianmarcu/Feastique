@@ -18,16 +18,17 @@ class DiscoverPageProvider with ChangeNotifier{
   List<Place> placesList = [];
   String viewType = 'map';
   Map<String, dynamic> activeFilters = {};
+  bool isLoading = false;
   BuildContext context;
 
   DiscoverPageProvider(this.context){
     /// Initialize the 'places' list with all the available places from Firestore
     getData();
-    _mapPlacesToMarkers(places);
   }
   
   /// Method that fetches all the places and information about them from the database
   Future<void> getData() async{
+    _loading();
     /// Instantiate active filters with no 'false' for each field
     activeFilters = {
       "types": kFilters['types']!.map((e) => false).toList(),
@@ -35,10 +36,11 @@ class DiscoverPageProvider with ChangeNotifier{
       "costs": kFilters['costs']!.map((e) => false).toList(),
     };
     /// Get all available places from Firestore
-    allPlaces = await FirebaseFirestore.instance.collection('places').get()
-    .then((query) => places = query.docs.map(docToPlace).toList());
+    await FirebaseFirestore.instance.collection('places').get()
+    .then((query) => allPlaces = query.docs.map(docToPlace).toList());
     /// Instantiate displayed places with all places
-    places = allPlaces;
+    places = List.from(allPlaces);
+    // places = allPlaces;
     /// Map displayed places to Markers
     markers = _mapPlacesToMarkers(places);
 
@@ -46,6 +48,7 @@ class DiscoverPageProvider with ChangeNotifier{
     // .then((query) => places = query.docs.map(docToPlace).toList());
     
     notifyListeners();
+    _loading();
   }
 
   // Future<void> getMoreData() async{
@@ -54,8 +57,9 @@ class DiscoverPageProvider with ChangeNotifier{
   // }
 
   void filter(Map<String, List<bool>> filters){
+    _loading();
 
-    activeFilters = filters;
+    activeFilters = Map<String, List<bool>>.from(filters);
     
     Map<String, List<String>> finalFilters = {"types" : [], "ambiences" : [], "costs": []};
     kFilters.forEach((key, list) {
@@ -64,8 +68,15 @@ class DiscoverPageProvider with ChangeNotifier{
         finalFilters[key]!.add(list[i]);
     });
     print(finalFilters);
+    
+    print(places.length);
+    print(allPlaces.length);
+    // List.copyRange(places, 0, allPlaces);
+    places = List.from(allPlaces);
 
-    places = allPlaces;
+    // places = allPlaces;
+
+    places.forEach((element) {print(element.types);});
     
     filters.forEach((key, list) {
       for(int i = 0; i < list.length; i++){
@@ -85,18 +96,41 @@ class DiscoverPageProvider with ChangeNotifier{
         }
       }
     });
+    print(allPlaces);
 
-    _mapPlacesToMarkers(places);
+    markers = _mapPlacesToMarkers(places);
 
     notifyListeners();
-    
+    _loading();
+  }
+
+  void removeFilters(){
+    _loading();
+     /// Instantiate active filters with no 'false' for each field
+    activeFilters = {
+      "types": kFilters['types']!.map((e) => false).toList(),
+      "ambiences": kFilters['ambiences']!.map((e) => false).toList(),
+      "costs": kFilters['costs']!.map((e) => false).toList(),
+    };
+    /// Reinstantiate displayed places with all places
+    ///     List.copyRange(places, 0, allPlaces);
+    places = List.from(allPlaces);
+    // places = allPlaces;
+    /// Map displayed places to Markers
+    print("LENGTH: ${allPlaces.last.name}");
+    markers = _mapPlacesToMarkers(places);
+
+    notifyListeners();
+    _loading();
   }
 
   void changeViewType() async{
+    _loading();
     if(viewType == "map")
       viewType = "list";
     else viewType = "map";
     notifyListeners();
+    _loading();
   }
 
   Set<Marker> _mapPlacesToMarkers(List<Place> places){
@@ -107,10 +141,16 @@ class DiscoverPageProvider with ChangeNotifier{
       onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => 
         ChangeNotifierProvider<PlaceProvider>(
           create: (context) => PlaceProvider(place),
-          builder: (context, child) => PlacePage()
+          builder: (context, child) => PlacePage(context)
         )
       ))
     )).toSet();
+  }
+
+  /// Method called everytime a provider function is called to show a progress indicator
+  void _loading(){
+    isLoading = !isLoading;
+    notifyListeners();
   }
 
 }

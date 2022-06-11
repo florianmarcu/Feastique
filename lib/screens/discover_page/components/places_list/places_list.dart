@@ -1,11 +1,14 @@
 import 'dart:math';
 
+import 'package:feastique/config/paths.dart';
 import 'package:feastique/models/models.dart';
 import 'package:feastique/screens/discover_page/discover_provider.dart';
 import 'package:feastique/screens/place_page/place_page.dart';
 import 'package:feastique/screens/place_page/place_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'places_list_empty.dart';
 
 class PlacesList extends StatefulWidget {
   const PlacesList({ Key? key }) : super(key: key);
@@ -48,15 +51,18 @@ class _PlacesListState extends State<PlacesList> {
     print(_places.length);
     return ScrollConfiguration(
       behavior: ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
-      child: ListView.separated(
-        cacheExtent: 10,
+      child: _places.length == 0
+      ? EmptyList()
+      : ListView.separated(
+        addAutomaticKeepAlives: false,
+        cacheExtent: 0,
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top, left: 30, right: 30, bottom: 30),
         controller: _scrollController,
-        itemCount: _places.length + 1,
+        itemCount: _places.length,
         separatorBuilder: (context, index) => SizedBox(height: 30),
         itemBuilder: (context, index){
-          if(index == _places.length)
-            return Center(child: CircularProgressIndicator.adaptive( valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor) ,));
+          // if(index == _places.length)
+          //   return Center(child: CircularProgressIndicator.adaptive(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor) ,));
           var place = _places[index];
           return InkWell(
             splashColor: Theme.of(context).splashColor,
@@ -64,7 +70,7 @@ class _PlacesListState extends State<PlacesList> {
               onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => 
                 ChangeNotifierProvider<PlaceProvider>(
                   create: (context) => PlaceProvider(place),
-                  builder: (context, child) => PlacePage()
+                  builder: (context, child) => PlacePage(context)
                 )
               )),
               child: ClipRRect(
@@ -73,7 +79,7 @@ class _PlacesListState extends State<PlacesList> {
                   alignment: Alignment.bottomCenter,
                   children: [
                     Container(
-                      height: 315,
+                      height: 325,
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor,
                         boxShadow: [
@@ -82,7 +88,7 @@ class _PlacesListState extends State<PlacesList> {
                       ),
                     ),
                     Container(
-                      height: 300,
+                      height: 310,
                       width: MediaQuery.of(context).size.width*0.9,
                       decoration: BoxDecoration(
                         //color: Theme.of(context).highlightColor,
@@ -132,6 +138,23 @@ class _PlacesListState extends State<PlacesList> {
                                     ))
                                   ],
                                 ),
+                                SizedBox(height: 3),
+                                Row(
+                                  children: [
+                                    Image.asset(asset("cuisine"), width: 17),
+                                    SizedBox(width: 10,),
+                                    Expanded(
+                                      child: Wrap
+                                      (
+                                        children: place.types!.map((type) => 
+                                          Container(
+                                            child: Text(type + "  ")
+                                          )
+                                        ).toList()
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ]),
                             ),
                           )
