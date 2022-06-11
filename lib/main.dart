@@ -54,10 +54,30 @@ Future<void> config() async{
   //   storageBucket: 'hyuga-app.appspot.com'
   // );
   // await Firebase.initializeApp(name: "hyuga",options: firebaseOptions);
-  //await fillDb();
+  await fillDb();
 }
 
 fillDb() async{
+  // var query = (await FirebaseFirestore.instance.collection("places").get())
+  // .docs.forEach((doc) async{
+  //   switch
+  //   await doc.reference.set(
+  //     {
+  //       "types": 
+  //     },
+  //     SetOptions(merge: true)
+  //   );
+    
+  // });
+
+  // await FirebaseFirestore.instance.collection("places").doc("za_lokal")
+  // .set(
+  //   {
+  //     "types": ["beer", "wine", "BBQ", "european", "coffee", "tea", "burger"]
+  //   },
+  //   SetOptions(merge: true)
+  // );
+  
   // var query1 = await FirebaseFirestore.instanceFor(app: Firebase.app("hyuga")).collection('locals_bucharest').where("partner", isEqualTo: true).get();
   // query1.docs.forEach((place) async{
   //   print(await FirebaseStorage.instanceFor(app: Firebase.app("hyuga")).ref()
