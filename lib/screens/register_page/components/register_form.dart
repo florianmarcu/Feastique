@@ -1,4 +1,3 @@
-import 'package:feastique/screens/authentication_page/authentication_provider.dart';
 import 'package:feastique/screens/register_page/register_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +21,7 @@ class RegisterForm extends StatelessWidget {
           SizedBox(height: 20),
           /// Password field
           TextFormField(
-            obscureText: provider.passwordVisible,
+            obscureText: !provider.passwordVisible,
             decoration: InputDecoration(
               labelText: "Parolă", 
               suffixIcon: IconButton(
