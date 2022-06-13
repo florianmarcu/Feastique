@@ -1,7 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feastique/models/models.dart';
-import 'package:feastique/models/place/place.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 export 'package:provider/provider.dart';
@@ -100,13 +99,13 @@ class NewReservationPopupProvider with ChangeNotifier{
   Future<Reservation> makeReservation(UserProfile? user) async{
     _loading();
 
-    var userReservationRef = FirebaseFirestore.instance.collection('reservations').doc();
+    var userReservationRef = FirebaseFirestore.instance.collection('users').doc(user!.uid).collection('reservations').doc();
     var placeReservationRef = place.reference!.collection('reservations').doc(userReservationRef.id);
     var reservationData = {
       'accepted': null,
       'date_created' : FieldValue.serverTimestamp(),
       'date_start': Timestamp.fromDate(selectedDate!),
-      'guest_id' : user!.uid,
+      'guest_id' : user.uid,
       'guest_name' : user.displayName,
       'place_id' : place.id,
       'place_name' : place.name,
@@ -129,13 +128,13 @@ class NewReservationPopupProvider with ChangeNotifier{
       .set(
         {
           'contact_phone_number' : selectedPhoneNo
-        }
+        },
+        SetOptions(merge: true)
       );
 
-
     _loading();
-    //notifyListeners();
-
+    
+    reservationData.update("date_created", (_) => DateTime.now().toLocal());
     return reservationDataToReservation(
       userReservationRef.id, 
       reservationData
