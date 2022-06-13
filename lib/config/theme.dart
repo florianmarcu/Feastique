@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Color _secondaryColor = Color(0xFF556b2e);
+//Color _secondaryColor = Color(0xFF556b2e);
 Color _highlightColor = Colors.white;
 Color _primaryColor = Color(0xFFeec584);
 Color _accentColor = Color(0xFF764248);
@@ -208,8 +208,8 @@ BottomNavigationBarThemeData _bottomNavigationBarTheme = BottomNavigationBarThem
   // backgroundColor: Colors.grey[200],
   backgroundColor: _highlightColor,
   selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-  unselectedLabelStyle: TextStyle(color: Colors.black.withOpacity(0.65))
-  // unselectedItemColor: Colors.black.withOpacity(0.65),
+  unselectedLabelStyle: TextStyle(color: Colors.black),
+  unselectedItemColor: Colors.black.withOpacity(0.65),
 );
 
 AppBarTheme _appBarTheme = AppBarTheme(
