@@ -75,11 +75,14 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
               Navigator.pop(context);
             }
             : null,
-            child: Text("Șterge filtre", style: Theme.of(context).textTheme.labelMedium!.copyWith(
-              decoration: TextDecoration.underline,
-              fontWeight: FontWeight.normal,
-              color: _currFiltersSelected ? Theme.of(context).textTheme.labelMedium!.color :  Theme.of(context).textTheme.labelMedium!.color!.withOpacity(0.4)
-            ),),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text("Șterge filtre", style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                decoration: TextDecoration.underline,
+                fontWeight: FontWeight.normal,
+                color: _currFiltersSelected ? Theme.of(context).textTheme.labelMedium!.color :  Theme.of(context).textTheme.labelMedium!.color!.withOpacity(0.4)
+              ),),
+            ),
           )
         ],
       ),
