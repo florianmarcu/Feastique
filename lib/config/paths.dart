@@ -32,6 +32,10 @@ String asset(String fileName){
       return "assets/icons/place.png";
     case 'question':
       return "assets/icons/question.png";
+    case 'reservation':
+      return "assets/icons/reservation.png";
+    case 'orders':
+      return "assets/icons/reservation.png";
     default: return "";
   }
 }

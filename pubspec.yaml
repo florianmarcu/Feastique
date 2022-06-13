@@ -65,6 +65,8 @@ flutter:
     - assets/icons/phone.png
     - assets/icons/place.png
     - assets/icons/question.png
+    - assets/icons/reservation.png
+    - assets/icons/orders.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
