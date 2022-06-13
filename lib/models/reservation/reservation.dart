@@ -48,8 +48,8 @@ Reservation reservationDataToReservation(String id, Map<String, dynamic> data){
   return Reservation(
     id: id,
     accepted: data['accepted'],
-    dateCreated: data['date_created'],
-    dateStart: data['date_start'],
+    dateCreated: data['date_created'].runtimeType == Timestamp ? DateTime.fromMillisecondsSinceEpoch(data['date_created'].millisecondsSinceEpoch) : data['date_created'],
+    dateStart: DateTime.fromMillisecondsSinceEpoch(data['date_start'].millisecondsSinceEpoch),
     guestId: data['guest_id'],
     guestName: data['guest_name'],
     placeId: data['place_id'],
@@ -57,9 +57,9 @@ Reservation reservationDataToReservation(String id, Map<String, dynamic> data){
     contactPhoneNumber: data['contact_phone_number'],
     contactName: data['contact_name'],
     details: data['details'],
-    claimed: data['guest_id'],
-    peopleNo: data['guest_id'],
-    discounts: data['guest_id'],
+    claimed: data['claimed'],
+    peopleNo: data['number_of_guests'],
+    discounts: data['discounts'],
     deals: data['deals'],
     placeReservationRef: data['place_reservation_ref'],
     userReservationRef: data['user_reservation_ref']
