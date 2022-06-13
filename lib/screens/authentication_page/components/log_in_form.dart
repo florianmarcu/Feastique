@@ -1,7 +1,5 @@
-import 'package:authentication/authentication.dart';
 import 'package:feastique/screens/authentication_page/authentication_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class LogInForm extends StatelessWidget{
   
@@ -23,7 +21,7 @@ class LogInForm extends StatelessWidget{
           SizedBox(height: 20),
           /// Password field
           TextFormField(
-            obscureText: provider.passwordVisible,
+            obscureText: !provider.passwordVisible,
             decoration: InputDecoration(
               labelText: "Parolă", 
               suffixIcon: IconButton(

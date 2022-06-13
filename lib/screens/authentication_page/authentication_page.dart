@@ -1,5 +1,4 @@
 import 'package:feastique/screens/authentication_page/components/log_in_form.dart';
-import 'package:feastique/screens/discover_page/discover_provider.dart';
 import 'package:feastique/screens/register_page/register_page.dart';
 import 'package:feastique/screens/register_page/register_provider.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +33,7 @@ class AuthenticationPage extends StatelessWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              //mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                /// TODO: Bagat animatie care ridica textul si da reveal la Login Form
                 Text("Bun venit!", style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),),
                 SizedBox(height: 20),
                 LogInForm(),
