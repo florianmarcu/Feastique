@@ -1,5 +1,3 @@
-import 'package:flutter/gestures.dart';
-
 import 'components/theme.dart';
 import 'package:flutter/material.dart';
 

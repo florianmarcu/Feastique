@@ -86,23 +86,23 @@ Place docToPlace(DocumentSnapshot doc){
   }
 
   Future<Image> _getImage(String? placeId) async {
-        var image = await FirebaseStorage.instance.ref("places/${placeId}/0.jpg")
-        .getData();
-        return Image.memory(
-          image!,
-          fit: BoxFit.fill,
-          frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
-            if (wasSynchronouslyLoaded) {
-              return child;
-            }
-            return AnimatedOpacity(
-              child: child,
-              opacity: frame == null ? 0 : 1,
-              duration: Duration(milliseconds: 200),
-              curve: Curves.easeOut,
-            );
-          }
+    var image = await FirebaseStorage.instance.ref("places/$placeId/0.jpg")
+    .getData();
+    return Image.memory(
+      image!,
+      fit: BoxFit.fill,
+      frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded) {
+          return child;
+        }
+        return AnimatedOpacity(
+          child: child,
+          opacity: frame == null ? 0 : 1,
+          duration: Duration(milliseconds: 200),
+          curve: Curves.easeOut,
         );
+      }
+    );
   }
 
 

@@ -1,4 +1,3 @@
-import 'package:feastique/screens/authentication_page/components/log_in_form.dart';
 import 'package:feastique/screens/register_page/components/register_form.dart';
 import 'package:feastique/screens/register_page/register_provider.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +35,6 @@ class RegisterPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               //mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                /// TODO: Bagat animatie care ridica textul si da reveal la Login Form
                 Text("Înregistrare", style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),),
                 SizedBox(height: 20),
                 RegisterForm(),

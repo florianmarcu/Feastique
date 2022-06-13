@@ -3,9 +3,6 @@ import 'package:feastique/screens/discover_page/components/filters_popup.dart';
 import 'package:feastique/screens/discover_page/components/places_list/places_list.dart';
 import 'package:feastique/screens/discover_page/components/places_map/places_map.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-//import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
 import 'discover_provider.dart';
 
 class DiscoverPage extends StatefulWidget {

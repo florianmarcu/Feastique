@@ -1,6 +1,5 @@
 import 'package:feastique/screens/profile_page/profile_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({ Key? key }) : super(key: key);

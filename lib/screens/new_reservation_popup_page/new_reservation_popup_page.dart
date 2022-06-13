@@ -61,7 +61,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
         children: [
-          Container( /// First page of the PageView where the users inputs the DAY, HOUR & PEOPLE NUMBER
+          Container( /// First page of the PageView where the user inputs the DAY, HOUR & PEOPLE NUMBER
             padding: EdgeInsets.only(top: 20),
             height: 400,
             child: Column(
@@ -293,7 +293,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
               ]
             ),
           ),
-          Container( /// Second page of the PageView where the users inputs the contact phone number
+          Container( /// Second page of the PageView where the user inputs the contact phone number
             padding: EdgeInsets.only(top: 20, ),
             height: 400,
             child: Column(
@@ -658,7 +658,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
               ],
             )
           ),
-          Container(
+          Container( /// Third page of the PageView where the user reviews the data
             padding: EdgeInsets.only(top: 20),
             height: 400,
             child: Column(

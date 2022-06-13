@@ -6,7 +6,6 @@ import 'package:feastique/screens/discover_page/discover_provider.dart';
 import 'package:feastique/screens/place_page/place_page.dart';
 import 'package:feastique/screens/place_page/place_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'places_list_empty.dart';
 
