@@ -1,5 +1,5 @@
 
-import 'package:authentication/authentication.dart';
+import 'package:feastique/config/config.dart';
 import 'package:feastique/models/user/user.dart';
 import 'package:feastique/screens/discover_page/discover_page.dart';
 import 'package:feastique/screens/discover_page/discover_provider.dart';
@@ -7,9 +7,10 @@ import 'package:feastique/screens/home_page/home_page.dart';
 import 'package:feastique/screens/home_page/home_provider.dart';
 import 'package:feastique/screens/profile_page/profile_page.dart';
 import 'package:feastique/screens/profile_page/profile_provider.dart';
+import 'package:feastique/screens/reservations_page/reservations_page.dart';
+import 'package:feastique/screens/reservations_page/reservations_provider.dart';
 import 'package:feastique/widgets/app_drawer/app_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 
 /// This Page is a Wrapper Page
@@ -39,6 +40,12 @@ class _WrapperHomePageState extends State<WrapperHomePage> {
         return DiscoverPage(context);
       }
     ),
+    ChangeNotifierProvider<ReservationsPageProvider>(
+      create: (context) => ReservationsPageProvider(context),
+      builder: (context, _) {
+        return ReservationsPage();
+      }
+    ),
     ChangeNotifierProvider<ProfilePageProvider>(
       create: (context) => ProfilePageProvider(Provider.of<UserProfile>(context, listen: false)),
       builder: (context, _) {
@@ -56,18 +63,13 @@ class _WrapperHomePageState extends State<WrapperHomePage> {
       icon: Icon(Icons.search)
     ),
     BottomNavigationBarItem(
+      label: "Rezervări",
+      icon: Image.asset(asset('reservation'), width: 19,)
+    ),
+    BottomNavigationBarItem(
       label: "Profil",
       icon: Icon(Icons.person)
     ),
-    // BottomNavigationBarItem(
-    //   label: "Evenimente",
-    //   icon: Icon(Icons.event)
-    // ),
-    // BottomNavigationBarItem(
-    //   label: "Profil",
-    //   icon: Icon(Icons.person)
-    // ),
-    
   ];
 
   @override
@@ -75,6 +77,7 @@ class _WrapperHomePageState extends State<WrapperHomePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: _selectedScreenIndex,
         items: _screenLabels,
         onTap: (index) => setState(()=>_selectedScreenIndex = index),
