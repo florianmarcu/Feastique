@@ -39,7 +39,7 @@ class Authentication{
   static Future signInWithEmailAndPassword(String email, String password) async{
     try{
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
-      User? user = result.user;
+      // User? user = result.user;
       // if(user != null)
       //   updateUserData(user, 'email_and_password');
       //AnalyticsService().analytics.logLogin(loginMethod: 'email_and_password');
