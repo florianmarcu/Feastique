@@ -22,9 +22,6 @@ class _PlacePageState extends State<PlacePage> {
     keepScrollOffset: true,
     initialScrollOffset: 0
   );
-  ScrollController? _dayScrollController;
-  ScrollController? _hourScrollController;
-  ScrollController? _peopleNoScrollController;
 
   @override
   void initState() {
@@ -176,13 +173,4 @@ class _PlacePageState extends State<PlacePage> {
       )
     );
   }
-
-  /// TODO: Delete this
-  // Ambience _ambience(String ambience){
-  //   switch (ambience){
-  //     case "calm":
-  //       return Ambience.intimate;
-  //     default: return Ambience.social;
-  //   }
-  // }
 }
