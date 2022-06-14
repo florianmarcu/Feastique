@@ -2,7 +2,7 @@
     package="com.example.feastique">
    <application
         android:label="feastique"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/feastique">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
