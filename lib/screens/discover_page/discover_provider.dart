@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feastique/config/config.dart';
 import 'package:feastique/config/constants.dart';
 import 'package:feastique/models/models.dart';
 import 'package:feastique/screens/place_page/place_page.dart';
 import 'package:feastique/screens/place_page/place_provider.dart';
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 export 'package:provider/provider.dart';
@@ -19,9 +21,11 @@ class DiscoverPageProvider with ChangeNotifier{
   Map<String, dynamic> activeFilters = {};
   bool isLoading = false;
   BuildContext context;
+  Map<String,dynamic>? city;
 
   DiscoverPageProvider(this.context){
     /// Initialize the 'places' list with all the available places from Firestore
+    /// Also initialize the 'city' with the main city provided by the database
     getData();
   }
   
@@ -39,13 +43,10 @@ class DiscoverPageProvider with ChangeNotifier{
     .then((query) => allPlaces = query.docs.map(docToPlace).toList());
     /// Instantiate displayed places with all places
     places = List.from(allPlaces);
-    // places = allPlaces;
     /// Map displayed places to Markers
-    markers = _mapPlacesToMarkers(places);
-
-    // placesList = await FirebaseFirestore.instance.collection('places').limit(10).get()
-    // .then((query) => places = query.docs.map(docToPlace).toList());
-    
+    markers = await _mapPlacesToMarkers(places);
+    /// Initialize the 'city'
+    city = context.read<WrapperHomePageProvider>().mainCity;
     notifyListeners();
     _loading();
   }
@@ -55,7 +56,7 @@ class DiscoverPageProvider with ChangeNotifier{
   //   .then((query) => places = query.docs.map(docToPlace).toList());
   // }
 
-  void filter(Map<String, List<bool>> filters){
+  void filter(Map<String, List<bool>> filters) async{
     _loading();
 
     activeFilters = Map<String, List<bool>>.from(filters);
@@ -66,10 +67,6 @@ class DiscoverPageProvider with ChangeNotifier{
       if(filters[key]![i])
         finalFilters[key]!.add(list[i]);
     });
-    print(finalFilters);
-    
-    print(places.length);
-    print(allPlaces.length);
     // List.copyRange(places, 0, allPlaces);
     places = List.from(allPlaces);
 
@@ -95,15 +92,14 @@ class DiscoverPageProvider with ChangeNotifier{
         }
       }
     });
-    print(allPlaces);
 
-    markers = _mapPlacesToMarkers(places);
+    markers = await _mapPlacesToMarkers(places);
 
     notifyListeners();
     _loading();
   }
 
-  void removeFilters(){
+  void removeFilters() async{
     _loading();
      /// Instantiate active filters with no 'false' for each field
     activeFilters = {
@@ -117,7 +113,7 @@ class DiscoverPageProvider with ChangeNotifier{
     // places = allPlaces;
     /// Map displayed places to Markers
     print("LENGTH: ${allPlaces.last.name}");
-    markers = _mapPlacesToMarkers(places);
+    markers = await _mapPlacesToMarkers(places);
 
     notifyListeners();
     _loading();
@@ -132,18 +128,27 @@ class DiscoverPageProvider with ChangeNotifier{
     _loading();
   }
 
-  Set<Marker> _mapPlacesToMarkers(List<Place> places){
-    return places.map((place) => Marker(
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
-      markerId: MarkerId(place.name),
-      position: LatLng(place.location.latitude, place.location.longitude), 
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => 
-        ChangeNotifierProvider<PlaceProvider>(
-          create: (context) => PlaceProvider(place),
-          builder: (context, child) => PlacePage(context)
-        )
-      ))
-    )).toSet();
+  Future<Set<Marker>> _mapPlacesToMarkers(List<Place> places) async{
+    Set<Marker> markers = {};
+    places.forEach((place) async{
+      var icon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(size: Size(20,20), devicePixelRatio: 0), 
+        asset("pin"),
+      );
+      var marker = Marker(
+        icon: icon,
+        markerId: MarkerId(place.name),
+        position: LatLng(place.location.latitude, place.location.longitude), 
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => 
+          ChangeNotifierProvider<PlaceProvider>(
+            create: (context) => PlaceProvider(place),
+            builder: (context, child) => PlacePage(context)
+          )
+        ))
+      );
+      markers.add(marker);
+    });
+    return markers;
   }
 
   /// Method called everytime a provider function is called to show a progress indicator
