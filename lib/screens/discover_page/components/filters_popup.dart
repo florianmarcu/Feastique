@@ -193,7 +193,71 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
                     );
                   }
                 ),
+              ),
+              Text("Sortează după", style: Theme.of(context).textTheme.labelMedium, textAlign: TextAlign.center,),
+              //SizedBox(height: MediaQuery.of(context).size.height*0.01,),
+              Container(
+                height: 60,
+                child: ListView.builder(
+                  cacheExtent: 0,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  itemExtent: 80,
+                  itemCount: 1,
+                  itemBuilder: (context, index){
+                    return ChoiceChip(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      side: BorderSide(width: 1, color: Theme.of(context).primaryColor),
+                      pressElevation: 0,
+                      selectedColor: Theme.of(context).primaryColor,
+                      backgroundColor: Theme.of(context).canvasColor,
+                      labelStyle: Theme.of(context).textTheme.overline!,
+                      label: Text("distanță"),
+                      selected: _currSelectedFilters['costs']![index],
+                      onSelected: (selected){
+                        setState(() {
+                          _currSelectedFilters['costs']![index] = selected;
+                        });
+                      },
+                    );
+                  }
+                ),
               )
+              // Container(
+              //   height: (_filters['costs']!.length/5 + 1) * 50,
+              //   child: GridView.builder(
+              //     cacheExtent: 0,
+              //     shrinkWrap: true,
+              //     physics: NeverScrollableScrollPhysics(),
+              //     padding: EdgeInsets.symmetric(horizontal: 20),
+              //     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 80,mainAxisExtent: 50), 
+              //     itemCount: _filters['costs']!.length,
+              //     itemBuilder: (context, index){
+              //       return ChoiceChip(
+              //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              //         side: BorderSide(width: 1, color: Theme.of(context).primaryColor),
+              //         pressElevation: 0,
+              //         selectedColor: Theme.of(context).primaryColor,
+              //         backgroundColor: Theme.of(context).canvasColor,
+              //         labelStyle: Theme.of(context).textTheme.overline!,
+              //         label: Row(
+              //           mainAxisSize: MainAxisSize.min,
+              //           children: List.generate(int.parse(_filters['costs']![index]), (index) => 
+              //           Container(
+              //             child: Text('\$', textAlign: TextAlign.center),
+              //           )
+              //         )),
+              //         selected: _currSelectedFilters['costs']![index],
+              //         onSelected: (selected){
+              //           setState(() {
+              //             _currSelectedFilters['costs']![index] = selected;
+              //           });
+              //         },
+              //       );
+              //     }
+              //   ),
+              // )
             ],
           ),
         ),
