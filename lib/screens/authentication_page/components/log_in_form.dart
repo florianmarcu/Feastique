@@ -35,9 +35,25 @@ class LogInForm extends StatelessWidget{
             onChanged: (password) => provider.setPassword(password),
           ),
           SizedBox(height: 30,),
-          TextButton(
-            onPressed: () => provider.logIn(context),
-            child: Text("Log in"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: () => provider.logIn(context),
+                child: Text("Log in"),
+              ),
+              TextButton(
+                onPressed: () => provider.logIn(context),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Sari peste"),
+                    SizedBox(width: 20,),
+                    Icon(Icons.arrow_forward_ios, size: 15)
+                  ],
+                ),
+              ),
+            ],
           )
         ],
       )
