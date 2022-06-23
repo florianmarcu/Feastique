@@ -1,3 +1,4 @@
+import 'package:feastique/config/config.dart';
 import 'package:feastique/screens/authentication_page/components/log_in_form.dart';
 import 'package:feastique/screens/register_page/register_page.dart';
 import 'package:feastique/screens/register_page/register_provider.dart';
@@ -27,7 +28,7 @@ class AuthenticationPage extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height*0.2, 
+              top: MediaQuery.of(context).size.height*0.15, 
               left: MediaQuery.of(context).size.width*0.05,
               right: MediaQuery.of(context).size.width*0.05,
             ),
@@ -65,7 +66,67 @@ class AuthenticationPage extends StatelessWidget {
                       ),)
                     ],
                   ),),
-                )
+                ),
+                /// Google Sign In Button
+                SizedBox(height: 20,),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: TextButton(
+                    onPressed: () => {},
+                    style: Theme.of(context).textButtonTheme.style!.copyWith(
+                      padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 10, vertical: 15)),
+                      backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).highlightColor)
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(asset("google"), width: 17,),
+                        SizedBox(width: 20,),
+                        Text("Continuă prin Google", style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 14),),
+                      ],
+                    ),
+                  ),
+                ),
+                ///Facebook Sign In Button
+                SizedBox(height: 15,),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: TextButton(
+                    onPressed: () => {},
+                    style: Theme.of(context).textButtonTheme.style!.copyWith(
+                      padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 10, vertical: 15)),
+                      backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).highlightColor)
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(asset("facebook"), width: 17,),
+                        SizedBox(width: 20,),
+                        Text("Continuă prin Facebook", style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 14),),
+                      ],
+                    ),
+                  ),
+                ),
+                /// Apple Sign In Button - for iOS only
+                // SizedBox(height: 10,),
+                // Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 10),
+                //   child: TextButton(
+                //     onPressed: () => {},
+                //     style: Theme.of(context).textButtonTheme.style!.copyWith(
+                //       padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 10, vertical: 0)),
+                //       backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).highlightColor)
+                //     ),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Image.asset(asset("apple"), width: 17,),
+                //         SizedBox(width: 20,),
+                //         Text("Continuă prin Apple", style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 14),),
+                //       ],
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
