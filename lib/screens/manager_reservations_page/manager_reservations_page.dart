@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feastique/config/config.dart';
+import 'package:feastique/models/models.dart';
 import 'package:feastique/screens/manager_orders_page/manager_orders_page.dart';
 import 'package:feastique/screens/manager_orders_page/manager_orders_provider.dart';
 import 'package:feastique/screens/manager_reservations_page/manager_reservations_provider.dart';
@@ -12,60 +14,97 @@ class ManagerReservationsPage extends StatefulWidget {
 
 class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
 
-  int _selectedScreenIndex = 1;
-  List<Widget> _screens = <Widget>[
-    ChangeNotifierProvider<ManagerReservationsProvider>(
-      create: (context) => ManagerReservationsProvider(context),
-      builder: (context, _) {
-        return ManagerReservationsPage();
-      }
-    ),
-    ChangeNotifierProvider<ManagerOrdersProvider>(
-      create: (context) => ManagerOrdersProvider(),
-      builder: (context, _) {
-        return ManagerOrdersPage();
-      }
-    ),
-  ];
-  List<BottomNavigationBarItem> _screenLabels = <BottomNavigationBarItem>[
-    BottomNavigationBarItem(
-      label: "Rezervări",
-      icon: Image.asset(asset('reservation'), width: 19,)
-    ),
-    BottomNavigationBarItem(
-      label: "Comenzi",
-      icon: Image.asset(asset('orders'), width: 19,)
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+        var provider = context.watch<ManagerReservationsProvider>();
+
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedScreenIndex,
-        items: _screenLabels,
-        onTap: (index) => setState(()=>_selectedScreenIndex = index),
-      ),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        //toolbarHeight: 70,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(bottomLeft: Radius.elliptical(210, 30), bottomRight: Radius.elliptical(210, 30))),
-        title: Center(child: Text(_screenLabels[_selectedScreenIndex].label!, style: Theme.of(context).textTheme.headline4,)),
-        // bottom: PreferredSize(
-        //   preferredSize: Size(MediaQuery.of(context).size.width, 80),
-        //   child: Row(children: [
-            
-        //   ],)
-        // ),
-      ),
-      drawer: AppDrawer(),
-      body: Center(
-        child: IndexedStack(
-          children: _screens,
-          index: _selectedScreenIndex
-        )
+      body: FutureBuilder<List<DocumentSnapshot>>(
+        future: provider.getReservation(),
+        builder: (context,AsyncSnapshot<List<DocumentSnapshot>> ss) {
+          if(!ss.hasData)
+            return Container();
+          else 
+          return ListView(
+            padding: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+            children: ss.data!.map((doc){
+              var reservation = reservationDataToReservation(doc.id, doc.data()!);
+              return Column(
+                children: [
+                  ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            color: Theme.of(context).highlightColor,
+                            //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                            height: 100,
+                            child: Row(
+                              children: [
+                                FutureProvider<Image?>.value(
+                                  value: provider.getImage(reservation.placeId),
+                                  initialData: null,
+                                  builder: (context, child){
+                                    var image = Provider.of<Image?>(context);
+                                    return SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: image != null 
+                                      ? AspectRatio(
+                                        aspectRatio: 1.5,
+                                        child: image,
+                                      )
+                                      : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
+                                    );
+                                  },
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(reservation.placeName, style: Theme.of(context).textTheme.labelMedium),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text.rich( /// The Date
+                                            TextSpan(
+                                              children: [
+                                                WidgetSpan(child: Image.asset(asset('calendar'), width: 18)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: formatDateToDay(reservation.dateStart)
+                                                ),
+                                              ]
+                                            )
+                                          ),
+                                          Text.rich( /// The Time 
+                                            TextSpan(
+                                              children: [
+                                                WidgetSpan(child: Image.asset(asset('time'), width: 18)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: formatDateToHourAndMinutes(reservation.dateStart)
+                                                ),
+                                              ]
+                                            )
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          ),
+                        ),
+                        Container(height: 20,)
+                ],
+              );
+            }
+
+            ).toList().reversed.toList(),
+          );
+        }
       ),
     );
   }
