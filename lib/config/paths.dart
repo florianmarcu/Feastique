@@ -35,7 +35,27 @@ String asset(String fileName){
     case 'reservation':
       return "assets/icons/reservation.png";
     case 'orders':
-      return "assets/icons/reservation.png";
+      return "assets/icons/orders.png";
+    case 'google':
+      return "assets/icons/google.png";
+    case 'facebook':
+      return "assets/icons/facebook.png";
+    case 'apple':
+      return "assets/icons/apple.png";
+    case 'pin':
+      return "assets/icons/pin.png";
+    case 'pizza':
+      return "assets/icons/pizza.png";
+    case 'italian':
+      return "assets/icons/italian.png";
+    case 'beer':
+      return "assets/icons/beer.png";
+    case 'coffee':
+      return "assets/icons/coffee.png";
+    case 'european':
+      return "assets/icons/european.png";
+    case 'wine':
+      return "assets/icons/wine.png";  
     default: return "";
   }
 }

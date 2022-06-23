@@ -19,6 +19,8 @@ dependencies:
   cloud_firestore:
   firebase_storage:
   firebase_app_check:
+  url_launcher: 
+  location: 
   intl: 
 
 
@@ -52,6 +54,16 @@ flutter:
     - assets/icons/question.png
     - assets/icons/reservation.png
     - assets/icons/orders.png
+    - assets/icons/google.png
+    - assets/icons/facebook.png
+    - assets/icons/apple.png
+    - assets/icons/pin.png
+    - assets/icons/italian.png
+    - assets/icons/pizza.png
+    - assets/icons/beer.png
+    - assets/icons/european.png
+    - assets/icons/coffee.png
+    - assets/icons/wine.png
 
   fonts:
     - family: Raleway
