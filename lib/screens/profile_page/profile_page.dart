@@ -1,4 +1,6 @@
+import 'package:feastique/screens/profile_page/components/cities_dialog.dart';
 import 'package:feastique/screens/profile_page/profile_provider.dart';
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -6,14 +8,143 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var user = context.watch<ProfilePageProvider>().user;
+    var provider = context.watch<ProfilePageProvider>();
+    var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
+    var mainCity = wrapperHomePageProvider.mainCity;
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            child: Text("Salut, ${user.displayName != null ? user.displayName : ""}!")
-          )
-        ],
+      body: Center(
+        child: Column(
+          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).padding.top + 80,
+            ),
+            Container(
+              child: Text("Salut!", style:  Theme.of(context).textTheme.headline3,)
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: MaterialButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => mainCity != null
+                    ? showDialog(context: context, builder: (context) => 
+                      MultiProvider(
+                        providers : [
+                          ChangeNotifierProvider.value(
+                            value: provider,
+                          ),
+                          ChangeNotifierProvider.value(
+                            value: wrapperHomePageProvider
+                          )
+                        ],
+                        child: CitiesDialog(),
+                      )
+                    )
+                    : {},
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 100,
+                      width: 150,
+                      color: Colors.white,
+                      child: 
+                      mainCity != null
+                      ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Oraș", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),),
+                          SizedBox(height: 10,),
+                          Text(mainCity['name']),
+                        ],
+                      )
+                      : Center(child: CircularProgressIndicator.adaptive(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor) ,)),
+                    ),
+                  ),
+                ),
+                  SizedBox(width: 50,),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    height: 100,
+                    width: 150,
+                    color: Colors.white,
+                    child: Center(child: Text("Rezervări", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),)),
+
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 100,
+                    width: 150,
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Descoperă", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),),
+                      ],
+                    ),
+                  ),
+                ),
+                  SizedBox(width: 50,),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 100,
+                    width: 150,
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Datele mele", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),),
+                      ],
+                    ),
+                  ),
+                ),
+                
+              ],
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    height: 100,
+                    width: 150,
+                    color: Colors.white,
+                    child: Center(child: Text("Ieși din cont", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),)),
+
+                  ),
+                ),
+                  SizedBox(width: 50,),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    height: 100,
+                    width: 150,
+                    color: Colors.transparent,
+                   // child: Center(child: Text("Ieși din cont", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),)),
+
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       )
     );
   }
