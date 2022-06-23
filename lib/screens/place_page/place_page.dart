@@ -1,8 +1,10 @@
+import 'package:feastique/config/config.dart';
 import 'package:feastique/screens/new_reservation_popup_page/new_reservation_popup_page.dart';
 import 'package:feastique/screens/new_reservation_popup_page/new_reservation_popup_provider.dart';
 import 'package:feastique/screens/place_page/components/tiles/detail.dart';
 import 'package:feastique/screens/place_page/place_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PlacePage extends StatefulWidget {
 
@@ -163,10 +165,80 @@ class _PlacePageState extends State<PlacePage> {
             [
               Padding(
                 padding: EdgeInsets.all(12),
-                child: Wrap(children: [
-                AmbienceDetailTile(place.ambience)
-              ],)), 
-              Container(height: 1000)
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    AmbienceDetailTile(place.ambience),
+                    CostDetailTile(place.cost)
+                  ],
+                )
+              ), 
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.all(12),
+                child: Wrap(
+                  alignment: WrapAlignment.end,
+                  children: place.types!.map((type) => TypeDetailTile(type)).toList(),
+                )
+              ),
+              SizedBox(height: 30,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    //width: 20,
+                    child: TextButton.icon(
+                      style: Theme.of(context).textButtonTheme.style!.copyWith(
+                        //backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 20))
+                      ),
+                      onPressed: (){},
+                      icon: Image.asset(asset("map"), width: 20,),
+                      label: Text("Vezi pe hartă", style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 13),),
+                    ),
+                  ),
+                  SizedBox(width: 30,),
+                  SizedBox(
+                    width: 80,
+                    child: TextButton(
+                      style: Theme.of(context).textButtonTheme.style!.copyWith(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)
+                      ),
+                      onPressed: (){},
+                      //icon: Image.asset(asset("map"), width: 20,),
+                      child: Text("Uber", style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 13),),
+                    ),
+                  ),
+                  
+                ],
+              ),
+              SizedBox(height: 30,),
+              // place.schedule != null
+              // ? Container( // The 'Schedule'
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //     children: place.schedule!.keys.map((String? key) => Column(
+              //         children: <Widget>[
+              //           Container(
+              //             margin: EdgeInsets.symmetric(vertical: 8),
+              //             child: Text(place.schedule![key]!.substring(0,2))
+              //           ),
+              //           Text(
+              //             place.schedule![key!.toLowerCase()].substring(0,5),
+              //           ),
+              //           Text(
+              //             place.schedule![key.toLowerCase()].substring(6,11),
+              //           )
+              //         ],
+              //       ),
+              //     ).toList()
+              //   )
+              // )
+              // : Container(),
+              SizedBox(height: 20,),
+              Image.network("https://firebasestorage.googleapis.com/v0/b/hyuga-app.appspot.com/o/photos%2Feurope%2Fbucharest%2Fmartina_ristorante%2Fmartina_ristorante_2.jpg?alt=media&token=add0f082-783d-4b83-9131-8553cf087987")
+              //,Container(height: 1000)
             ]
           ))
         ],
