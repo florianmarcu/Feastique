@@ -10,6 +10,15 @@ class RegisterForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          /// Display Name field
+          TextFormField(
+            keyboardType: TextInputType.name,
+            decoration: InputDecoration(
+              labelText: "Nume",
+            ),
+           // onChanged: (email) => provider.setEmail(email),
+          ),
+          SizedBox(height: 20),
           /// Email field
           TextFormField(
             keyboardType: TextInputType.emailAddress,
