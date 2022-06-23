@@ -65,6 +65,7 @@ class ReservationsPage extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(reservation.placeName, style: Theme.of(context).textTheme.labelMedium),
@@ -159,6 +160,7 @@ class ReservationsPage extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(reservation.placeName, style: Theme.of(context).textTheme.labelMedium),

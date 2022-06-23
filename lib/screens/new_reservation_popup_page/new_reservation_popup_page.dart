@@ -136,7 +136,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                     separatorBuilder: (context,index)=>SizedBox(width: 10,),
                     itemBuilder: (context,index) {
                       GlobalKey _tooltipKey = GlobalKey();
-                      int discount = 0;
+                      int discount = 30;
                       //int discount = getDiscountForHour(index);
                       List<Map<String,dynamic>> deals = _getDealsForHour(provider.firstHourAsDate, selectedDay, place, index);
                       return  Opacity(
@@ -217,7 +217,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                                 width: MediaQuery.of(context).size.width*0.11,
                                 height: 20,
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).accentColor,
+                                  color: Theme.of(context).primaryColor,
                                   borderRadius: BorderRadius.circular(30)
                                 ),
                                 child: Text(
