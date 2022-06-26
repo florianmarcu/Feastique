@@ -1,3 +1,6 @@
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
+import 'package:provider/provider.dart';
+
 import 'components/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +9,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>(); 
     return Theme(
       data: _buildTheme(context),
       child: Container(
@@ -33,7 +37,7 @@ class HomePage extends StatelessWidget {
                 ),
                 SizedBox(height: 12,),
                 TextButton( /// 'Find the perfect place' button
-                  onPressed: (){},
+                  onPressed: () => wrapperHomePageProvider.pageController.animateToPage(1, duration: Duration(milliseconds: 200), curve: Curves.easeIn),
                   child: Container(
                     height: 150,
                     width: MediaQuery.of(context).size.width*0.8,
