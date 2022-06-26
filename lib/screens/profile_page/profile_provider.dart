@@ -13,7 +13,7 @@ class ProfilePageProvider with ChangeNotifier{
   Map<String, dynamic>? city;
   
  
-  ProfilePageProvider(this.user, this.context){
+  ProfilePageProvider(this.context, this.user){
     getData(context);
   }
     

@@ -1,3 +1,4 @@
+import 'package:authentication/authentication.dart';
 import 'package:feastique/screens/profile_page/components/cities_dialog.dart';
 import 'package:feastique/screens/profile_page/profile_provider.dart';
 import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
@@ -67,12 +68,17 @@ class ProfilePage extends StatelessWidget {
                   SizedBox(width: 50,),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(30),
-                  child: Container(
-                    height: 100,
-                    width: 150,
-                    color: Colors.white,
-                    child: Center(child: Text("Rezervări", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),)),
-
+                  child: MaterialButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => wrapperHomePageProvider.pageController.animateToPage(2, duration: Duration(milliseconds: 200), curve: Curves.easeIn),
+                    // onPressed: () => wrapperHomePageProvider.updateSelectedScreenIndex(2),
+                    child: Container(
+                      height: 100,
+                      width: 150,
+                      color: Colors.white,
+                      child: Center(child: Text("Rezervări", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),)),
+                  
+                    ),
                   ),
                 ),
               ],
@@ -81,19 +87,23 @@ class ProfilePage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                
                 ClipRRect(
                   borderRadius: BorderRadius.circular(30),
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 100,
-                    width: 150,
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Descoperă", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),),
-                      ],
+                  child: MaterialButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => wrapperHomePageProvider.pageController.animateToPage(1, duration: Duration(milliseconds: 200), curve: Curves.easeIn),
+                    // onPressed: () => wrapperHomePageProvider.updateSelectedScreenIndex(1),
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 100,
+                      width: 150,
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Descoperă", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -122,12 +132,15 @@ class ProfilePage extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(30),
-                  child: Container(
-                    height: 100,
-                    width: 150,
-                    color: Colors.white,
-                    child: Center(child: Text("Ieși din cont", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),)),
-
+                  child: MaterialButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => Authentication.signOut(),
+                    child: Container(
+                      height: 100,
+                      width: 150,
+                      color: Colors.white,
+                      child: Center(child: Text("Ieși din cont", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),)),
+                    ),
                   ),
                 ),
                   SizedBox(width: 50,),
