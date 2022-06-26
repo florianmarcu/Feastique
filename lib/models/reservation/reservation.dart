@@ -14,6 +14,7 @@ class Reservation{
   String contactName;
   String details;
   bool? claimed;
+  bool? active;
   int peopleNo;
   Map<String, dynamic>? deals;
   Map<String, dynamic>? discounts;
@@ -35,6 +36,7 @@ class Reservation{
       required this.contactName,
       required this.details,
       required this.claimed,
+      required this.active,
       required this.peopleNo,
       required this.deals,
       required this.discounts,
@@ -58,6 +60,7 @@ Reservation reservationDataToReservation(String id, Map<String, dynamic> data){
     contactName: data['contact_name'],
     details: data['details'],
     claimed: data['claimed'],
+    active: data['active'],
     peopleNo: data['number_of_guests'],
     discounts: data['discounts'],
     deals: data['deals'],
