@@ -16,15 +16,15 @@ class ReservationsPageProvider with ChangeNotifier{
   }
   
   Future<void> _getData(BuildContext context) async{
-    var user = Provider.of<UserProfile?>(context, listen: false);
+    var user = Provider.of<User?>(context, listen: false);
     
-    FirebaseFirestore.instance.collection("users").doc(user!.uid).collection("reservations")
+    await FirebaseFirestore.instance.collection("users").doc(user!.uid).collection("reservations")
     .where('date_start', isLessThan: Timestamp.fromDate(DateTime.now().add(Duration(minutes: -30)).toLocal()))
     .orderBy("date_start")
     .get()
     .then((query) => pastReservations = query.docs.map((doc) => reservationDataToReservation(doc.id, doc.data())).toList());
 
-    FirebaseFirestore.instance.collection("users").doc(user.uid).collection("reservations")
+    await FirebaseFirestore.instance.collection("users").doc(user.uid).collection("reservations")
     .where('date_start', isGreaterThan: Timestamp.fromDate(DateTime.now().add(Duration(minutes: -30)).toLocal()))
     .orderBy("date_start")
     .get()
