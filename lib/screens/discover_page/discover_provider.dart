@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feastique/config/config.dart';
-import 'package:feastique/config/constants.dart';
 import 'package:feastique/models/models.dart';
 import 'package:feastique/screens/place_page/place_page.dart';
 import 'package:feastique/screens/place_page/place_provider.dart';
-import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 export 'package:provider/provider.dart';
 
 class DiscoverPageProvider with ChangeNotifier{
+  /// The current city
+  Map<String,dynamic> city;
   /// The 'places' to be displayed on the Map
   /// They will change according to the filters applied by the users
   List<Place> places = [];
@@ -20,17 +20,19 @@ class DiscoverPageProvider with ChangeNotifier{
   String viewType = 'map';
   Map<String, dynamic> activeFilters = {};
   bool isLoading = false;
-  BuildContext context;
-  Map<String,dynamic>? city;
 
-  DiscoverPageProvider(this.context){
+  BuildContext context;
+  GoogleMapController? mapController;
+
+
+  DiscoverPageProvider(this.context, this.city){
     /// Initialize the 'places' list with all the available places from Firestore
     /// Also initialize the 'city' with the main city provided by the database
-    getData();
+    getData(context);
   }
   
   /// Method that fetches all the places and information about them from the database
-  Future<void> getData() async{
+  Future<void> getData(BuildContext context) async{
     _loading();
     /// Instantiate active filters with no 'false' for each field
     activeFilters = {
@@ -39,22 +41,19 @@ class DiscoverPageProvider with ChangeNotifier{
       "costs": kFilters['costs']!.map((e) => false).toList(),
     };
     /// Get all available places from Firestore
-    await FirebaseFirestore.instance.collection('places').get()
+    await FirebaseFirestore.instance.collection('places')
+    .where("city", isEqualTo: city['id'])
+    .get()
     .then((query) => allPlaces = query.docs.map(docToPlace).toList());
     /// Instantiate displayed places with all places
     places = List.from(allPlaces);
     /// Map displayed places to Markers
     markers = await _mapPlacesToMarkers(places);
     /// Initialize the 'city'
-    city = context.read<WrapperHomePageProvider>().mainCity;
+    //city = context.read<WrapperHomePageProvider>().mainCity;
     notifyListeners();
     _loading();
   }
-
-  // Future<void> getMoreData() async{
-  //   var query = await FirebaseFirestore.instance.collection('places').get()
-  //   .then((query) => places = query.docs.map(docToPlace).toList());
-  // }
 
   void filter(Map<String, List<bool>> filters) async{
     _loading();
@@ -108,11 +107,8 @@ class DiscoverPageProvider with ChangeNotifier{
       "costs": kFilters['costs']!.map((e) => false).toList(),
     };
     /// Reinstantiate displayed places with all places
-    ///     List.copyRange(places, 0, allPlaces);
     places = List.from(allPlaces);
-    // places = allPlaces;
     /// Map displayed places to Markers
-    print("LENGTH: ${allPlaces.last.name}");
     markers = await _mapPlacesToMarkers(places);
 
     notifyListeners();
@@ -149,6 +145,10 @@ class DiscoverPageProvider with ChangeNotifier{
       markers.add(marker);
     });
     return markers;
+  }
+
+  void initializeMapController(GoogleMapController controller){
+    mapController = controller;
   }
 
   /// Method called everytime a provider function is called to show a progress indicator

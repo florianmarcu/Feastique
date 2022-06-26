@@ -8,20 +8,36 @@ class PlacesMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var places = context.watch<DiscoverPageProvider>().places;
-    var markers = context.watch<DiscoverPageProvider>().markers;
+    var provider = context.watch<DiscoverPageProvider>();
+    var markers = provider.markers;
     var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
     var mainCity = wrapperHomePageProvider.mainCity;
-    return Container(
-      child: GoogleMap(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-        myLocationEnabled: false,
-        initialCameraPosition: mainCity != null ?
-        CameraPosition(target: LatLng(mainCity['location'].latitude, mainCity['location'].longitude), zoom: 14)
-        : CameraPosition(target: LatLng(0,0)),
-        markers: markers,
+    print(mainCity);
+    return wrapperHomePageProvider.isLoading
+    ? Positioned(
+      bottom: MediaQuery.of(context).padding.bottom,
+      child: Container(
+        height: 5,
+        width: MediaQuery.of(context).size.width,
+        child: LinearProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
       ),
-      height: MediaQuery.of(context).size.height,
+    )
+    : Builder(
+      builder: (context) {
+        if(provider.mapController != null)
+          provider.mapController!.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(mainCity!['location'].latitude, mainCity['location'].longitude), zoom: 14)));
+        return GoogleMap(
+          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          myLocationEnabled: false,
+          initialCameraPosition: mainCity != null ?
+          CameraPosition(target: LatLng(mainCity['location'].latitude, mainCity['location'].longitude), zoom: 14)
+          : CameraPosition(target: LatLng(0,0)),
+          onMapCreated: (controller){
+            provider.initializeMapController(controller);
+          },
+          markers: markers,
+        );
+      }
     );
   }
 }
