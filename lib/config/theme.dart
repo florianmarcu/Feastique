@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-//Color _secondaryColor = Color(0xFF556b2e);
+Color kSecondaryColor = Color(0xFF556b2e);
 Color _highlightColor = Colors.white;
 Color _primaryColor = Color(0xFFeec584);
 Color _accentColor = Color(0xFF764248);
