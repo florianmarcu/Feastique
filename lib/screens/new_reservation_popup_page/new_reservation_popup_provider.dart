@@ -96,7 +96,7 @@ class NewReservationPopupProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<Reservation> makeReservation(UserProfile? user) async{
+  Future<Reservation> makeReservation(User? user) async{
     _loading();
 
     var userReservationRef = FirebaseFirestore.instance.collection('users').doc(user!.uid).collection('reservations').doc();
@@ -106,7 +106,7 @@ class NewReservationPopupProvider with ChangeNotifier{
       'date_created' : FieldValue.serverTimestamp(),
       'date_start': Timestamp.fromDate(selectedDate!),
       'guest_id' : user.uid,
-      'guest_name' : user.displayName,
+      'guest_name' : selectedName != "" ? selectedName : (user.displayName != null ? user.displayName : ""),
       'place_id' : place.id,
       'place_name' : place.name,
       'contact_phone_number' : selectedPhoneNo,

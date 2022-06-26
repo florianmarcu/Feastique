@@ -1,6 +1,6 @@
+import 'package:authentication/authentication.dart';
 import 'package:feastique/config/config.dart';
 import 'package:feastique/models/place/place.dart';
-import 'package:feastique/models/user/user.dart';
 import 'package:feastique/screens/new_reservation_popup_page/new_reservation_popup_provider.dart';
 import 'package:feastique/screens/reservation_page/reservation_page.dart';
 import 'package:feastique/screens/reservation_page/reservation_provider.dart';
@@ -781,9 +781,9 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                               WidgetSpan(child: Icon(Icons.email_outlined, size: 20)),
                               WidgetSpan(child: SizedBox(width: 10)),
                               TextSpan(
-                                text: Provider.of<UserProfile>(context, listen: false).email!.length < 25
-                                ? Provider.of<UserProfile>(context, listen: false).email! 
-                                : Provider.of<UserProfile>(context, listen: false).email!.substring(0,3) + "..." + Provider.of<UserProfile>(context, listen: false).email!.substring(Provider.of<UserProfile>(context, listen: false).email!.indexOf("@") -5)
+                                text: Provider.of<User>(context, listen: false).email!.length < 25
+                                ? Provider.of<User>(context, listen: false).email! 
+                                : Provider.of<User>(context, listen: false).email!.substring(0,3) + "..." + Provider.of<User>(context, listen: false).email!.substring(Provider.of<User>(context, listen: false).email!.indexOf("@") -5)
                               ),
                             ]
                           )
@@ -801,9 +801,9 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                     shape: ContinuousRectangleBorder(),
                     elevation: 0,
                     onPressed: () async{
-                      var reservation = await provider.makeReservation(Provider.of<UserProfile?>(context, listen: false));
+                      var reservation = await provider.makeReservation(Provider.of<User?>(context, listen: false));
                       Navigator.popUntil(context, (route) => route.isFirst);
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>
                         ChangeNotifierProvider(
                           create: (context) => ReservationProvider(reservation) ,
                           child: ReservationPage(),
