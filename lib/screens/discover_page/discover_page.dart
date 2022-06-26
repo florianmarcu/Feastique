@@ -47,7 +47,6 @@ class _DiscoverPageState extends State<DiscoverPage> with TickerProviderStateMix
                           var _animation = CurvedAnimation(parent: animation, curve: Curves.easeIn);
                           return SlideTransition(
                             child: child,
-                            //child: ClipPath(child: child, clipper: _clipper,),
                             position: Tween<Offset>(
                               begin: Offset(0,-1),
                               end: Offset(0,0)
@@ -59,25 +58,6 @@ class _DiscoverPageState extends State<DiscoverPage> with TickerProviderStateMix
                           builder: (context, child) => FiltersPopUpPage()
                         )
                       ));
-                      // showGeneralDialog(
-                      //   context: context,
-                      //   transitionDuration: Duration(milliseconds: ),
-                      //   transitionBuilder: (context, animation, secondAnimation, child){
-                      //     var _animation = CurvedAnimation(parent: animation, curve: Curves.easeIn);
-                      //     return SlideTransition(
-                      //       child: child,
-                      //       //child: ClipPath(child: child, clipper: _clipper,),
-                      //       position: Tween<Offset>(
-                      //         begin: Offset(0,-1),
-                      //         end: Offset(0,0)
-                      //       ).animate(_animation),
-                      //     );
-                      //   },
-                      //   pageBuilder: ((context, animation, secondaryAnimation) => ChangeNotifierProvider(
-                      //     create: (context) => context.read<DiscoverPageProvider>(),
-                      //     builder:( context, child) => FiltersPopupPage()
-                      //   )
-                      // ));
                     },
                   ),
                   SizedBox(width: 10),
@@ -102,6 +82,7 @@ class _DiscoverPageState extends State<DiscoverPage> with TickerProviderStateMix
           viewType == "map" 
           ? PlacesMap()
           : PlacesList(),
+          // wrapperHomePageProvider.isLoading || 
           isLoading
           ? Positioned(
             child: Container(
@@ -115,36 +96,5 @@ class _DiscoverPageState extends State<DiscoverPage> with TickerProviderStateMix
         ]),
       )
     );
-    // return FlutterMap(
-    //   options: MapOptions(
-    //     center: LatLng(44.427466, 26.102500),
-    //     zoom: 14,
-    //     interactiveFlags: InteractiveFlag.doubleTapZoom | InteractiveFlag.drag | InteractiveFlag.pinchMove | InteractiveFlag.pinchZoom
-    //   ),
-    //   layers: [
-    //     TileLayerOptions(
-    //       urlTemplate: "https://mt0.google.com/vt/lyrs=m@221097413,traffic,transit,bike&x={x}&y={y}&z={z}",
-    //       subdomains: ['a', 'b', 'c'],
-    //       // attributionBuilder: (_) {
-    //       //   return Text("© OpenStreetMap contributors");
-    //       // },
-    //       retinaMode: true
-    //     ),
-    //     MarkerLayerOptions(
-    //       markers: [
-    //         Marker(
-    //           width: 80.0,
-    //           height: 80.0,
-    //           point: LatLng(44.427466, 26.102500),
-    //           builder: (ctx) =>
-    //           Container(
-    //             child: FlutterLogo(),
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   ],
-    // );
-
   }
 }
