@@ -34,35 +34,35 @@ class _PlacesListState extends State<PlacesList> {
   @override
   Widget build(BuildContext context) {
     var places = context.watch<DiscoverPageProvider>().places;
-    setState(() {
-      _places = places;
-    });
-    //_loadPlaces(places);
-    _scrollController.addListener(() {
-      if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent){
-        _loadMorePlaces(places);
-      }
-    });
-    // print(places.length);
     // setState(() {
     //   _places = places;
     // });
-    print(_places.length);
+    // //_loadPlaces(places);
+    // _scrollController.addListener(() {
+    //   if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent){
+    //     _loadMorePlaces(places);
+    //   }
+    // });
+    // // print(places.length);
+    // // setState(() {
+    // //   _places = places;
+    // // });
+    // print(_places.length);
     return ScrollConfiguration(
       behavior: ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
-      child: _places.length == 0
+      child: places.length == 0
       ? EmptyList()
       : ListView.separated(
         addAutomaticKeepAlives: false,
         cacheExtent: 0,
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top, left: 30, right: 30, bottom: 30),
         controller: _scrollController,
-        itemCount: _places.length,
+        itemCount: places.length,
         separatorBuilder: (context, index) => SizedBox(height: 30),
         itemBuilder: (context, index){
           // if(index == _places.length)
           //   return Center(child: CircularProgressIndicator.adaptive(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor) ,));
-          var place = _places[index];
+          var place = places[index];
           return InkWell(
             splashColor: Theme.of(context).splashColor,
             child: GestureDetector(
@@ -108,8 +108,8 @@ class _PlacesListState extends State<PlacesList> {
                               width: MediaQuery.of(context).size.width*0.9,
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
                               child: FutureProvider<Image?>.value(
-                                value: _places[index].image,
-                                initialData: _places[index].finalImage,
+                                value: places[index].image,
+                                initialData: places[index].finalImage,
                                 builder: (context, child){
                                   var image = Provider.of<Image?>(context);
                                   return image == null
