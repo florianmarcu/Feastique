@@ -2,6 +2,7 @@ import 'package:feastique/config/config.dart';
 import 'package:feastique/screens/new_reservation_popup_page/new_reservation_popup_page.dart';
 import 'package:feastique/screens/new_reservation_popup_page/new_reservation_popup_provider.dart';
 import 'package:feastique/screens/place_page/components/tiles/detail.dart';
+import 'package:feastique/screens/place_page/components/tiles/place_map.dart';
 import 'package:feastique/screens/place_page/place_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -192,7 +193,7 @@ class _PlacePageState extends State<PlacePage> {
                         //backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                         padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 20))
                       ),
-                      onPressed: (){},
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PlaceMapPage(place.location))),
                       icon: Image.asset(asset("map"), width: 20,),
                       label: Text("Vezi pe hartă", style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 13),),
                     ),
