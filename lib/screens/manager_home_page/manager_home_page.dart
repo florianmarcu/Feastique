@@ -4,7 +4,6 @@ import 'package:feastique/screens/manager_orders_page/manager_orders_provider.da
 import 'package:feastique/screens/manager_reservations_page/manager_reservations_page.dart';
 import 'package:feastique/screens/manager_reservations_page/manager_reservations_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ManagerHomePage extends StatefulWidget {
 
@@ -23,7 +22,7 @@ class _ManagerHomePageState extends State<ManagerHomePage> {
       }
     ),
     ChangeNotifierProvider<ManagerOrdersProvider>(
-      create: (context) => ManagerOrdersProvider(),
+      create: (context) => ManagerOrdersProvider(context),
       builder: (context, _) {
         return ManagerOrdersPage();
       }
@@ -46,6 +45,7 @@ class _ManagerHomePageState extends State<ManagerHomePage> {
 
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         //toolbarHeight: 70,
