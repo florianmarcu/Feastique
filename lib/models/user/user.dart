@@ -7,19 +7,18 @@ class UserProfile{
   final String? email;
   final String? photoURL;
   final String? displayName;
-  final bool? isAnonymous;
+  final bool isAnonymous;
   String? phoneNumber;
-  Future<bool>? isManager;
+  bool isManager = false;
 
-  UserProfile(this.uid, {this.email,this.photoURL, this.displayName, this.isAnonymous, this.phoneNumber});
+  UserProfile({required this.uid, this.email, this.photoURL, this.displayName, required this.isAnonymous, this.phoneNumber});
 }
 
 /// Converts a User to UserProfile
-UserProfile? userToUserProfile(User? user){
+Future<UserProfile?> userToUserProfile(User? user) async{
   if(user != null){
-
     var userProfile = UserProfile(
-      user.uid,
+      uid: user.uid,
       email: user.email,
       photoURL: user.photoURL,
       phoneNumber: user.phoneNumber,
@@ -27,25 +26,19 @@ UserProfile? userToUserProfile(User? user){
         ? user.displayName 
         : (user.email != null
           ? user.email!.substring(0,user.email!.indexOf('@'))
-          : "Guest"),
+          : "Oaspete"),
       isAnonymous : user.isAnonymous,
     );
 
-    _fetchExtraData(userProfile);
+    /// Fetch extra data from the user's document in Firestore (users/{user})  
+    if(!user.isAnonymous)
+      await FirebaseFirestore.instance.collection('users').doc(userProfile.uid).get()
+      .then((doc){
+        userProfile.isManager = doc.data()!.containsKey('manager') && doc.data()!['manager'] == true;
+      });
     
     return userProfile;
 
   }
   else return null;
-}
-
-void _fetchExtraData(UserProfile userProfile){
-  bool isManager = false;
-
-  FirebaseFirestore.instance.collection('users').doc(userProfile.uid).get()
-  .then((doc){
-    isManager = doc.data()!.containsKey('isManager') && doc.data()!['isManager'] == true;
-
-  });
-  //userProfile.isManager
 }
