@@ -11,16 +11,16 @@ class Place{
   final int cost; // Imported from the database
   final String ambience;
   final int capacity;
-  final Map<String,dynamic>? discounts;
+  final Map<String, dynamic>? discounts;
   //final Future<List<Uint8List>> images; // The Place images from Firebase Storage
   final Future<String>? address; // The Street&No of the Place
   /// A reference to the 'users/{usersId}/managed_place/{managed_place}' in the database
   /// Contains some data about the place, and the 'reservations' and 'scanned_codes' subcollections. 
   final DocumentReference? reference;
-  final Map<String,dynamic>? schedule;
-  final Map<String,dynamic>? deals;
+  final Map<String, dynamic>? schedule;
+  final Map<String, dynamic>? deals;
   final List<dynamic>? types;
-  final String? menu; // A link to a webpage containing the Place's menu
+  final dynamic menu; // A link to a webpage containing the Place's menu
   final bool? hasOpenspace;
   final bool? hasReservations;
   final bool? isPartner;
