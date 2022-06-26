@@ -19,34 +19,15 @@ class WrapperHomePageProvider with ChangeNotifier{
   List<Map<String, dynamic>>? cities;
   /// The main city selected in the app
   Map<String, dynamic>? mainCity;
+  UserProfile? currentUser; 
+  Reservation? activeReservation;
   int selectedScreenIndex = 1;
+  bool isLoading = false;
 
-  List<Widget> screens = <Widget>[
-    ChangeNotifierProvider<HomePageProvider>(
-      create: (context) => HomePageProvider(),
-      builder: (context, _) {
-        return HomePage();
-      }
-    ),
-    ChangeNotifierProvider<DiscoverPageProvider>(
-      create: (context) => DiscoverPageProvider(context),
-      builder: (context, _) {
-        return DiscoverPage(context);
-      }
-    ),
-    ChangeNotifierProvider<ReservationsPageProvider>(
-      create: (context) => ReservationsPageProvider(context),
-      builder: (context, _) {
-        return ReservationsPage();
-      }
-    ),
-    ChangeNotifierProvider<ProfilePageProvider>(
-      create: (context) => ProfilePageProvider(Provider.of<UserProfile>(context, listen: false), context),
-      builder: (context, _) {
-        return ProfilePage();
-      }
-    ),
-  ];
+  PageController pageController = PageController(initialPage: 1);
+
+  List<Widget> screens = [];
+
   List<BottomNavigationBarItem> screenLabels = <BottomNavigationBarItem>[
     BottomNavigationBarItem(
       label: "Acasă",
@@ -67,17 +48,100 @@ class WrapperHomePageProvider with ChangeNotifier{
   ];
 
 
-  WrapperHomePageProvider(){
-    getData();
+  WrapperHomePageProvider(BuildContext context){
+    getData(context);
   }
 
-  void getData() async{
+  void getData(BuildContext context) async{
+    _loading();
+
+    currentUser = await userToUserProfile(context.read<User?>());
+
     var query = FirebaseFirestore.instance.collection("config").doc("config");
     var doc = await query.get();
     configData = doc.data(); 
     mainCity = configData!['cities'][configData!['main_city']];
+    mainCity!.addAll({"id": configData!['main_city']});
+
+    screens = <Widget>[
+      ChangeNotifierProvider<HomePageProvider>(
+        create: (context) => HomePageProvider(),
+        builder: (context, _) {
+          return HomePage();
+        }
+      ),
+      ChangeNotifierProvider<DiscoverPageProvider>(
+        create: (context) => DiscoverPageProvider(context, mainCity!),
+        builder: (context, _) {
+          return DiscoverPage(context);
+        }
+      ),
+      ChangeNotifierProvider<ReservationsPageProvider>(
+        create: (context) => ReservationsPageProvider(context),
+        builder: (context, _) {
+          return ReservationsPage();
+        }
+      ),
+      ChangeNotifierProvider<ProfilePageProvider>(
+        create: (context) => ProfilePageProvider(context, currentUser!),
+        builder: (context, _) {
+          return ProfilePage();
+        }
+      ),
+    ];
+
+    /// Check if there's an active reservation
+    /// If there is, assign it to the 'activeReservation'
+    await FirebaseFirestore.instance.collection('users').doc(currentUser!.uid).collection("reservations")
+    .where("active", isEqualTo: true)
+    .get()
+    .then((query) {
+      if(query.docs.length > 0)
+        activeReservation = reservationDataToReservation(query.docs[0].id, query.docs[0].data());
+    });
+    
 
     notifyListeners();
+
+    _loading();
+  }
+
+  void updateData() async{
+    _loading();
+
+    screens = [];
+    print(mainCity);
+
+    screens = <Widget>[
+      ChangeNotifierProvider<HomePageProvider>(
+        create: (context) => HomePageProvider(),
+        builder: (context, _) {
+          return HomePage();
+        }
+      ),
+      ChangeNotifierProvider<DiscoverPageProvider>(
+        create: (context) => DiscoverPageProvider(context, mainCity!),
+        builder: (context, _) {
+          return DiscoverPage(context);
+        }
+      ),
+      ChangeNotifierProvider<ReservationsPageProvider>(
+        create: (context) => ReservationsPageProvider(context),
+        builder: (context, _) {
+          return ReservationsPage();
+        }
+      ),
+      ChangeNotifierProvider<ProfilePageProvider>(
+        create: (context) => ProfilePageProvider(context, currentUser!),
+        builder: (context, _) {
+          return ProfilePage();
+        }
+      ),
+    ];
+
+    notifyListeners();
+
+    _loading();
   }
 
   void updateSelectedScreenIndex(int index){
@@ -87,7 +151,21 @@ class WrapperHomePageProvider with ChangeNotifier{
   }
 
   void updateMainCity(String city){
+    _loading();
+
     mainCity = configData!['cities'][city];
+    mainCity!.addAll({"id": city});
+
+    /// Update screens
+    updateData();
+
+    notifyListeners();
+
+    _loading();
+  }
+
+  void _loading(){
+    isLoading = !isLoading;
 
     notifyListeners();
   }
