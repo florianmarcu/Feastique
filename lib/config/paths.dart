@@ -56,6 +56,12 @@ String asset(String fileName){
       return "assets/icons/european.png";
     case 'wine':
       return "assets/icons/wine.png";  
+    case 'accepted':
+      return "assets/icons/accepted.png";
+    case 'refused':
+      return "assets/icons/refused.png";
+    case 'claimed':
+      return "assets/icons/claimed.png";    
     default: return "";
   }
 }

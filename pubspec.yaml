@@ -64,7 +64,9 @@ flutter:
     - assets/icons/european.png
     - assets/icons/coffee.png
     - assets/icons/wine.png
-
+    - assets/icons/accepted.png
+    - assets/icons/refused.png
+    - assets/icons/claimed.png
   fonts:
     - family: Raleway
       fonts:
