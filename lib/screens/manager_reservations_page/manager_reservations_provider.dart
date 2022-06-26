@@ -7,19 +7,49 @@ export 'package:provider/provider.dart';
 
 class ManagerReservationsProvider with ChangeNotifier{
 
-  List<Reservation>? upcomingReservations;
+  List<Reservation>? pastReservations;
+  List<Reservation>? pendingReservations;
+  List<Reservation>? activeReservations;
+  BuildContext context;
 
-  ManagerReservationsProvider(BuildContext context){
-    _getData(context);
+  ManagerReservationsProvider(this.context){
+    _getData();
   }
-  Future<void> _getData(BuildContext context) async{
-    var user = Provider.of<UserProfile?>(context, listen: false);
 
-    FirebaseFirestore.instance.collection("users").doc(user!.uid).collection("reservations")
-    .where('date_start', isGreaterThan: Timestamp.fromDate(DateTime.now().add(Duration(minutes: -30)).toLocal()))
-    .orderBy("date_start")
-    .get()
-    .then((query) => upcomingReservations = query.docs.map((doc) => reservationDataToReservation(doc.id, doc.data())).toList());
+  Future<void> _getData() async{
+    var user = Provider.of<User?>(context, listen: false);
+
+    var place = (await FirebaseFirestore.instance.collection("users").doc(user!.uid).collection("managed_places").get()).docs.first;
+    
+    try {
+      /// Get pending reservations
+      await FirebaseFirestore.instance.collection("users").doc(user.uid).collection("managed_places").doc(place.id).collection("reservations")
+      .where('accepted', isNull: true)
+      .orderBy("date_start", descending: true)
+      .get()
+      .then((query) => pendingReservations = query.docs.map((doc) => reservationDataToReservation(doc.id, doc.data())).toList());
+
+      /// Get processed reservations   
+      await FirebaseFirestore.instance.collection("users").doc(user.uid).collection("managed_places").doc(place.id).collection("reservations")
+      .where('accepted', isEqualTo: true)
+      // .orderBy("date_start")
+      .get()
+      .then((query) => pastReservations = query.docs.map((doc) => reservationDataToReservation(doc.id, doc.data())).toList());
+      await FirebaseFirestore.instance.collection("users").doc(user.uid).collection("managed_places").doc(place.id).collection("reservations")
+      .where('accepted', isEqualTo: false)
+      .get()
+      .then((query) => pastReservations!.addAll(query.docs.map((doc) => reservationDataToReservation(doc.id, doc.data())).toList()));
+      pastReservations!.sort(((a, b) => a.dateStart.millisecondsSinceEpoch - b.dateStart.millisecondsSinceEpoch));
+
+      /// Get active reservations
+      await FirebaseFirestore.instance.collection("users").doc(user.uid).collection("managed_places").doc(place.id).collection("reservations")
+      .where('active', isEqualTo: true)
+      .orderBy("date_start", descending: true)
+      .get()
+      .then((query) => activeReservations = query.docs.map((doc) => reservationDataToReservation(doc.id, doc.data())).toList());
+
+    }
+    catch(err){}
 
     notifyListeners();
   }
@@ -45,10 +75,82 @@ class ManagerReservationsProvider with ChangeNotifier{
     );
   }
 
-  Future<List<DocumentSnapshot>> getReservation()async{
-    var query = await FirebaseFirestore.instance.collection('users').doc("kosUWxVf20hAa0AgD0SJRudtVd82").collection("managed_places").doc("martina_ristorante")
-    .collection("reservations").get();
-    return query.docs;
+  void acceptReservation(Reservation reservation) async{
+    await reservation.userReservationRef!.set(
+      {
+        "accepted": true,
+      },
+      SetOptions(merge: true)
+    );
+    await reservation.placeReservationRef!.set(
+      {
+        "accepted": true,
+      },
+      SetOptions(merge: true)
+    );
+    
+    _getData();
+
+    notifyListeners();
+  }
+
+  void declineReservation(Reservation reservation) async{
+    await reservation.userReservationRef!.set(
+      {
+        "accepted": true,
+      },
+      SetOptions(merge: true)
+    );
+    await reservation.placeReservationRef!.set(
+      {
+        "accepted": true,
+      },
+      SetOptions(merge: true)
+    );
+    
+    _getData();
+
+    notifyListeners();
+  }
+
+  void activateReservation(Reservation reservation) async{
+    await reservation.userReservationRef!.set(
+      {
+        "claimed": true,
+        "active": true,
+      },
+      SetOptions(merge: true)
+    );
+    await reservation.placeReservationRef!.set(
+      {
+        "claimed": true,
+        "active": true,
+      },
+      SetOptions(merge: true)
+    );
+    
+    _getData();
+
+    notifyListeners();
+  }
+
+  void deactivateReservation(Reservation reservation) async{
+    await reservation.userReservationRef!.set(
+      {
+        "active": false,
+      },
+      SetOptions(merge: true)
+    );
+    await reservation.placeReservationRef!.set(
+      {
+        "active": false,
+      },
+      SetOptions(merge: true)
+    );
+    
+    _getData();
+
+    notifyListeners();
   }
 
 }
