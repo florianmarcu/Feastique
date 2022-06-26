@@ -1,15 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'user.dart';
 export 'package:firebase_auth/firebase_auth.dart';
 
 /// A singleton class that handles the entire authentication process of the app
 class Authentication{
-    static final FirebaseAuth _auth = FirebaseAuth.instance;
-    static final FirebaseFirestore _db = FirebaseFirestore.instance;
-    static User? currentUser;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseFirestore _db = FirebaseFirestore.instance;
+  static UserProfile? currentUser;
 
   /// Auth state of the app as a stream
   static Stream<User?> get user{
+    
     return _auth.authStateChanges();
   }
 
@@ -19,9 +23,6 @@ class Authentication{
     DocumentSnapshot doc = await ref.get();
     //await _saveDeviceToken(user.uid);
     if(doc.data() == null){
-      //AnalyticsService().analytics.logSignUp(signUpMethod: credentialProvider!);
-      // Commented temporarly in order to skip the tutorial
-      // g.isNewUser = true;
       ref.set({
         'uid' : user.uid,
         'email' : user.email,
@@ -34,15 +35,64 @@ class Authentication{
       );
     }
   }
+  
+  static Future signInAnonimously() async{
+    try{
+      UserCredential result = await _auth.signInAnonymously();
+      return result;
+    }
+    catch(error){
+      print(error);
+      return error;
+    }
+  }
+  
+  // Sign in with Google
+  static Future signInWithGoogle() async{
+    try{
+      var googleSignIn = GoogleSignIn();  
+      await googleSignIn.signOut();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken, 
+        accessToken: googleAuth.accessToken
+      );
+      UserCredential result = await _auth.signInWithCredential(credential);
+      if(result.user != null)
+        updateUserData(result.user!,'email_and_password');
+      return result;
+    }
+    catch(error){
+      print(error);
+      return error;
+    }
+  }
+
+  // Sign in with Google
+  static Future signInWithFacebook() async{
+    try{
+      final LoginResult facebookLoginResult = await FacebookAuth.instance.expressLogin(
+        //permissions: ['email'],
+      );
+      final AuthCredential credential = FacebookAuthProvider.credential(
+        facebookLoginResult.accessToken!.token
+      );
+      UserCredential result = await _auth.signInWithCredential(credential);
+      if(result.user != null)
+        updateUserData(result.user!,'facebook');
+      return result;
+    }
+    catch(error){
+      print(error);
+      return error;
+    }
+  }
 
   // Sign in by email and password
   static Future signInWithEmailAndPassword(String email, String password) async{
     try{
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
-      // User? user = result.user;
-      // if(user != null)
-      //   updateUserData(user, 'email_and_password');
-      //AnalyticsService().analytics.logLogin(loginMethod: 'email_and_password');
       return result;
     }
     catch(error){
@@ -76,7 +126,7 @@ class Authentication{
 
   Authentication._init(){
     user.listen((user) {
-      currentUser = user;
+      currentUser = userToUserProfile(user);
     });
   }
   static final Authentication _instance = Authentication._init();

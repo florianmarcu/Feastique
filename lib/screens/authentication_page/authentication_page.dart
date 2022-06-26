@@ -1,4 +1,5 @@
 import 'package:feastique/config/config.dart';
+import 'package:feastique/screens/authentication_page/authentication_provider.dart';
 import 'package:feastique/screens/authentication_page/components/log_in_form.dart';
 import 'package:feastique/screens/register_page/register_page.dart';
 import 'package:feastique/screens/register_page/register_provider.dart';
@@ -9,6 +10,8 @@ class AuthenticationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var provider = context.watch<AuthenticationPageProvider>();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -72,7 +75,7 @@ class AuthenticationPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: TextButton(
-                    onPressed: () => {},
+                    onPressed: () => provider.logIn(context, "google"),
                     style: Theme.of(context).textButtonTheme.style!.copyWith(
                       padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 10, vertical: 15)),
                       backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).highlightColor)
@@ -92,7 +95,7 @@ class AuthenticationPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: TextButton(
-                    onPressed: () => {},
+                    onPressed: () => provider.logIn(context, "facebook"),
                     style: Theme.of(context).textButtonTheme.style!.copyWith(
                       padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 10, vertical: 15)),
                       backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).highlightColor)
@@ -156,6 +159,16 @@ class AuthenticationPage extends StatelessWidget {
               ),
             )
           ),
+          provider.isLoading
+          ? Positioned(
+            child: Container(
+              height: 5,
+              width: MediaQuery.of(context).size.width,
+              child: LinearProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
+            ), 
+            bottom: MediaQuery.of(context).padding.bottom,
+          )
+          : Container(),
         ],
       ),
     );

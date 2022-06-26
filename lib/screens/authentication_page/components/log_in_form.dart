@@ -39,11 +39,11 @@ class LogInForm extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
-                onPressed: () => provider.logIn(context),
+                onPressed: () => provider.logIn(context, "email_and_password"),
                 child: Text("Log in"),
               ),
               TextButton(
-                onPressed: () => provider.logIn(context),
+                onPressed: () => provider.logIn(context, "anonimously"),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

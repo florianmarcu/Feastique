@@ -9,12 +9,31 @@ class AuthenticationPageProvider with ChangeNotifier{
   bool passwordVisible = false;
   bool isLoading = false;
 
-  void logIn(BuildContext context) async{
-    var result = await Authentication.signInWithEmailAndPassword(email!, password!);
+  void logIn(BuildContext context, String signInMethod) async{
+    _loading();
+
+    var result;
+    switch(signInMethod){
+      case "email_and_password":
+        result = await Authentication.signInWithEmailAndPassword(email!, password!);
+      break;
+      case "anonimously":
+        result = await Authentication.signInAnonimously();
+      break;
+      case "google":
+        result = await Authentication.signInWithGoogle();
+      break;
+      case "facebook":
+        result = await Authentication.signInWithFacebook();
+      break;
+    }
+
     if(result.runtimeType == FirebaseAuthException)
       _handleAuthError(context, result);
 
     notifyListeners();
+
+    _loading();
   }
 
   void setEmail(String? email){
