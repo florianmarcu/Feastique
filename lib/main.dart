@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feastique/config/theme.dart';
 import 'package:feastique/models/models.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -23,8 +22,8 @@ class Main extends StatelessWidget {
       /// The providers for app's state
       providers: [
         /// The auth state of the app
-        StreamProvider<UserProfile?>.value(  
-          value: Authentication.user.map(userToUserProfile), 
+        StreamProvider<User?>.value(  
+          value: Authentication.user, 
           initialData: null
         )
       ],
@@ -58,13 +57,50 @@ Future<void> config() async{
 }
 
 fillDb() async{
-  var query2 = await FirebaseFirestore.instance.collection('places').get();
-  query2.docs.forEach((doc) async{ 
-    await doc.reference.set(
-      {
-        "city": "bucharest",
-      },
-      SetOptions(merge: true)
-    );
-  });
+  FirebaseFirestore.instance.collection("places")
+  .doc("martina_ristorante").set(
+    {
+      "menu": {
+        "items": [
+          {
+            "title": "Pizza Margherita",
+            "content": "Pizza Margherita, cu blat subțire și diametru de 40 cm",
+            "ingredients": ["aluat, sos de roșii, brânză mozzarella"],
+            "alergens" : ["lactoză", "gluten"],
+            "price": "29RON",
+          },
+          {
+            "title": "Pizza Capricciosa",
+            "content": "Pizza Capricciosa, cu blat subțire și diametru de 40 cm",
+            "ingredients": ["aluat, sos de roșii, brânză mozzarella", "ciuperci"],
+            "alergens" : ["lactoză", "gluten"],
+            "price": "31RON",
+          },
+          {
+            "title": "Pizza Suprema",
+            "content": "Pizza Suprema, cu blat subțire și diametru de 40 cm",
+            "ingredients": ["aluat, sos de roșii, brânză mozzarella", "ciuperci", "porumb", "prosciutto crudo"],
+            "alergens" : ["lactoză", "gluten"],
+            "price": "35RON",
+          },
+          {
+            "title": "Spaghetti Carbonara",
+            "content": "Spaghetti Carbonara după rețeta tradițională",
+            "ingredients": ["ou, parmezan, brânză mozzarella", "spaghette"],
+            "alergens" : ["lactoză", "gluten", "ou"],
+            "weight" : "350g",
+            "price": "33RON",
+          },
+          {
+            "title": "Spaghetti Bolognese",
+            "content": "Pizza Capricciosa, cu blat subțire și diametru de 40 cm",
+            "ingredients": ["sos de roșii, carne de vită", "spaghetti", "morcovi"],
+            "alergens" : ["gluten"],
+            "price": "35RON",
+          }
+        ]
+      }
+    },
+    SetOptions(merge: true)
+  );
 }

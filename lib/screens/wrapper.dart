@@ -15,7 +15,7 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of<UserProfile?>(context);
+    var user = Provider.of<User?>(context);
     print(Authentication.currentUser);
     // Logged out
     if(user == null)
@@ -26,7 +26,8 @@ class Wrapper extends StatelessWidget {
     // Logged in
     else 
       return ChangeNotifierProvider(
-        create: (context) => WrapperHomePageProvider(),
+        create: (context) => WrapperHomePageProvider(context),
+        lazy: false,
         child: WrapperHomePage()
       );
   }
