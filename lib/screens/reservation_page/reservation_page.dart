@@ -27,7 +27,11 @@ class ReservationPage extends StatelessWidget {
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
-          Text(provider.reservation.id),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              Text(provider.reservation.id),
+            ]),
+          ),
         ],
       )
     );
