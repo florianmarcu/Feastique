@@ -55,7 +55,7 @@ class RegisterPage extends StatelessWidget {
                         child: Text("Log in", style: Theme.of(context).textTheme.labelMedium!.copyWith(
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.normal,
-                          color: Theme.of(context).accentColor
+                          color:  Theme.of(context).colorScheme.secondary
                         )),
                         onPressed: (){
                           Navigator.pop(context);
@@ -75,7 +75,7 @@ class RegisterPage extends StatelessWidget {
               width: 400.0,
               height: 270.0,
               decoration: new BoxDecoration(
-                color: Theme.of(context).accentColor,
+                color:  Theme.of(context).colorScheme.secondary,
                 shape: BoxShape.circle,
               ),
             )

@@ -1,4 +1,3 @@
-import 'package:feastique/screens/place_page/place_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 

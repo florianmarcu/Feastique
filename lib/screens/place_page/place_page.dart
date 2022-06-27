@@ -5,7 +5,6 @@ import 'package:feastique/screens/place_page/components/tiles/detail.dart';
 import 'package:feastique/screens/place_page/components/tiles/place_map.dart';
 import 'package:feastique/screens/place_page/place_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PlacePage extends StatefulWidget {
 

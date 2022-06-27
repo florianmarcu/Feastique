@@ -1,8 +1,5 @@
-import 'package:feastique/screens/discover_page/discover_provider.dart';
 import 'package:feastique/screens/order_page/order_page.dart';
 import 'package:feastique/screens/order_page/order_provider.dart';
-import 'package:feastique/screens/profile_page/profile_provider.dart';
-import 'package:feastique/screens/reservations_page/reservations_provider.dart';
 import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:feastique/widgets/app_drawer/app_drawer.dart';
 import 'package:flutter/material.dart';

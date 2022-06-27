@@ -194,7 +194,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                                     width: MediaQuery.of(context).size.width*0.11,
                                     height: 20,
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).accentColor,
+                                      color:  Theme.of(context).colorScheme.secondary,
                                       borderRadius: BorderRadius.circular(30)
                                     ),
                                     child: Icon(
@@ -397,8 +397,8 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                           onPressed: () => setState(() => _isFormEnabled = true), 
                           iconSize: 16,
                           color: Theme.of(context).primaryColor,
-                          // splashColor: Theme.of(context).accentColor,
-                          // highlightColor: Theme.of(context).accentColor,
+                          // splashColor:  Theme.of(context).colorScheme.secondary,
+                          // highlightColor:  Theme.of(context).colorScheme.secondary,
                           icon: Image.asset(asset("edit"), width: 15,)
                         ),
                       )
@@ -510,8 +510,8 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                           onPressed: () => setState(() => _isFormEnabled = true), 
                           iconSize: 16,
                           color: Theme.of(context).primaryColor,
-                          // splashColor: Theme.of(context).accentColor,
-                          // highlightColor: Theme.of(context).accentColor,
+                          // splashColor:  Theme.of(context).colorScheme.secondary,
+                          // highlightColor:  Theme.of(context).colorScheme.secondary,
                           icon: Image.asset(asset("edit"), width: 15,)
                         ),
                       )
@@ -630,8 +630,8 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                           onPressed: () => setState(() => _isFormEnabled = true), 
                           iconSize: 16,
                           color: Theme.of(context).primaryColor,
-                          // splashColor: Theme.of(context).accentColor,
-                          // highlightColor: Theme.of(context).accentColor,
+                          // splashColor:  Theme.of(context).colorScheme.secondary,
+                          // highlightColor:  Theme.of(context).colorScheme.secondary,
                           icon: Image.asset(asset("edit"), width: 15,)
                         ),
                       )

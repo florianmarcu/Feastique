@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-Color kSecondaryColor = Color(0xFF556b2e);
+Color _tertiaryColor = Color(0xFF556b2e);
 Color _highlightColor = Colors.white;
 Color _primaryColor = Color(0xFFeec584);
-Color _accentColor = Color(0xFF764248);
+Color _secondaryColor = Color(0xFF764248);
 /// The color of the text, used in TextTheme
 Color _textColor = Colors.black;
 Color _splashColor = Colors.grey[300]!;
@@ -13,7 +13,7 @@ double? textScaleFactor = 1;
 ThemeData theme(BuildContext context){ 
   textScaleFactor = MediaQuery.textScaleFactorOf(context);
   return ThemeData(
-    accentColor: _accentColor,
+    colorScheme: _colorScheme,
     splashColor: _splashColor,
     primaryColor: _primaryColor,
     highlightColor: _highlightColor,
@@ -32,6 +32,23 @@ ThemeData theme(BuildContext context){
     floatingActionButtonTheme: _floatingActionButtonTheme
   );
 }
+
+ColorScheme _colorScheme = ColorScheme(
+  primary: _primaryColor,
+  secondary: _secondaryColor,
+  tertiary: _tertiaryColor, 
+  background: _highlightColor, 
+  brightness: Brightness.light, 
+  error: Colors.red, 
+  onBackground: Colors.black, 
+  onError: _highlightColor, 
+  onPrimary: Colors.black, 
+  onSecondary: _highlightColor, 
+  onTertiary: _highlightColor,
+  onSurface: Colors.black, 
+  surface: _primaryColor,
+);
+
 TextTheme _textTheme = TextTheme(
   /// Subtitle1 refers to the input style in a text field
   subtitle1: TextStyle(
@@ -180,7 +197,7 @@ TextSelectionThemeData _textSelectionTheme = TextSelectionThemeData(
 
 InputDecorationTheme _inputDecorationTheme = InputDecorationTheme(
   focusColor: _primaryColor,
-  fillColor: _accentColor,
+  fillColor: _secondaryColor,
   filled: true,
   floatingLabelBehavior: FloatingLabelBehavior.never,
   contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 20),

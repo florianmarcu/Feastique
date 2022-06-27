@@ -54,7 +54,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                     ),
                     secondaryBackground: Container(
                       width: MediaQuery.of(context).size.width,
-                      color: Theme.of(context).accentColor
+                      color:  Theme.of(context).colorScheme.secondary
                     ),
                     onDismissed: (direction) => direction == DismissDirection.startToEnd
                     ? provider.acceptReservation(reservation)
@@ -329,7 +329,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                     ),
                     secondaryBackground: Container(
                       width: MediaQuery.of(context).size.width,
-                      color: Theme.of(context).accentColor
+                      color:  Theme.of(context).colorScheme.secondary
                     ),
                     onDismissed: (direction) => provider.deactivateReservation(reservation),
                     child: ClipRRect(

@@ -1,5 +1,4 @@
 import 'package:authentication/authentication.dart';
-import 'package:feastique/models/user/user.dart';
 import 'package:feastique/screens/manager_home_page/manager_home_page.dart';
 import 'package:feastique/screens/manager_home_page/manager_home_provider.dart';
 import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';

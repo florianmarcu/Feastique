@@ -9,7 +9,7 @@ TextButtonThemeData textButtonTheme(BuildContext context) =>  TextButtonThemeDat
       Theme.of(context).highlightColor
   ),
   backgroundColor: MaterialStateProperty.all<Color>(
-    Theme.of(context).accentColor
+     Theme.of(context).colorScheme.secondary
   ),
   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
     RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))

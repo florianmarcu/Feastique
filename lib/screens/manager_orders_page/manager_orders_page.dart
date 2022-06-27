@@ -1,4 +1,3 @@
-import 'package:feastique/config/config.dart';
 import 'package:feastique/screens/manager_orders_page/manager_orders_provider.dart';
 import 'package:flutter/material.dart';
 

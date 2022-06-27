@@ -58,7 +58,7 @@ class AuthenticationPage extends StatelessWidget {
                         child: Text("Înregistrare", style: Theme.of(context).textTheme.labelMedium!.copyWith(
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.normal,
-                          color: Theme.of(context).accentColor
+                          color: Theme.of(context).colorScheme.secondary
                         )),
                         onPressed: () => Navigator.push(context, MaterialPageRoute(
                           builder: (context) => ChangeNotifierProvider(
@@ -141,7 +141,7 @@ class AuthenticationPage extends StatelessWidget {
               width: 400.0,
               height: 270.0,
               decoration: new BoxDecoration(
-                color: Theme.of(context).accentColor,
+                color:  Theme.of(context).colorScheme.secondary,
                 shape: BoxShape.circle,
               ),
             )
