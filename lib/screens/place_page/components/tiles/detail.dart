@@ -17,7 +17,7 @@ class AmbienceDetailTile extends DetailTile{
       padding: const EdgeInsets.all(10.0),
       child: Row(
         children: [
-          Image.asset(asset(ambience), width: 23,),
+          Image.asset(localAsset(ambience), width: 23,),
           SizedBox(width: 10,),
           Column(
             children: [
@@ -87,9 +87,8 @@ class TypeDetailTile extends DetailTile{
         child: Row(
           children: [
             // Text("\$", style: Theme.of(context).textTheme.headline6,),
-            Image.asset(asset(type), width: 22,),
+            Image.memory(cloudAsset(type), width: 22,),
             SizedBox(width: 10,),
-
             Column(
               children: [
                 //Text("Cost", style:Theme.of(context).textTheme.overline,),

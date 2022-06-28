@@ -399,7 +399,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                           color: Theme.of(context).primaryColor,
                           // splashColor:  Theme.of(context).colorScheme.secondary,
                           // highlightColor:  Theme.of(context).colorScheme.secondary,
-                          icon: Image.asset(asset("edit"), width: 15,)
+                          icon: Image.asset(localAsset("edit"), width: 15,)
                         ),
                       )
                     ],
@@ -512,7 +512,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                           color: Theme.of(context).primaryColor,
                           // splashColor:  Theme.of(context).colorScheme.secondary,
                           // highlightColor:  Theme.of(context).colorScheme.secondary,
-                          icon: Image.asset(asset("edit"), width: 15,)
+                          icon: Image.asset(localAsset("edit"), width: 15,)
                         ),
                       )
                     ],
@@ -529,7 +529,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                         ),
                         WidgetSpan(child: SizedBox(width: 10)),
                         WidgetSpan(child: Tooltip(
-                          child: Image.asset(asset("question"), width: 17, color: Colors.grey[500]), 
+                          child: Image.asset(localAsset("question"), width: 17, color: Colors.grey[500]), 
                           message: "Dacă aveți alte informații legate de rezervare, vă rugăm să le adăugați aici",
                           verticalOffset: -50,
                           height: 50,
@@ -632,7 +632,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                           color: Theme.of(context).primaryColor,
                           // splashColor:  Theme.of(context).colorScheme.secondary,
                           // highlightColor:  Theme.of(context).colorScheme.secondary,
-                          icon: Image.asset(asset("edit"), width: 15,)
+                          icon: Image.asset(localAsset("edit"), width: 15,)
                         ),
                       )
                     ],
@@ -692,7 +692,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                         Text.rich( /// The Time 
                           TextSpan(
                             children: [
-                              WidgetSpan(child: Image.asset(asset('time'), width: 18)),
+                              WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
                               WidgetSpan(child: SizedBox(width: 10)),
                               TextSpan(
                                 text: formatDateToHourAndMinutes(selectedDate)
@@ -703,7 +703,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                         Text.rich( /// The Date
                           TextSpan(
                             children: [
-                              WidgetSpan(child: Image.asset(asset('calendar'), width: 18)),
+                              WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
                               WidgetSpan(child: SizedBox(width: 10)),
                               TextSpan(
                                 text: formatDateToDay(selectedDate)
@@ -714,7 +714,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                         Text.rich( /// The People Number
                           TextSpan(
                             children: [
-                              WidgetSpan(child: Image.asset(asset('user'), width: 15)),
+                              WidgetSpan(child: Image.asset(localAsset('user'), width: 15)),
                               WidgetSpan(child: SizedBox(width: 10)),
                               TextSpan(
                                 text: (selectedPeopleNo + 1).toString()
@@ -728,7 +728,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                     Text.rich( /// The Details 
                       TextSpan(
                         children: [
-                          WidgetSpan(child: Image.asset(asset('detail'), width: 20)),
+                          WidgetSpan(child: Image.asset(localAsset('detail'), width: 20)),
                           WidgetSpan(child: SizedBox(width: 10)),
                           TextSpan(
                             text: selectedDetails != "" ? (selectedDetails.length <= 15 ? selectedDetails : selectedDetails.substring(13) + "...") : " - "
@@ -767,7 +767,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                         Text.rich( /// The Phone Number 
                           TextSpan(
                             children: [
-                              WidgetSpan(child: Image.asset(asset('phone'), width: 20)),
+                              WidgetSpan(child: Image.asset(localAsset('phone'), width: 20)),
                               WidgetSpan(child: SizedBox(width: 10)),
                               TextSpan(
                                 text: selectedPhoneNo != "" ? selectedPhoneNo : " - "

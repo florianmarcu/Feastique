@@ -11,7 +11,7 @@ class EmptyList extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(
-            asset("no-results-found"),
+            localAsset("no-results-found"),
             color: Colors.black54,
             width: 70,
           ),

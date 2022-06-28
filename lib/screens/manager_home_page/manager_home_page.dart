@@ -32,11 +32,11 @@ class _ManagerHomePageState extends State<ManagerHomePage> {
   List<BottomNavigationBarItem> _screenLabels = <BottomNavigationBarItem>[
     BottomNavigationBarItem(
       label: "Rezervări",
-      icon: Image.asset(asset("reservation"), width: 20,)
+      icon: Image.asset(localAsset("reservation"), width: 20,)
     ),
     BottomNavigationBarItem(
       label: "Comenzi",
-      icon: Image.asset(asset("orders"), width: 20,)
+      icon: Image.asset(localAsset("orders"), width: 20,)
     ),
   ];
 

@@ -15,13 +15,15 @@ class WrapperHomePageProvider with ChangeNotifier{
   
   /// Configuration data about the cities
   Map<String, dynamic>? configData;
+  /// Configuration data about the assets
+  Map<String, dynamic>? assetsData;
   /// The cities available in the app
   List<Map<String, dynamic>>? cities;
   /// The main city selected in the app
   Map<String, dynamic>? mainCity;
   UserProfile? currentUser; 
   Reservation? activeReservation;
-  int selectedScreenIndex = 1;
+  int selectedScreenIndex = 0;
   bool isLoading = false;
 
   PageController pageController = PageController(initialPage: 1);
@@ -39,7 +41,7 @@ class WrapperHomePageProvider with ChangeNotifier{
     ),
     BottomNavigationBarItem(
       label: "Rezervări",
-      icon: Image.asset(asset('reservation'), width: 19,)
+      icon: Image.asset(localAsset('reservation'), width: 19,)
     ),
     BottomNavigationBarItem(
       label: "Profil",
@@ -55,13 +57,16 @@ class WrapperHomePageProvider with ChangeNotifier{
   void getData(BuildContext context) async{
     _loading();
 
+    ///Get 'currentUser' as UserProfile (with full data from both FirebaseAuth and Cloud Firestore)
     currentUser = await userToUserProfile(context.read<User?>());
 
+    ///Get the configuration data from Cloud Firestore (such as available cities)
     var query = FirebaseFirestore.instance.collection("config").doc("config");
     var doc = await query.get();
     configData = doc.data(); 
     mainCity = configData!['cities'][configData!['main_city']];
     mainCity!.addAll({"id": configData!['main_city']});
+    
 
     screens = <Widget>[
       ChangeNotifierProvider<HomePageProvider>(
@@ -110,7 +115,7 @@ class WrapperHomePageProvider with ChangeNotifier{
     _loading();
 
     screens = [];
-    print(mainCity);
+    //print(mainCity!['id']);
 
     screens = <Widget>[
       ChangeNotifierProvider<HomePageProvider>(
@@ -163,6 +168,8 @@ class WrapperHomePageProvider with ChangeNotifier{
 
     _loading();
   }
+
+  
 
   void _loading(){
     isLoading = !isLoading;

@@ -2,6 +2,7 @@ import 'package:authentication/authentication.dart';
 import 'package:feastique/models/models.dart';
 import 'package:feastique/screens/authentication_page/authentication_page.dart';
 import 'package:feastique/screens/authentication_page/authentication_provider.dart';
+import 'package:feastique/screens/wrapper/wrapper_provider.dart';
 import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -15,19 +16,31 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var provider = context.watch<WrapperProvider>();
     var user = Provider.of<User?>(context);
     print(Authentication.currentUser);
+    if(provider.isLoading)
+      return Container(
+        color: Theme.of(context).canvasColor,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Container(
+          alignment: Alignment.bottomCenter,
+          height: 5,
+          width: MediaQuery.of(context).size.width,
+          child: LinearProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
+        ), 
+      );
     // Logged out
-    if(user == null)
+    else if(user == null)
       return ChangeNotifierProvider(
         create: (context) => AuthenticationPageProvider(),
         child: AuthenticationPage()
       );
     // Logged in
-    else 
-      return ChangeNotifierProvider(
+    else return ChangeNotifierProvider(
         create: (context) => WrapperHomePageProvider(context),
-        lazy: false,
+        //lazy: false,
         child: WrapperHomePage()
       );
   }

@@ -77,7 +77,7 @@ class ReservationsPage extends StatelessWidget {
                                     Text.rich( /// The Date
                                       TextSpan(
                                         children: [
-                                          WidgetSpan(child: Image.asset(asset('calendar'), width: 18)),
+                                          WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
                                           WidgetSpan(child: SizedBox(width: 10)),
                                           TextSpan(
                                             text: formatDateToDay(reservation.dateStart)
@@ -88,7 +88,7 @@ class ReservationsPage extends StatelessWidget {
                                     Text.rich( /// The Time 
                                       TextSpan(
                                         children: [
-                                          WidgetSpan(child: Image.asset(asset('time'), width: 18)),
+                                          WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
                                           WidgetSpan(child: SizedBox(width: 10)),
                                           TextSpan(
                                             text: formatDateToHourAndMinutes(reservation.dateStart)
@@ -172,7 +172,7 @@ class ReservationsPage extends StatelessWidget {
                                     Text.rich( /// The Date
                                       TextSpan(
                                         children: [
-                                          WidgetSpan(child: Image.asset(asset('calendar'), width: 18)),
+                                          WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
                                           WidgetSpan(child: SizedBox(width: 10)),
                                           TextSpan(
                                             text: formatDateToDay(reservation.dateStart)
@@ -183,7 +183,7 @@ class ReservationsPage extends StatelessWidget {
                                     Text.rich( /// The Time 
                                       TextSpan(
                                         children: [
-                                          WidgetSpan(child: Image.asset(asset('time'), width: 18)),
+                                          WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
                                           WidgetSpan(child: SizedBox(width: 10)),
                                           TextSpan(
                                             text: formatDateToHourAndMinutes(reservation.dateStart)

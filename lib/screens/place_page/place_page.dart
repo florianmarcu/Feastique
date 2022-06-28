@@ -193,7 +193,7 @@ class _PlacePageState extends State<PlacePage> {
                         padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 20))
                       ),
                       onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PlaceMapPage(place.location))),
-                      icon: Image.asset(asset("map"), width: 20,),
+                      icon: Image.asset(localAsset("map"), width: 20,),
                       label: Text("Vezi pe hartă", style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 13),),
                     ),
                   ),
@@ -205,7 +205,7 @@ class _PlacePageState extends State<PlacePage> {
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                         padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)
                       ),
-                      onPressed: (){},
+                      onPressed: () => provider.launchUber(context),
                       //icon: Image.asset(asset("map"), width: 20,),
                       child: Text("Uber", style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 13),),
                     ),

@@ -1,6 +1,7 @@
 
+import 'dart:typed_data';
 /// Returns the full asset path for a specific file
-String asset(String fileName){
+String localAsset(String fileName){
   switch(fileName){
     case 'social-friendly':
       return "assets/icons/social-friendly.png";
@@ -65,3 +66,10 @@ String asset(String fileName){
     default: return "";
   }
 }
+
+Uint8List cloudAsset(String fileName){
+  return kAssets[fileName];
+}
+
+/// Initialized in 'WrapperHomePageProvider's getData() method
+var kAssets = {};

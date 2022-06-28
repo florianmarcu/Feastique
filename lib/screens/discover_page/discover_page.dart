@@ -38,7 +38,7 @@ class _DiscoverPageState extends State<DiscoverPage> with TickerProviderStateMix
                   TextButton.icon(
                     style: Theme.of(context).textButtonTheme.style!.copyWith(padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 10, vertical: 0))),
                     label: Text("Filtre", style: Theme.of(context).textTheme.caption,),
-                    icon: Image.asset(asset('filter'), width: 15, color: Theme.of(context).highlightColor,),
+                    icon: Image.asset(localAsset('filter'), width: 15, color: Theme.of(context).highlightColor,),
                     onPressed: (){
                       showGeneralDialog(
                         context: context,
@@ -65,8 +65,8 @@ class _DiscoverPageState extends State<DiscoverPage> with TickerProviderStateMix
                     style: Theme.of(context).textButtonTheme.style!.copyWith(padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 10, vertical: 0))),
                     label: Text(viewTypeText, style: Theme.of(context).textTheme.caption,),
                     icon: viewType == 'map'
-                    ? Image.asset(asset('list'), width: 15, color: Theme.of(context).highlightColor,)
-                    : Image.asset(asset('map'), width: 15, color: Theme.of(context).highlightColor,),
+                    ? Image.asset(localAsset('list'), width: 15, color: Theme.of(context).highlightColor,)
+                    : Image.asset(localAsset('map'), width: 15, color: Theme.of(context).highlightColor,),
                     onPressed: () => provider.changeViewType()
                   ),
                 ],

@@ -83,7 +83,7 @@ class AuthenticationPage extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(asset("google"), width: 17,),
+                        Image.asset(localAsset("google"), width: 17,),
                         SizedBox(width: 20,),
                         Text("Continuă prin Google", style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 14),),
                       ],
@@ -103,7 +103,7 @@ class AuthenticationPage extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(asset("facebook"), width: 17,),
+                        Image.asset(localAsset("facebook"), width: 17,),
                         SizedBox(width: 20,),
                         Text("Continuă prin Facebook", style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 14),),
                       ],

@@ -97,7 +97,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                                       Text.rich( /// The Date
                                         TextSpan(
                                           children: [
-                                            WidgetSpan(child: Image.asset(asset('calendar'), width: 18)),
+                                            WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
                                             WidgetSpan(child: SizedBox(width: 10)),
                                             TextSpan(
                                               text: formatDateToDay(reservation.dateStart)
@@ -109,7 +109,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                                       Text.rich( /// The Time 
                                         TextSpan(
                                           children: [
-                                            WidgetSpan(child: Image.asset(asset('time'), width: 18)),
+                                            WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
                                             WidgetSpan(child: SizedBox(width: 10)),
                                             TextSpan(
                                               text: formatDateToHourAndMinutes(reservation.dateStart)
@@ -205,7 +205,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                                           Text.rich( /// The Date
                                             TextSpan(
                                               children: [
-                                                WidgetSpan(child: Image.asset(asset('calendar'), width: 18)),
+                                                WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
                                                 WidgetSpan(child: SizedBox(width: 10)),
                                                 TextSpan(
                                                   text: formatDateToDay(reservation.dateStart)
@@ -217,7 +217,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                                           Text.rich( /// The Time 
                                             TextSpan(
                                               children: [
-                                                WidgetSpan(child: Image.asset(asset('time'), width: 18)),
+                                                WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
                                                 WidgetSpan(child: SizedBox(width: 10)),
                                                 TextSpan(
                                                   text: formatDateToHourAndMinutes(reservation.dateStart)
@@ -234,7 +234,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                                             TextSpan(
                                               children: reservation.accepted!
                                               ? [
-                                                WidgetSpan(child: Image.asset(asset('accepted'), width: 18, color: Colors.green)),
+                                                WidgetSpan(child: Image.asset(localAsset('accepted'), width: 18, color: Colors.green)),
                                                 WidgetSpan(child: SizedBox(width: 10)),
                                                 TextSpan(
                                                   text: "Acceptată",
@@ -244,7 +244,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                                                 ),
                                               ]
                                               : [
-                                                WidgetSpan(child: Image.asset(asset('refused'), width: 18, color: Colors.red)),
+                                                WidgetSpan(child: Image.asset(localAsset('refused'), width: 18, color: Colors.red)),
                                                 WidgetSpan(child: SizedBox(width: 10)),
                                                 TextSpan(
                                                   text: "Refuzată",
@@ -262,7 +262,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                                             Text.rich( /// The "claimed" property
                                               TextSpan(
                                                 children: [
-                                                  WidgetSpan(child: Image.asset(asset('claimed'), width: 18)),
+                                                  WidgetSpan(child: Image.asset(localAsset('claimed'), width: 18)),
                                                   WidgetSpan(child: SizedBox(width: 10)),
                                                   TextSpan(
                                                     text: "Revendicată"
@@ -370,7 +370,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                                       Text.rich( /// The Date
                                         TextSpan(
                                           children: [
-                                            WidgetSpan(child: Image.asset(asset('calendar'), width: 18)),
+                                            WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
                                             WidgetSpan(child: SizedBox(width: 10)),
                                             TextSpan(
                                               text: formatDateToDay(reservation.dateStart)
@@ -382,7 +382,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                                       Text.rich( /// The Time 
                                         TextSpan(
                                           children: [
-                                            WidgetSpan(child: Image.asset(asset('time'), width: 18)),
+                                            WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
                                             WidgetSpan(child: SizedBox(width: 10)),
                                             TextSpan(
                                               text: formatDateToHourAndMinutes(reservation.dateStart)

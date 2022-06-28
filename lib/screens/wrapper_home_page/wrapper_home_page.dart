@@ -26,7 +26,9 @@ class WrapperHomePage extends StatelessWidget {
         currentIndex: selectedScreenIndex,
         items: provider.screenLabels,
         // onTap: (index) => provider.updateSelectedScreenIndex(index),
-        onTap: (index) => provider.pageController.animateToPage(index, duration: Duration(milliseconds: 200), curve: Curves.easeIn),
+        onTap: (index) =>
+        //  provider.updateSelectedScreenIndex(index)
+        provider.pageController.animateToPage(index, duration: Duration(milliseconds: 200), curve: Curves.easeIn),
 
       ),
       appBar: AppBar(
@@ -63,10 +65,11 @@ class WrapperHomePage extends StatelessWidget {
       : Container(), /// Added for orders
       // body: Center(
       //   child: IndexedStack(
-      //     children: ,
+      //     children: provider.screens,
       //     index: selectedScreenIndex
       //   )
       // ),
+      // body: provider.screens[selectedScreenIndex],
       body: SizedBox.expand(
         child: PageView(
           physics: NeverScrollableScrollPhysics(),

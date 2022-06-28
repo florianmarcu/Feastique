@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:feastique/config/paths.dart';
-import 'package:feastique/models/models.dart';
 import 'package:feastique/screens/discover_page/discover_provider.dart';
 import 'package:feastique/screens/place_page/place_page.dart';
 import 'package:feastique/screens/place_page/place_provider.dart';
@@ -18,7 +15,7 @@ class PlacesList extends StatefulWidget {
 
 class _PlacesListState extends State<PlacesList> {
 
-  List<Place> _places = [];
+  // List<Place> _places = [];
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -140,7 +137,7 @@ class _PlacesListState extends State<PlacesList> {
                                 SizedBox(height: 3),
                                 Row(
                                   children: [
-                                    Image.asset(asset("cuisine"), width: 17),
+                                    Image.asset(localAsset("cuisine"), width: 17),
                                     SizedBox(width: 10,),
                                     Expanded(
                                       child: Wrap
@@ -170,21 +167,21 @@ class _PlacesListState extends State<PlacesList> {
     );
   }
 
-  _loadPlaces(List<Place> places) => setState(() {
-    _places = places.take(10).toList();
-  });
+  // _loadPlaces(List<Place> places) => setState(() {
+  //   _places = places.take(10).toList();
+  // });
 
-  _loadMorePlaces(List<Place> places){
-    var temp = <Place>[];
-    if(_places.length < places.length)
-      for(int i = _places.length; i < _places.length + min(10, places.length - _places.length); i++){
-        print(i+1);
-        temp.add(places[i]);
-      }
-    setState(() {
-      _places.addAll(temp);
-      print(_places);
-    });
-  }
+  // _loadMorePlaces(List<Place> places){
+  //   var temp = <Place>[];
+  //   if(_places.length < places.length)
+  //     for(int i = _places.length; i < _places.length + min(10, places.length - _places.length); i++){
+  //       print(i+1);
+  //       temp.add(places[i]);
+  //     }
+  //   setState(() {
+  //     _places.addAll(temp);
+  //     print(_places);
+  //   });
+  // }
   
 }

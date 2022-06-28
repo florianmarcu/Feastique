@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feastique/config/config.dart';
 import 'package:feastique/config/theme.dart';
 import 'package:feastique/models/models.dart';
+import 'package:feastique/screens/wrapper/wrapper_provider.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,7 +33,10 @@ class Main extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Feastique',
         theme: theme(context),
-        home: Wrapper(),
+        home: ChangeNotifierProvider(
+          create: (context) => WrapperProvider(),
+          child: Wrapper()
+        ),
       ),
     );
   }
@@ -53,54 +58,60 @@ Future<void> config() async{
   //   storageBucket: 'hyuga-app.appspot.com'
   // );
   // await Firebase.initializeApp(name: "hyuga",options: firebaseOptions);
-  //await fillDb();
+  await fillDb();
 }
 
 fillDb() async{
-  FirebaseFirestore.instance.collection("places")
-  .doc("martina_ristorante").set(
-    {
-      "menu": {
-        "items": [
-          {
-            "title": "Pizza Margherita",
-            "content": "Pizza Margherita, cu blat subțire și diametru de 40 cm",
-            "ingredients": ["aluat, sos de roșii, brânză mozzarella"],
-            "alergens" : ["lactoză", "gluten"],
-            "price": "29RON",
-          },
-          {
-            "title": "Pizza Capricciosa",
-            "content": "Pizza Capricciosa, cu blat subțire și diametru de 40 cm",
-            "ingredients": ["aluat, sos de roșii, brânză mozzarella", "ciuperci"],
-            "alergens" : ["lactoză", "gluten"],
-            "price": "31RON",
-          },
-          {
-            "title": "Pizza Suprema",
-            "content": "Pizza Suprema, cu blat subțire și diametru de 40 cm",
-            "ingredients": ["aluat, sos de roșii, brânză mozzarella", "ciuperci", "porumb", "prosciutto crudo"],
-            "alergens" : ["lactoză", "gluten"],
-            "price": "35RON",
-          },
-          {
-            "title": "Spaghetti Carbonara",
-            "content": "Spaghetti Carbonara după rețeta tradițională",
-            "ingredients": ["ou, parmezan, brânză mozzarella", "spaghette"],
-            "alergens" : ["lactoză", "gluten", "ou"],
-            "weight" : "350g",
-            "price": "33RON",
-          },
-          {
-            "title": "Spaghetti Bolognese",
-            "content": "Pizza Capricciosa, cu blat subțire și diametru de 40 cm",
-            "ingredients": ["sos de roșii, carne de vită", "spaghetti", "morcovi"],
-            "alergens" : ["gluten"],
-            "price": "35RON",
-          }
-        ]
-      }
-    },
-    SetOptions(merge: true)
-  );
+  // FirebaseFirestore.instance.collection('config').doc("assets").set(
+  //   {
+  //     "icons": kFilters['types']!.toList(),
+  //   },
+  //   SetOptions(merge: true)
+  // );
+  // FirebaseFirestore.instance.collection("places")
+  // .doc("martina_ristorante").set(
+  //   {
+  //     "menu": {
+  //       "items": [
+  //         {
+  //           "title": "Pizza Margherita",
+  //           "content": "Pizza Margherita, cu blat subțire și diametru de 40 cm",
+  //           "ingredients": ["aluat, sos de roșii, brânză mozzarella"],
+  //           "alergens" : ["lactoză", "gluten"],
+  //           "price": "29RON",
+  //         },
+  //         {
+  //           "title": "Pizza Capricciosa",
+  //           "content": "Pizza Capricciosa, cu blat subțire și diametru de 40 cm",
+  //           "ingredients": ["aluat, sos de roșii, brânză mozzarella", "ciuperci"],
+  //           "alergens" : ["lactoză", "gluten"],
+  //           "price": "31RON",
+  //         },
+  //         {
+  //           "title": "Pizza Suprema",
+  //           "content": "Pizza Suprema, cu blat subțire și diametru de 40 cm",
+  //           "ingredients": ["aluat, sos de roșii, brânză mozzarella", "ciuperci", "porumb", "prosciutto crudo"],
+  //           "alergens" : ["lactoză", "gluten"],
+  //           "price": "35RON",
+  //         },
+  //         {
+  //           "title": "Spaghetti Carbonara",
+  //           "content": "Spaghetti Carbonara după rețeta tradițională",
+  //           "ingredients": ["ou, parmezan, brânză mozzarella", "spaghette"],
+  //           "alergens" : ["lactoză", "gluten", "ou"],
+  //           "weight" : "350g",
+  //           "price": "33RON",
+  //         },
+  //         {
+  //           "title": "Spaghetti Bolognese",
+  //           "content": "Pizza Capricciosa, cu blat subțire și diametru de 40 cm",
+  //           "ingredients": ["sos de roșii, carne de vită", "spaghetti", "morcovi"],
+  //           "alergens" : ["gluten"],
+  //           "price": "35RON",
+  //         }
+  //       ]
+  //     }
+  //   },
+  //   SetOptions(merge: true)
+  // );
 }
