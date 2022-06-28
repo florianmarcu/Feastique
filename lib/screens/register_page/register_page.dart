@@ -1,5 +1,4 @@
 import 'package:feastique/screens/register_page/components/register_form.dart';
-import 'package:feastique/screens/register_page/register_provider.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -7,7 +6,6 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var provider = context.watch<RegisterPageProvider>();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(

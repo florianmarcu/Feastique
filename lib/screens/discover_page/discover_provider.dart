@@ -3,6 +3,7 @@ import 'package:feastique/config/config.dart';
 import 'package:feastique/models/models.dart';
 import 'package:feastique/screens/place_page/place_page.dart';
 import 'package:feastique/screens/place_page/place_provider.dart';
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 export 'package:provider/provider.dart';
@@ -40,6 +41,7 @@ class DiscoverPageProvider with ChangeNotifier{
       "ambiences": kFilters['ambiences']!.map((e) => false).toList(),
       "costs": kFilters['costs']!.map((e) => false).toList(),
     };
+    print(city["id"] + "ID");
     /// Get all available places from Firestore
     await FirebaseFirestore.instance.collection('places')
     .where("city", isEqualTo: city['id'])
@@ -50,7 +52,7 @@ class DiscoverPageProvider with ChangeNotifier{
     /// Map displayed places to Markers
     markers = await _mapPlacesToMarkers(places);
     /// Initialize the 'city'
-    //city = context.read<WrapperHomePageProvider>().mainCity;
+    // city = context.watch<WrapperHomePageProvider>().mainCity!;
     notifyListeners();
     _loading();
   }
@@ -129,7 +131,7 @@ class DiscoverPageProvider with ChangeNotifier{
     places.forEach((place) async{
       var icon = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration(size: Size(20,20), devicePixelRatio: 0), 
-        asset("pin"),
+        "assets/icons/pin.png",
       );
       var marker = Marker(
         icon: icon,

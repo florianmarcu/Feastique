@@ -12,7 +12,6 @@ class PlacesMap extends StatelessWidget {
     var markers = provider.markers;
     var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
     var mainCity = wrapperHomePageProvider.mainCity;
-    print(mainCity);
     return wrapperHomePageProvider.isLoading
     ? Positioned(
       bottom: MediaQuery.of(context).padding.bottom,
