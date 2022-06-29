@@ -2,6 +2,8 @@ import 'package:feastique/config/format.dart';
 import 'package:feastique/screens/order_page/order_provider.dart';
 import 'package:flutter/material.dart';
 
+import 'order_item_page.dart';
+
 class PastOrdersList extends StatelessWidget {
 
   @override
@@ -36,69 +38,34 @@ class PastOrdersList extends StatelessWidget {
                     children: [
                       ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        color: Theme.of(context).highlightColor,
-                        //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        height: 100,
-                        child: Row(
-                          children: [
-                            SizedBox(width: 20,),
-                            // FutureProvider<Image?>.value(
-                            //   value: provider.getImage(reservation.placeId),
-                            //   initialData: null,
-                            //   builder: (context, child){
-                            //     var image = Provider.of<Image?>(context);
-                            //     return SizedBox(
-                            //       width: 100,
-                            //       height: 100,
-                            //       child: image != null 
-                            //       ? AspectRatio(
-                            //         aspectRatio: 1.5,
-                            //         child: image,
-                            //       )
-                            //       : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
-                            //     );
-                            //   },
-                            // ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Comandă la ${formatDateToHourAndMinutes(order.dateCreated)}", style: Theme.of(context).textTheme.labelMedium),
-                                  // Row(
-                                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  //   children: [
-                                  //     Text.rich( /// The Date
-                                  //       TextSpan(
-                                  //         children: [
-                                  //           WidgetSpan(child: Image.asset(asset('calendar'), width: 18)),
-                                  //           WidgetSpan(child: SizedBox(width: 10)),
-                                  //           TextSpan(
-                                  //             text: formatDateToDay(reservation.dateStart)
-                                  //           ),
-                                  //         ]
-                                  //       )
-                                  //     ),
-                                  //     Text.rich( /// The Time 
-                                  //       TextSpan(
-                                  //         children: [
-                                  //           WidgetSpan(child: Image.asset(asset('time'), width: 18)),
-                                  //           WidgetSpan(child: SizedBox(width: 10)),
-                                  //           TextSpan(
-                                  //             text: formatDateToHourAndMinutes(reservation.dateStart)
-                                  //           ),
-                                  //         ]
-                                  //       )
-                                  //     ),
-                                  //   ],
-                                  // ),
-                                ],
+                      child: MaterialButton(
+                        padding: EdgeInsets.zero,
+                         onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                          ChangeNotifierProvider.value(
+                            value: provider,
+                            child: OrderItemPage(order),
+                          )
+                        )).whenComplete(() => provider.getData()),
+                        child: Container(
+                          color: Theme.of(context).highlightColor,
+                          //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          height: 100,
+                          child: Row(
+                            children: [
+                              SizedBox(width: 20,),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Comandă la ${formatDateToHourAndMinutes(order.dateCreated)}", style: Theme.of(context).textTheme.labelMedium),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        )
+                            ],
+                          )
+                        ),
                       ),
                     ),
                     ],

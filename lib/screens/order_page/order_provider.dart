@@ -28,7 +28,7 @@ class OrderPageProvider with ChangeNotifier{
     .get()
     .then((query){
       var orders = query.docs;
-      pastOrders = orders.map((order) => orderDataToOrder(reservation, order.data())).toList();
+      pastOrders = orders.map((order) => orderDataToOrder(reservation, order.id, order.data())).toList();
     });
 
     await FirebaseFirestore.instance.collection("places").doc(reservation.placeId)
@@ -117,6 +117,30 @@ class OrderPageProvider with ChangeNotifier{
         );
       }
     );
+
+    notifyListeners();
+  }
+
+  Future<void> cancelOrder(Order order) async{
+    _loading();
+
+    await order.reservation.placeReservationRef!.collection("orders").doc(order.id)
+    .set(
+      {
+        "canceled" : true
+      },
+      SetOptions(merge: true)
+    );
+
+    await order.reservation.userReservationRef!.collection("orders").doc(order.id)
+    .set(
+      {
+        "canceled" : true
+      },
+      SetOptions(merge: true)
+    );
+
+    _loading();
 
     notifyListeners();
   }
