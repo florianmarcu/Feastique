@@ -10,6 +10,7 @@ import 'package:feastique/screens/profile_page/profile_provider.dart';
 import 'package:feastique/screens/reservations_page/reservations_page.dart';
 import 'package:feastique/screens/reservations_page/reservations_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 
 class WrapperHomePageProvider with ChangeNotifier{
   
@@ -22,6 +23,7 @@ class WrapperHomePageProvider with ChangeNotifier{
   /// The main city selected in the app
   Map<String, dynamic>? mainCity;
   UserProfile? currentUser; 
+  LocationData? currentLocation;
   Reservation? activeReservation;
   int selectedScreenIndex = 0;
   bool isLoading = false;
@@ -52,6 +54,7 @@ class WrapperHomePageProvider with ChangeNotifier{
 
   WrapperHomePageProvider(BuildContext context){
     getData(context);
+    getLocation();
   }
 
   void getData(BuildContext context) async{
@@ -76,7 +79,7 @@ class WrapperHomePageProvider with ChangeNotifier{
         }
       ),
       ChangeNotifierProvider<DiscoverPageProvider>(
-        create: (context) => DiscoverPageProvider(context, mainCity!),
+        create: (context) => DiscoverPageProvider(context, mainCity!, this),
         builder: (context, _) {
           return DiscoverPage(context);
         }
@@ -125,7 +128,7 @@ class WrapperHomePageProvider with ChangeNotifier{
         }
       ),
       ChangeNotifierProvider<DiscoverPageProvider>(
-        create: (context) => DiscoverPageProvider(context, mainCity!),
+        create: (context) => DiscoverPageProvider(context, mainCity!, this),
         builder: (context, _) {
           return DiscoverPage(context);
         }
@@ -169,7 +172,30 @@ class WrapperHomePageProvider with ChangeNotifier{
     _loading();
   }
 
-  
+  /// Asks for permissions and gets the location for the user
+  Future<void> getLocation() async{
+    var location = new Location();
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+
+    serviceEnabled = await location.serviceEnabled();
+    if(!serviceEnabled){
+      serviceEnabled = await location.requestService();
+      if(!serviceEnabled)
+        return;
+    }
+    
+    permissionGranted = await location.hasPermission();
+    if(permissionGranted == PermissionStatus.denied || permissionGranted == PermissionStatus.deniedForever){
+      permissionGranted = await location.requestPermission();
+      if(permissionGranted == PermissionStatus.denied || permissionGranted == PermissionStatus.deniedForever)
+        return;
+    }
+
+    currentLocation = await location.getLocation();
+
+    notifyListeners();
+  }
 
   void _loading(){
     isLoading = !isLoading;

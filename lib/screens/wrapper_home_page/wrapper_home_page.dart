@@ -48,7 +48,7 @@ class WrapperHomePage extends StatelessWidget {
           child: FloatingActionButton.extended(
             label: Column(
               children: [
-                Text("Martina Ristorante Pizzeria", style: TextStyle(fontWeight: FontWeight.bold,letterSpacing: 0, fontSize: 13, color: Colors.black),),
+                Text(provider.activeReservation!.placeName, style: TextStyle(fontWeight: FontWeight.bold,letterSpacing: 0, fontSize: 13, color: Colors.black),),
                 SizedBox(height: 10,),
                 Text("Comandă", style: TextStyle(fontWeight: FontWeight.bold,letterSpacing: 0),),
               ],
