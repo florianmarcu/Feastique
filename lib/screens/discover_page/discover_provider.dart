@@ -21,12 +21,13 @@ class DiscoverPageProvider with ChangeNotifier{
   String viewType = 'map';
   Map<String, dynamic> activeFilters = {};
   bool isLoading = false;
+  WrapperHomePageProvider wrapperHomePageProvider;
 
   BuildContext context;
   GoogleMapController? mapController;
 
 
-  DiscoverPageProvider(this.context, this.city){
+  DiscoverPageProvider(this.context, this.city, this.wrapperHomePageProvider){
     /// Initialize the 'places' list with all the available places from Firestore
     /// Also initialize the 'city' with the main city provided by the database
     getData(context);
@@ -137,9 +138,13 @@ class DiscoverPageProvider with ChangeNotifier{
         icon: icon,
         markerId: MarkerId(place.name),
         position: LatLng(place.location.latitude, place.location.longitude), 
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => 
-          ChangeNotifierProvider<PlaceProvider>(
-            create: (context) => PlaceProvider(place),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => 
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider<PlacePageProvider>(create: (context) => PlacePageProvider(place, wrapperHomePageProvider),),
+              ChangeNotifierProvider.value(value: wrapperHomePageProvider)
+            ],
             builder: (context, child) => PlacePage(context)
           )
         ))

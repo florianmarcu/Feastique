@@ -2,6 +2,7 @@ import 'package:feastique/config/paths.dart';
 import 'package:feastique/screens/discover_page/discover_provider.dart';
 import 'package:feastique/screens/place_page/place_page.dart';
 import 'package:feastique/screens/place_page/place_provider.dart';
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'places_list_empty.dart';
@@ -31,6 +32,7 @@ class _PlacesListState extends State<PlacesList> {
   @override
   Widget build(BuildContext context) {
     var places = context.watch<DiscoverPageProvider>().places;
+    var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
     // setState(() {
     //   _places = places;
     // });
@@ -64,8 +66,11 @@ class _PlacesListState extends State<PlacesList> {
             splashColor: Theme.of(context).splashColor,
             child: GestureDetector(
               onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => 
-                ChangeNotifierProvider<PlaceProvider>(
-                  create: (context) => PlaceProvider(place),
+                MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider<PlacePageProvider>(create: (context) => PlacePageProvider(place, wrapperHomePageProvider),),
+                    ChangeNotifierProvider.value(value: wrapperHomePageProvider)
+                  ],
                   builder: (context, child) => PlacePage(context)
                 )
               )),

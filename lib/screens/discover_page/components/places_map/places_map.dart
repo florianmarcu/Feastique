@@ -27,7 +27,8 @@ class PlacesMap extends StatelessWidget {
           provider.mapController!.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(mainCity!['location'].latitude, mainCity['location'].longitude), zoom: 14)));
         return GoogleMap(
           padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-          myLocationEnabled: false,
+          myLocationEnabled: true,
+          myLocationButtonEnabled: true,
           initialCameraPosition: mainCity != null ?
           CameraPosition(target: LatLng(mainCity['location'].latitude, mainCity['location'].longitude), zoom: 14)
           : CameraPosition(target: LatLng(0,0)),
