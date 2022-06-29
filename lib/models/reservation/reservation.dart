@@ -15,9 +15,11 @@ class Reservation{
   String details;
   bool? claimed;
   bool? active;
+  bool canceled;
   int peopleNo;
   Map<String, dynamic>? deals;
   Map<String, dynamic>? discounts;
+  int? discount;
 
   DocumentReference? placeReservationRef;
   DocumentReference? userReservationRef;
@@ -37,9 +39,11 @@ class Reservation{
       required this.details,
       required this.claimed,
       required this.active,
+      required this.canceled,
       required this.peopleNo,
       required this.deals,
       required this.discounts,
+      required this.discount,
       required this.placeReservationRef,
       required this.userReservationRef
     }
@@ -61,8 +65,10 @@ Reservation reservationDataToReservation(String id, Map<String, dynamic> data){
     details: data['details'],
     claimed: data['claimed'],
     active: data['active'],
+    canceled: data['canceled'] == true ? true : false,
     peopleNo: data['number_of_guests'],
     discounts: data['discounts'],
+    discount: data['discount'],
     deals: data['deals'],
     placeReservationRef: data['place_reservation_ref'],
     userReservationRef: data['user_reservation_ref']
