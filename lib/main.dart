@@ -58,10 +58,25 @@ Future<void> config() async{
   //   storageBucket: 'hyuga-app.appspot.com'
   // );
   // await Firebase.initializeApp(name: "hyuga",options: firebaseOptions);
-  await fillDb();
+  //await fillDb();
 }
 
 fillDb() async{
+  FirebaseFirestore.instance.collection("places").doc("martina_ristorante")
+  .set(
+    {
+      "discounts":{
+        "monday":["09:00-24:00_20"],
+        "tuesday":["09:00-24:00_30"],
+        "wednesday":["09:00-24:00_20"],
+        "thursday":["09:00-24:00_30"],
+        "friday":["09:00-00:24_20"],
+        "saturday":["09:00-24:00_20"],
+        "sunday": ["09:00-18:00_20", "18:00-24:00_30"]
+      }
+    }
+    ,SetOptions(merge: true)
+  );
   // FirebaseFirestore.instance.collection('config').doc("assets").set(
   //   {
   //     "icons": kFilters['types']!.toList(),
