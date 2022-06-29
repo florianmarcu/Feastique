@@ -9,10 +9,15 @@ class RegisterPageProvider with ChangeNotifier{
   bool isLoading = false;
 
   void register(BuildContext context) async{
+    _loading();
+    
     var result = await Authentication.registerWithEmailAndPassword(email!, password!);
     if(result.runtimeType == FirebaseAuthException)
       _handleAuthError(context, result);
     else Navigator.pop(context);
+
+    _loading();
+
     notifyListeners();
   }
 
