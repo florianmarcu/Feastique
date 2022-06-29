@@ -22,6 +22,8 @@ dependencies:
   url_launcher: 
   location: 
   intl: 
+  flutter_polyline_points:
+  http:
 
 
 dev_dependencies:
@@ -67,6 +69,14 @@ flutter:
     - assets/icons/accepted.png
     - assets/icons/refused.png
     - assets/icons/claimed.png
+    - assets/icons/google-maps.png
+    - assets/icons/distance.png
+    - assets/icons/waiting.png
+    - assets/icons/activate.png
+    - assets/icons/deactivate.png
+    - assets/icons/important.png
+    - assets/icons/item.png
+
   fonts:
     - family: Raleway
       fonts:
