@@ -1,11 +1,15 @@
 import 'package:feastique/config/config.dart';
+import 'package:feastique/screens/reservation_page/reservation_page.dart';
+import 'package:feastique/screens/reservation_page/reservation_provider.dart';
 import 'package:feastique/screens/reservations_page/reservations_provider.dart';
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 
 class ReservationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = context.watch<ReservationsPageProvider>();
+    var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
     var pastReservations = provider.pastReservations;
     var upcomingReservations = provider.upcomingReservations;
     return Scaffold(
@@ -30,79 +34,162 @@ class ReservationsPage extends StatelessWidget {
               itemCount: upcomingReservations == null ? 1 : upcomingReservations.length,
               separatorBuilder: (context, index) => SizedBox(height: 15),
               itemBuilder: (context, index){
-                if(upcomingReservations == null)
+                if(upcomingReservations == null){
                   return Container(
                     padding: EdgeInsets.only(top: 95),
                     height: 100,
                     child: LinearProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
                   );
+                }
+                // else if(upcomingReservations.length == 0){
+                //   return Container(
+                //     height: 100,
+                //     child: Column(
+                //       mainAxisSize: MainAxisSize.min,
+                //       children: [
+                //         Image.asset(
+                //           localAsset("no-results-found"),
+                //           color: Colors.black54,
+                //           width: 70,
+                //         ),
+                //         SizedBox(height: 20,),
+                //         Text("Nu există rezultate :(", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 20, color: Theme.of(context).textTheme.headline6!.color!.withOpacity(0.54)))
+                //       ],
+                //     ),
+                //   );
+                // }
                 else {
                   var reservation = upcomingReservations[index];
-                  print(reservation);
+                  var image = provider.getImage(reservation.placeId);
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      color: Theme.of(context).highlightColor,
-                      //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      height: 100,
-                      child: Row(
-                        children: [
-                          FutureProvider<Image?>.value(
-                            value: provider.getImage(reservation.placeId),
-                            initialData: null,
-                            builder: (context, child){
-                              var image = Provider.of<Image?>(context);
-                              return SizedBox(
-                                width: 100,
-                                height: 100,
-                                child: image != null 
-                                ? AspectRatio(
-                                  aspectRatio: 1.5,
-                                  child: image,
-                                )
-                                : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
-                              );
-                            },
+                    child: MaterialButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => 
+                        ChangeNotifierProvider.value(
+                          value: wrapperHomePageProvider,
+                          child: ChangeNotifierProvider(
+                            create: (context) => ReservationPageProvider(reservation, image),
+                            child: ReservationPage(),
                           ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        )
+                      )),
+                      child: Stack(
+                        children: [
+                          Container(
+                            color: Theme.of(context).highlightColor,
+                            //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                            height: 100,
+                            child: Row(
                               children: [
-                                Text(reservation.placeName, style: Theme.of(context).textTheme.labelMedium),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Text.rich( /// The Date
-                                      TextSpan(
-                                        children: [
-                                          WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
-                                          WidgetSpan(child: SizedBox(width: 10)),
-                                          TextSpan(
-                                            text: formatDateToDay(reservation.dateStart)
-                                          ),
-                                        ]
+                                FutureProvider<Image?>.value(
+                                  value: image,
+                                  initialData: null,
+                                  builder: (context, child){
+                                    var image = Provider.of<Image?>(context);
+                                    return SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: image != null 
+                                      ? AspectRatio(
+                                        aspectRatio: 1.5,
+                                        child: image,
                                       )
-                                    ),
-                                    Text.rich( /// The Time 
-                                      TextSpan(
+                                      : Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,))
+                                    );
+                                  },
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(reservation.placeName, style: Theme.of(context).textTheme.labelMedium),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
-                                          WidgetSpan(child: SizedBox(width: 10)),
-                                          TextSpan(
-                                            text: formatDateToHourAndMinutes(reservation.dateStart)
+                                          Text.rich( /// The Date
+                                            TextSpan(
+                                              children: [
+                                                WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: formatDateToDay(reservation.dateStart)
+                                                ),
+                                              ]
+                                            )
                                           ),
-                                        ]
+                                          SizedBox(width: 20,),
+                                          Text.rich( /// The Time 
+                                            TextSpan(
+                                              children: [
+                                                WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: formatDateToHourAndMinutes(reservation.dateStart)
+                                                ),
+                                              ]
+                                            )
+                                          ),
+                                        ],
+                                      ),
+                                       Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text.rich( /// The 'Accepted' or 'Refused' symbol
+                                            TextSpan(
+                                              children: reservation.accepted != null
+                                              ? ( reservation.accepted !
+                                              ? [
+                                                WidgetSpan(child: Image.asset(localAsset('accepted'), width: 18, color: Colors.green)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: "Acceptată",
+                                                  style: TextStyle(
+                                                    color: Colors.green
+                                                  )
+                                                ),
+                                              ]
+                                              : [
+                                                WidgetSpan(child: Image.asset(localAsset('refused'), width: 18, color: Colors.red)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: "Refuzată",
+                                                  style: TextStyle(
+                                                    color: Colors.red
+                                                  )
+                                                ),
+                                              ])
+                                              : [
+                                                WidgetSpan(child: Image.asset(localAsset('waiting'), width: 18)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: "În așteptare",
+                                                ),
+                                              ]
+                                            )
+                                          ),
+                                        ],
                                       )
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ],
-                            ),
+                            )
                           ),
+                          reservation.canceled
+                          ? Container(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width,
+                            color: Colors.black54,
+                            child: Center(
+                              child: Text("Anulată", style: Theme.of(context).textTheme.headline4),
+                            ),
+                          )
+                          : Container()
                         ],
-                      )
+                      ),
                     ),
                   );
                 }
@@ -133,71 +220,156 @@ class ReservationsPage extends StatelessWidget {
                   );
                 else {
                   var reservation = pastReservations[index];
+                  var image = provider.getImage(reservation.placeId);
                   print(reservation);
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      color: Theme.of(context).highlightColor,
-                      //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      height: 100,
-                      child: Row(
+                    child: MaterialButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => 
+                        ChangeNotifierProvider(
+                          create: (context) => ReservationPageProvider(reservation, image),
+                          child: ReservationPage(),
+                        )
+                      )),
+                      child: Stack(
                         children: [
-                          FutureProvider<Image?>.value(
-                            value: provider.getImage(reservation.placeId),
-                            initialData: null,
-                            builder: (context, child){
-                              var image = Provider.of<Image?>(context);
-                              return SizedBox(
-                                width: 100,
-                                height: 100,
-                                child: image != null 
-                                ? AspectRatio(
-                                  aspectRatio: 1.5,
-                                  child: image,
-                                )
-                                : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
-                              );
-                            },
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          Container(
+                            color: Theme.of(context).highlightColor,
+                            //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                            height: 100,
+                            child: Row(
                               children: [
-                                Text(reservation.placeName, style: Theme.of(context).textTheme.labelMedium),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Text.rich( /// The Date
-                                      TextSpan(
-                                        children: [
-                                          WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
-                                          WidgetSpan(child: SizedBox(width: 10)),
-                                          TextSpan(
-                                            text: formatDateToDay(reservation.dateStart)
-                                          ),
-                                        ]
+                                FutureProvider<Image?>.value(
+                                  value: provider.getImage(reservation.placeId),
+                                  initialData: null,
+                                  builder: (context, child){
+                                    var image = Provider.of<Image?>(context);
+                                    return SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: image != null 
+                                      ? AspectRatio(
+                                        aspectRatio: 1.5,
+                                        child: image,
                                       )
-                                    ),
-                                    Text.rich( /// The Time 
-                                      TextSpan(
+                                      : Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,))
+                                    );
+                                  },
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(reservation.placeName, style: Theme.of(context).textTheme.labelMedium),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
-                                          WidgetSpan(child: SizedBox(width: 10)),
-                                          TextSpan(
-                                            text: formatDateToHourAndMinutes(reservation.dateStart)
+                                          Text.rich( /// The Date
+                                            TextSpan(
+                                              children: [
+                                                WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: formatDateToDay(reservation.dateStart)
+                                                ),
+                                              ]
+                                            )
                                           ),
-                                        ]
+                                          SizedBox(width: 20,),
+                                          Text.rich( /// The Time 
+                                            TextSpan(
+                                              children: [
+                                                WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: formatDateToHourAndMinutes(reservation.dateStart)
+                                                ),
+                                              ]
+                                            )
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text.rich( /// The 'Accepted' or 'Refused' symbol
+                                            TextSpan(
+                                              children: reservation.accepted != null
+                                              ? ( reservation.accepted == true
+                                                ? [
+                                                WidgetSpan(child: Image.asset(localAsset('accepted'), width: 18, color: Colors.green)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: "Acceptată",
+                                                  style: TextStyle(
+                                                    color: Colors.green
+                                                  )
+                                                ),
+                                              ]
+                                              : [
+                                                WidgetSpan(child: Image.asset(localAsset('refused'), width: 18, color: Colors.red)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: "Refuzată",
+                                                  style: TextStyle(
+                                                    color: Colors.red
+                                                  )
+                                                ),
+                                              ])
+                                              : [
+                                                WidgetSpan(child: Image.asset(localAsset('refused'), width: 18)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: "În așteptare",
+                                                ),
+                                              ]
+                                            )
+                                          ),
+                                          SizedBox(width: 20,),
+                                          !reservation.canceled
+                                          ? Column( children: [
+                                            SizedBox(width: 10,),
+                                            Text.rich( /// The "claimed" property
+                                              TextSpan(
+                                                children: [
+                                                  WidgetSpan(child: Image.asset(localAsset('claimed'), width: 18, color: reservation.claimed != null && reservation.claimed == true ? Colors.green : Colors.red,)),
+                                                  WidgetSpan(child: SizedBox(width: 10)),
+                                                  TextSpan(
+                                                    text: reservation.claimed != null && reservation.claimed == true
+                                                    ? "Revendicată"
+                                                    : "Nerevendicată",
+                                                    style: reservation.claimed != null && reservation.claimed == true
+                                                    ? TextStyle(color: Colors.green)
+                                                    : TextStyle(color: Colors.red)
+                                                  ),
+                                                ]
+                                              )
+                                            ),
+                                          ])
+                                          : Container()
+                                        ],
                                       )
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ],
-                            ),
+                            )
                           ),
+                          reservation.canceled
+                          ? Container(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width,
+                            color: Colors.black54,
+                            child: Center(
+                              child: Text("Anulată", style: Theme.of(context).textTheme.headline4),
+                            ),
+                          )
+                          : Container()
                         ],
-                      )
+                      ),
                     ),
                   );
                 }

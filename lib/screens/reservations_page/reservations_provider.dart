@@ -12,23 +12,30 @@ class ReservationsPageProvider with ChangeNotifier{
   List<Reservation>? upcomingReservations; 
 
   ReservationsPageProvider(BuildContext context){
-    _getData(context);
+    getData(context);
   }
   
-  Future<void> _getData(BuildContext context) async{
+  Future<void> getData(BuildContext context) async{
     var user = Provider.of<User?>(context, listen: false);
     
+    /// Get past reservations
     await FirebaseFirestore.instance.collection("users").doc(user!.uid).collection("reservations")
     .where('date_start', isLessThan: Timestamp.fromDate(DateTime.now().add(Duration(minutes: -30)).toLocal()))
-    .orderBy("date_start")
     .get()
     .then((query) => pastReservations = query.docs.map((doc) => reservationDataToReservation(doc.id, doc.data())).toList());
+    await FirebaseFirestore.instance.collection("users").doc(user.uid).collection("reservations")
+    .where('canceled', isEqualTo: true)
+    .get()
+    .then((query) => pastReservations!.addAll(query.docs.map((doc) => reservationDataToReservation(doc.id, doc.data())).toList()));
+    pastReservations!.sort((a, b) => b.dateStart.millisecondsSinceEpoch - a.dateStart.millisecondsSinceEpoch);
 
+    /// Get upcoming reservations
     await FirebaseFirestore.instance.collection("users").doc(user.uid).collection("reservations")
     .where('date_start', isGreaterThan: Timestamp.fromDate(DateTime.now().add(Duration(minutes: -30)).toLocal()))
-    .orderBy("date_start")
     .get()
     .then((query) => upcomingReservations = query.docs.map((doc) => reservationDataToReservation(doc.id, doc.data())).toList());
+    upcomingReservations!.removeWhere((reservation) => reservation.accepted == false || reservation.canceled == true);
+    upcomingReservations!.sort((a, b) => b.dateStart.millisecondsSinceEpoch - a.dateStart.millisecondsSinceEpoch);
 
     notifyListeners();
   }
