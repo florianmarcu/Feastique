@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 class CitiesDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var provider = context.watch<ProfilePageProvider>();
     var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
     var cities = wrapperHomePageProvider.configData!['cities'].values.toList();
-    var mainCity = wrapperHomePageProvider.mainCity;
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30)
