@@ -96,13 +96,30 @@ class NewReservationPopupProvider with ChangeNotifier{
     notifyListeners();
   }
 
+  int? getDiscountForHour(int index, DateTime hour){
+    String selectedHour =  
+    hour.add(Duration(minutes: index*30)).hour.toString()
+        + ":" +
+          (hour.add(Duration(minutes: index*30)).minute.toString() == '0' 
+          ? '00'
+          : hour.add(Duration(minutes: index*30)).minute.toString());
+    List? hourAndDiscount = place.discounts![DateFormat("EEEE").format(DateTime.now().toLocal().add(Duration(days: selectedDay))).toLowerCase()];
+    print(hourAndDiscount);
+    if(hourAndDiscount != null)
+      for(int i = 0; i< hourAndDiscount.length; i++)
+        if(selectedHour.compareTo(hourAndDiscount[i].substring(0,5))>= 0 &&
+        selectedHour.compareTo(hourAndDiscount[i].substring(6,11))< 0)
+          return int.tryParse(hourAndDiscount[i].substring(12,14));
+    return 0;
+  }
+
   Future<Reservation> makeReservation(User? user) async{
     _loading();
 
     var userReservationRef = FirebaseFirestore.instance.collection('users').doc(user!.uid).collection('reservations').doc();
     var placeReservationRef = place.reference!.collection('reservations').doc(userReservationRef.id);
     var reservationData = {
-      'accepted': null,
+      'accepted': place.capacity >= selectedPeopleNo ? true : null,
       'date_created' : FieldValue.serverTimestamp(),
       'date_start': Timestamp.fromDate(selectedDate!),
       'guest_id' : user.uid,
@@ -114,7 +131,7 @@ class NewReservationPopupProvider with ChangeNotifier{
       'details' : selectedDetails,
       'claimed' : null,
       'number_of_guests' : selectedPeopleNo + 1,
-      'discount': null,
+      'discount': getDiscountForHour(selectedHour, firstHourAsDate!),
       'deals': null,
       'user_reservation_ref': userReservationRef,
       'place_reservation_ref': placeReservationRef

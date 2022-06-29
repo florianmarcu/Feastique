@@ -136,8 +136,8 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                     separatorBuilder: (context,index)=>SizedBox(width: 10,),
                     itemBuilder: (context,index) {
                       GlobalKey _tooltipKey = GlobalKey();
-                      int discount = 30;
-                      //int discount = getDiscountForHour(index);
+                      var now = DateTime.now().toLocal();
+                      int? discount = provider.getDiscountForHour(index, DateTime(now.year, now.month, now.day, int.parse(provider.startHour!.substring(0,2)), int.parse(provider.startHour!.substring(3,5))));
                       List<Map<String,dynamic>> deals = _getDealsForHour(provider.firstHourAsDate, selectedDay, place, index);
                       return  Opacity(
                         opacity: provider.firstHourAsDate!.add(Duration(minutes: index*30)).compareTo(DateTime.now()) < 0 && selectedDay == 0
@@ -805,7 +805,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                       Navigator.popUntil(context, (route) => route.isFirst);
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>
                         ChangeNotifierProvider(
-                          create: (context) => ReservationProvider(reservation) ,
+                          create: (context) => ReservationPageProvider(reservation, place.image),
                           child: ReservationPage(),
                         )
                       ));
