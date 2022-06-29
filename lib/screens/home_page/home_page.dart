@@ -44,6 +44,20 @@ class HomePage extends StatelessWidget {
                     child: Center(child: Text("Găsește localul perfect"))
                   ),
                 ),
+                SizedBox(height: 15),
+                Text(
+                  "Îți recomandăm",
+                  style: Theme.of(context).textTheme.headline3,
+                ),
+                SizedBox(height: 12,),
+                TextButton( /// 'Find the perfect place' button
+                  onPressed: () => wrapperHomePageProvider.pageController.animateToPage(1, duration: Duration(milliseconds: 200), curve: Curves.easeIn),
+                  child: Container(
+                    height: 150,
+                    width: MediaQuery.of(context).size.width*0.8,
+                    child: Center(child: Text("Găsește localul perfect"))
+                  ),
+                ),
               ],
             ),
           ),
