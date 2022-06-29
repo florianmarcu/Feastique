@@ -5,18 +5,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 export 'package:provider/provider.dart';
 
-class ManagerReservationsProvider with ChangeNotifier{
+class ManagerReservationsPageProvider with ChangeNotifier{
 
   List<Reservation>? pastReservations;
   List<Reservation>? pendingReservations;
   List<Reservation>? activeReservations;
   BuildContext context;
 
-  ManagerReservationsProvider(this.context){
-    _getData();
+  ManagerReservationsPageProvider(this.context){
+    getData();
   }
 
-  Future<void> _getData() async{
+  Future<void> getData() async{
     var user = Provider.of<User?>(context, listen: false);
 
     var place = (await FirebaseFirestore.instance.collection("users").doc(user!.uid).collection("managed_places").get()).docs.first;
@@ -24,10 +24,12 @@ class ManagerReservationsProvider with ChangeNotifier{
     try {
       /// Get pending reservations
       await FirebaseFirestore.instance.collection("users").doc(user.uid).collection("managed_places").doc(place.id).collection("reservations")
-      .where('accepted', isNull: true)
+      // .where('canceled', isNull: true)
+      //.where('accepted', isNull: true)
       .orderBy("date_start", descending: true)
       .get()
       .then((query) => pendingReservations = query.docs.map((doc) => reservationDataToReservation(doc.id, doc.data())).toList());
+      pendingReservations!.removeWhere((reservation) => reservation.accepted != null || !reservation.canceled);
 
       /// Get processed reservations   
       await FirebaseFirestore.instance.collection("users").doc(user.uid).collection("managed_places").doc(place.id).collection("reservations")
@@ -39,7 +41,8 @@ class ManagerReservationsProvider with ChangeNotifier{
       .where('accepted', isEqualTo: false)
       .get()
       .then((query) => pastReservations!.addAll(query.docs.map((doc) => reservationDataToReservation(doc.id, doc.data())).toList()));
-      pastReservations!.sort(((a, b) => a.dateStart.millisecondsSinceEpoch - b.dateStart.millisecondsSinceEpoch));
+      pastReservations!.removeWhere((reservation) => reservation.canceled);
+      pastReservations!.sort(((a, b) => b.dateStart.millisecondsSinceEpoch - a.dateStart.millisecondsSinceEpoch));
 
       /// Get active reservations
       await FirebaseFirestore.instance.collection("users").doc(user.uid).collection("managed_places").doc(place.id).collection("reservations")
@@ -89,7 +92,7 @@ class ManagerReservationsProvider with ChangeNotifier{
       SetOptions(merge: true)
     );
     
-    _getData();
+    getData();
 
     notifyListeners();
   }
@@ -108,7 +111,7 @@ class ManagerReservationsProvider with ChangeNotifier{
       SetOptions(merge: true)
     );
     
-    _getData();
+    getData();
 
     notifyListeners();
   }
@@ -129,7 +132,7 @@ class ManagerReservationsProvider with ChangeNotifier{
       SetOptions(merge: true)
     );
     
-    _getData();
+    getData();
 
     notifyListeners();
   }
@@ -148,7 +151,7 @@ class ManagerReservationsProvider with ChangeNotifier{
       SetOptions(merge: true)
     );
     
-    _getData();
+    getData();
 
     notifyListeners();
   }

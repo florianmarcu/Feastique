@@ -1,5 +1,7 @@
 import 'package:feastique/config/config.dart';
 import 'package:feastique/screens/manager_reservations_page/manager_reservations_provider.dart';
+import 'package:feastique/screens/reservation_page/reservation_page.dart';
+import 'package:feastique/screens/reservation_page/reservation_provider.dart';
 import 'package:flutter/material.dart';
 
 class ManagerReservationsPage extends StatefulWidget {
@@ -11,7 +13,8 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = context.watch<ManagerReservationsProvider>();
+    var provider = context.watch<ManagerReservationsPageProvider>();
+    //var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
     var pendingReservations = provider.pendingReservations;
     var pastReservations = provider.pastReservations;
     var activeReservations = provider.activeReservations;
@@ -46,85 +49,103 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                   );
                 else {
                   var reservation = pendingReservations[index];
+                  var image = provider.getImage(reservation.placeId);
                   return Dismissible(
                     key: UniqueKey(),
                     background: Container(
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1),
                       width: MediaQuery.of(context).size.width,
-                      color: Colors.green
+                      alignment: Alignment.centerLeft,
+                      //color: Colors.green,
+                      child: Image.asset(localAsset("accepted"), width: 30, color: Colors.green),
+
                     ),
                     secondaryBackground: Container(
+                      padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.1),
                       width: MediaQuery.of(context).size.width,
-                      color:  Theme.of(context).colorScheme.secondary
+                      alignment: Alignment.centerRight,
+                      //color: Colors.green,
+                      child: Image.asset(localAsset("refused"), width: 30, color: Colors.red),
+
                     ),
                     onDismissed: (direction) => direction == DismissDirection.startToEnd
                     ? provider.acceptReservation(reservation)
                     : provider.declineReservation(reservation),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        color: Theme.of(context).highlightColor,
-                        //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        height: 100,
-                        child: Row(
-                          children: [
-                            FutureProvider<Image?>.value(
-                              value: provider.getImage(reservation.placeId),
-                              initialData: null,
-                              builder: (context, child){
-                                var image = Provider.of<Image?>(context);
-                                return SizedBox(
-                                  width: 100,
-                                  height: 100,
-                                  child: image != null 
-                                  ? AspectRatio(
-                                    aspectRatio: 1.5,
-                                    child: image,
-                                  )
-                                  : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
-                                );
-                              },
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(reservation.placeName, style: Theme.of(context).textTheme.labelMedium),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text.rich( /// The Date
-                                        TextSpan(
-                                          children: [
-                                            WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
-                                            WidgetSpan(child: SizedBox(width: 10)),
-                                            TextSpan(
-                                              text: formatDateToDay(reservation.dateStart)
-                                            ),
-                                          ]
-                                        )
-                                      ),
-                                      SizedBox(width: 10,),
-                                      Text.rich( /// The Time 
-                                        TextSpan(
-                                          children: [
-                                            WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
-                                            WidgetSpan(child: SizedBox(width: 10)),
-                                            TextSpan(
-                                              text: formatDateToHourAndMinutes(reservation.dateStart)
-                                            ),
-                                          ]
-                                        )
-                                      ),
-                                    ],
-                                  ),
-                                  
-                                ],
+                      child: MaterialButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                          ChangeNotifierProvider(
+                            create: (context) => ReservationPageProvider(reservation, image),
+                            child: ReservationPage(true),
+                          )
+                        )),
+                        child: Container(
+                          color: Theme.of(context).highlightColor,
+                          //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          height: 100,
+                          child: Row(
+                            children: [
+                              FutureProvider<Image?>.value(
+                                value: image,
+                                initialData: null,
+                                builder: (context, child){
+                                  var image = Provider.of<Image?>(context);
+                                  return SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: image != null 
+                                    ? AspectRatio(
+                                      aspectRatio: 1.5,
+                                      child: image,
+                                    )
+                                    : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
+                                  );
+                                },
                               ),
-                            ),
-                          ],
-                        )
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(reservation.placeName, style: Theme.of(context).textTheme.labelMedium),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text.rich( /// The Date
+                                          TextSpan(
+                                            children: [
+                                              WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
+                                              WidgetSpan(child: SizedBox(width: 10)),
+                                              TextSpan(
+                                                text: formatDateToDay(reservation.dateStart)
+                                              ),
+                                            ]
+                                          )
+                                        ),
+                                        SizedBox(width: 10,),
+                                        Text.rich( /// The Time 
+                                          TextSpan(
+                                            children: [
+                                              WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
+                                              WidgetSpan(child: SizedBox(width: 10)),
+                                              TextSpan(
+                                                text: formatDateToHourAndMinutes(reservation.dateStart)
+                                              ),
+                                            ]
+                                          )
+                                        ),
+                                      ],
+                                    ),
+                                    
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
+                        ),
                       ),
                     ),
                   );
@@ -155,11 +176,24 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                   );
                 else {
                   var reservation = pastReservations[index];
+                  var image = provider.getImage(reservation.placeId);
                   return Dismissible(
                     key: UniqueKey(),
                     background: Container(
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1),
                       width: MediaQuery.of(context).size.width,
-                      color: Colors.green
+                      alignment: Alignment.centerLeft,
+                      //color: Colors.green,
+                      child: Image.asset(localAsset("activate"), width: 30, color: Colors.green),
+
+                    ),
+                    secondaryBackground: Container(
+                      padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.1),
+                      width: MediaQuery.of(context).size.width,
+                      alignment: Alignment.centerRight,
+                      //color: Colors.green,
+                      child: Image.asset(localAsset("activate"), width: 30, color: Colors.green),
+
                     ),
                     direction: !(reservation.claimed != null && reservation.claimed == true)
                     ? DismissDirection.horizontal
@@ -167,130 +201,139 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                     onDismissed: (direction) => provider.activateReservation(reservation),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Stack(
-                        children: [
-                          Container(
-                            color: Theme.of(context).highlightColor,
-                            //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                            height: 100,
-                            child: Row(
-                              children: [
-                                FutureProvider<Image?>.value(
-                                  value: provider.getImage(reservation.placeId),
-                                  initialData: null,
-                                  builder: (context, child){
-                                    var image = Provider.of<Image?>(context);
-                                    return SizedBox(
-                                      width: 100,
-                                      height: 100,
-                                      child: image != null 
-                                      ? AspectRatio(
-                                        aspectRatio: 1.5,
-                                        child: image,
-                                      )
-                                      : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
-                                    );
-                                  },
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(reservation.placeName, style: Theme.of(context).textTheme.labelMedium),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Text.rich( /// The Date
-                                            TextSpan(
-                                              children: [
-                                                WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
-                                                WidgetSpan(child: SizedBox(width: 10)),
-                                                TextSpan(
-                                                  text: formatDateToDay(reservation.dateStart)
-                                                ),
-                                              ]
-                                            )
-                                          ),
-                                          SizedBox(width: 10,),
-                                          Text.rich( /// The Time 
-                                            TextSpan(
-                                              children: [
-                                                WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
-                                                WidgetSpan(child: SizedBox(width: 10)),
-                                                TextSpan(
-                                                  text: formatDateToHourAndMinutes(reservation.dateStart)
-                                                ),
-                                              ]
-                                            )
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Text.rich( /// The 'Accepted' or 'Refused' symbol
-                                            TextSpan(
-                                              children: reservation.accepted!
-                                              ? [
-                                                WidgetSpan(child: Image.asset(localAsset('accepted'), width: 18, color: Colors.green)),
-                                                WidgetSpan(child: SizedBox(width: 10)),
-                                                TextSpan(
-                                                  text: "Acceptată",
-                                                  style: TextStyle(
-                                                    color: Colors.green
-                                                  )
-                                                ),
-                                              ]
-                                              : [
-                                                WidgetSpan(child: Image.asset(localAsset('refused'), width: 18, color: Colors.red)),
-                                                WidgetSpan(child: SizedBox(width: 10)),
-                                                TextSpan(
-                                                  text: "Refuzată",
-                                                  style: TextStyle(
-                                                    color: Colors.red
-                                                  )
-                                                ),
-                                              ]
-                                            )
-                                          ),
-                                          SizedBox(width: 20,),
-                                          reservation.claimed != null && reservation.claimed == true
-                                          ? Column( children: [
-                                            SizedBox(width: 10,),
-                                            Text.rich( /// The "claimed" property
+                      child: MaterialButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                          ChangeNotifierProvider(
+                            create: (context) => ReservationPageProvider(reservation, image),
+                            child: ReservationPage(true),
+                          )
+                        )).whenComplete(() => provider.getData()),
+                        child: Stack(
+                          children: [
+                            Container(
+                              color: Theme.of(context).highlightColor,
+                              //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                              height: 100,
+                              child: Row(
+                                children: [
+                                  FutureProvider<Image?>.value(
+                                    value: image,
+                                    initialData: null,
+                                    builder: (context, child){
+                                      var image = Provider.of<Image?>(context);
+                                      return SizedBox(
+                                        width: 100,
+                                        height: 100,
+                                        child: image != null 
+                                        ? AspectRatio(
+                                          aspectRatio: 1.5,
+                                          child: image,
+                                        )
+                                        : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
+                                      );
+                                    },
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(reservation.placeName, style: Theme.of(context).textTheme.labelMedium),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text.rich( /// The Date
                                               TextSpan(
                                                 children: [
-                                                  WidgetSpan(child: Image.asset(localAsset('claimed'), width: 18)),
+                                                  WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
                                                   WidgetSpan(child: SizedBox(width: 10)),
                                                   TextSpan(
-                                                    text: "Revendicată"
+                                                    text: formatDateToDay(reservation.dateStart)
                                                   ),
                                                 ]
                                               )
                                             ),
-                                          ])
-                                          : Container()
-                                        ],
-                                      )
-                                    ],
+                                            SizedBox(width: 10,),
+                                            Text.rich( /// The Time 
+                                              TextSpan(
+                                                children: [
+                                                  WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
+                                                  WidgetSpan(child: SizedBox(width: 10)),
+                                                  TextSpan(
+                                                    text: formatDateToHourAndMinutes(reservation.dateStart)
+                                                  ),
+                                                ]
+                                              )
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text.rich( /// The 'Accepted' or 'Refused' symbol
+                                              TextSpan(
+                                                children: reservation.accepted!
+                                                ? [
+                                                  WidgetSpan(child: Image.asset(localAsset('accepted'), width: 18, color: Colors.green)),
+                                                  WidgetSpan(child: SizedBox(width: 10)),
+                                                  TextSpan(
+                                                    text: "Acceptată",
+                                                    style: TextStyle(
+                                                      color: Colors.green
+                                                    )
+                                                  ),
+                                                ]
+                                                : [
+                                                  WidgetSpan(child: Image.asset(localAsset('refused'), width: 18, color: Colors.red)),
+                                                  WidgetSpan(child: SizedBox(width: 10)),
+                                                  TextSpan(
+                                                    text: "Refuzată",
+                                                    style: TextStyle(
+                                                      color: Colors.red
+                                                    )
+                                                  ),
+                                                ]
+                                              )
+                                            ),
+                                            SizedBox(width: 20,),
+                                            reservation.claimed != null && reservation.claimed == true
+                                            ? Column( children: [
+                                              SizedBox(width: 10,),
+                                              Text.rich( /// The "claimed" property
+                                                TextSpan(
+                                                  children: [
+                                                    WidgetSpan(child: Image.asset(localAsset('claimed'), width: 18)),
+                                                    WidgetSpan(child: SizedBox(width: 10)),
+                                                    TextSpan(
+                                                      text: "Revendicată"
+                                                    ),
+                                                  ]
+                                                )
+                                              ),
+                                            ])
+                                            : Container()
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )
-                          ),
-                          (reservation.active != null && reservation.active!)
-                          ? Container(
-                            height: 100,
-                            width: MediaQuery.of(context).size.width,
-                            color: Colors.black54,
-                            child: Center(
-                              child: Text("Rezervare activă", style: Theme.of(context).textTheme.headline4),
+                                ],
+                              )
                             ),
-                          )
-                          : Container()
-                        ],
+                            (reservation.active != null && reservation.active!)
+                            ? Container(
+                              height: 100,
+                              width: MediaQuery.of(context).size.width,
+                              color: Colors.black54,
+                              child: Center(
+                                child: Text("Rezervare activă", style: Theme.of(context).textTheme.headline4),
+                              ),
+                            )
+                            : Container()
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -321,82 +364,100 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                   );
                 else {
                   var reservation = activeReservations[index];
+                  var image = provider.getImage(reservation.placeId);
                   return Dismissible(
                     key: UniqueKey(),
                     background: Container(
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1),
                       width: MediaQuery.of(context).size.width,
-                      color: Colors.green
+                      alignment: Alignment.centerLeft,
+                      //color: Colors.green,
+                      child: Image.asset(localAsset("deactivate"), width: 30, color: Colors.red),
+
                     ),
                     secondaryBackground: Container(
+                      padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.1),
                       width: MediaQuery.of(context).size.width,
-                      color:  Theme.of(context).colorScheme.secondary
+                      alignment: Alignment.centerRight,
+                      //color: Colors.green,
+                      child: Image.asset(localAsset("deactivate"), width: 30, color: Colors.red),
+
                     ),
                     onDismissed: (direction) => provider.deactivateReservation(reservation),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        color: Theme.of(context).highlightColor,
-                        //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        height: 100,
-                        child: Row(
-                          children: [
-                            FutureProvider<Image?>.value(
-                              value: provider.getImage(reservation.placeId),
-                              initialData: null,
-                              builder: (context, child){
-                                var image = Provider.of<Image?>(context);
-                                return SizedBox(
-                                  width: 100,
-                                  height: 100,
-                                  child: image != null 
-                                  ? AspectRatio(
-                                    aspectRatio: 1.5,
-                                    child: image,
-                                  )
-                                  : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
-                                );
-                              },
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(reservation.placeName, style: Theme.of(context).textTheme.labelMedium),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text.rich( /// The Date
-                                        TextSpan(
-                                          children: [
-                                            WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
-                                            WidgetSpan(child: SizedBox(width: 10)),
-                                            TextSpan(
-                                              text: formatDateToDay(reservation.dateStart)
-                                            ),
-                                          ]
-                                        )
-                                      ),
-                                      SizedBox(width: 10,),
-                                      Text.rich( /// The Time 
-                                        TextSpan(
-                                          children: [
-                                            WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
-                                            WidgetSpan(child: SizedBox(width: 10)),
-                                            TextSpan(
-                                              text: formatDateToHourAndMinutes(reservation.dateStart)
-                                            ),
-                                          ]
-                                        )
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                      child: MaterialButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                          ChangeNotifierProvider(
+                            create: (context) => ReservationPageProvider(reservation, image),
+                            child: ReservationPage(true),
+                          )
+                        )),
+                        child: Container(
+                          color: Theme.of(context).highlightColor,
+                          //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          height: 100,
+                          child: Row(
+                            children: [
+                              FutureProvider<Image?>.value(
+                                value: image,
+                                initialData: null,
+                                builder: (context, child){
+                                  var image = Provider.of<Image?>(context);
+                                  return SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: image != null 
+                                    ? AspectRatio(
+                                      aspectRatio: 1.5,
+                                      child: image,
+                                    )
+                                    : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
+                                  );
+                                },
                               ),
-                            ),
-                          ],
-                        )
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(reservation.placeName, style: Theme.of(context).textTheme.labelMedium),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text.rich( /// The Date
+                                          TextSpan(
+                                            children: [
+                                              WidgetSpan(child: Image.asset(localAsset('calendar'), width: 18)),
+                                              WidgetSpan(child: SizedBox(width: 10)),
+                                              TextSpan(
+                                                text: formatDateToDay(reservation.dateStart)
+                                              ),
+                                            ]
+                                          )
+                                        ),
+                                        SizedBox(width: 10,),
+                                        Text.rich( /// The Time 
+                                          TextSpan(
+                                            children: [
+                                              WidgetSpan(child: Image.asset(localAsset('time'), width: 18)),
+                                              WidgetSpan(child: SizedBox(width: 10)),
+                                              TextSpan(
+                                                text: formatDateToHourAndMinutes(reservation.dateStart)
+                                              ),
+                                            ]
+                                          )
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
+                        ),
                       ),
                     ),
                   );
