@@ -83,7 +83,7 @@ class TypeDetailTile extends DetailTile{
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
-        width: MediaQuery.of(context).size.width*0.25,
+        width: MediaQuery.of(context).size.width*0.27,
         child: Row(
           children: [
             // Text("\$", style: Theme.of(context).textTheme.headline6,),

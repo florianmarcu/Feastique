@@ -2,8 +2,10 @@ import 'package:feastique/config/config.dart';
 import 'package:feastique/screens/new_reservation_popup_page/new_reservation_popup_page.dart';
 import 'package:feastique/screens/new_reservation_popup_page/new_reservation_popup_provider.dart';
 import 'package:feastique/screens/place_page/components/tiles/detail.dart';
+import 'package:feastique/screens/place_page/components/tiles/menu.dart';
 import 'package:feastique/screens/place_page/components/tiles/place_map.dart';
 import 'package:feastique/screens/place_page/place_provider.dart';
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 
 class PlacePage extends StatefulWidget {
@@ -37,7 +39,8 @@ class _PlacePageState extends State<PlacePage> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = context.watch<PlaceProvider>();
+    var provider = context.watch<PlacePageProvider>();
+    var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
     var place = provider.place;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -174,10 +177,11 @@ class _PlacePageState extends State<PlacePage> {
                 )
               ), 
               Container(
+                alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.all(12),
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 5),
                 child: Wrap(
-                  alignment: WrapAlignment.end,
+                  alignment: WrapAlignment.start,
                   children: place.types!.map((type) => TypeDetailTile(type)).toList(),
                 )
               ),
@@ -192,7 +196,15 @@ class _PlacePageState extends State<PlacePage> {
                         //backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                         padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 20))
                       ),
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PlaceMapPage(place.location))),
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => MultiProvider(
+                          providers: [
+                            ChangeNotifierProvider.value(value: provider,),
+                            ChangeNotifierProvider.value(value: wrapperHomePageProvider,)
+                          ],
+                          child: PlaceMapPage()
+                        ))
+                      ),
                       icon: Image.asset(localAsset("map"), width: 20,),
                       label: Text("Vezi pe hartă", style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 13),),
                     ),
@@ -205,7 +217,7 @@ class _PlacePageState extends State<PlacePage> {
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                         padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)
                       ),
-                      onPressed: () => provider.launchUber(context),
+                      onPressed: () => provider.launchUber(context, wrapperHomePageProvider.currentLocation),
                       //icon: Image.asset(asset("map"), width: 20,),
                       child: Text("Uber", style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 13),),
                     ),
@@ -237,7 +249,9 @@ class _PlacePageState extends State<PlacePage> {
               // )
               // : Container(),
               SizedBox(height: 20,),
-              Image.network("https://firebasestorage.googleapis.com/v0/b/hyuga-app.appspot.com/o/photos%2Feurope%2Fbucharest%2Fmartina_ristorante%2Fmartina_ristorante_2.jpg?alt=media&token=add0f082-783d-4b83-9131-8553cf087987")
+              Image.network("https://firebasestorage.googleapis.com/v0/b/hyuga-app.appspot.com/o/photos%2Feurope%2Fbucharest%2Fmartina_ristorante%2Fmartina_ristorante_2.jpg?alt=media&token=add0f082-783d-4b83-9131-8553cf087987"),
+              SizedBox(height: 30,),
+              PlaceMenu()
               //,Container(height: 1000)
             ]
           ))
