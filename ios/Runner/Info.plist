@@ -26,6 +26,9 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<!-- Added for location permission -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>feastique requires permission for your location in order to find every place around you</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
