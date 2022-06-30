@@ -73,7 +73,7 @@ class ReservationsPage extends StatelessWidget {
                             child: ReservationPage(),
                           ),
                         )
-                      )),
+                      )).whenComplete(() => provider.getData(context)),
                       child: Stack(
                         children: [
                           Container(
@@ -227,10 +227,13 @@ class ReservationsPage extends StatelessWidget {
                     child: MaterialButton(
                       padding: EdgeInsets.zero,
                       onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => 
-                        ChangeNotifierProvider(
-                          create: (context) => ReservationPageProvider(reservation, image),
+                        MultiProvider(
+                          providers: [
+                            ChangeNotifierProvider(create: (context) => ReservationPageProvider(reservation, image),),
+                            ChangeNotifierProvider.value(value: wrapperHomePageProvider)
+                          ],
                           child: ReservationPage(),
-                        )
+                        ),
                       )),
                       child: Stack(
                         children: [
@@ -320,7 +323,7 @@ class ReservationsPage extends StatelessWidget {
                                                 ),
                                               ])
                                               : [
-                                                WidgetSpan(child: Image.asset(localAsset('refused'), width: 18)),
+                                                WidgetSpan(child: Image.asset(localAsset('waiting'), width: 18)),
                                                 WidgetSpan(child: SizedBox(width: 10)),
                                                 TextSpan(
                                                   text: "În așteptare",
@@ -338,10 +341,10 @@ class ReservationsPage extends StatelessWidget {
                                                   WidgetSpan(child: Image.asset(localAsset('claimed'), width: 18, color: reservation.claimed != null && reservation.claimed == true ? Colors.green : Colors.red,)),
                                                   WidgetSpan(child: SizedBox(width: 10)),
                                                   TextSpan(
-                                                    text: reservation.claimed != null && reservation.claimed == true
+                                                    text: (reservation.claimed != null && reservation.claimed == true) && reservation.accepted == true
                                                     ? "Revendicată"
                                                     : "Nerevendicată",
-                                                    style: reservation.claimed != null && reservation.claimed == true
+                                                    style: (reservation.claimed != null && reservation.claimed == true) && reservation.accepted == true
                                                     ? TextStyle(color: Colors.green)
                                                     : TextStyle(color: Colors.red)
                                                   ),

@@ -18,7 +18,7 @@ class AppDrawer extends StatelessWidget {
           children: [
             UserAccountsDrawerHeader(
               accountName: Text(
-                user.displayName!, 
+                user.displayName, 
                 style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 25)
               ), 
               accountEmail: Text(user.email != null ? user.email! : ""),

@@ -2,6 +2,7 @@ import 'package:feastique/config/paths.dart';
 import 'package:feastique/screens/discover_page/components/filters_popup.dart';
 import 'package:feastique/screens/discover_page/components/places_list/places_list.dart';
 import 'package:feastique/screens/discover_page/components/places_map/places_map.dart';
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 import 'discover_provider.dart';
 
@@ -19,6 +20,7 @@ class _DiscoverPageState extends State<DiscoverPage> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     var provider = context.watch<DiscoverPageProvider>();
+    var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
     var isLoading = provider.isLoading;
     var viewType = provider.viewType;
     var viewTypeText = viewType == "map" ? "Listă" : "Hartă";
@@ -53,9 +55,12 @@ class _DiscoverPageState extends State<DiscoverPage> with TickerProviderStateMix
                             ).animate(_animation),
                           );
                         },
-                        pageBuilder: ((context, animation, secondaryAnimation) => ChangeNotifierProvider.value(
-                          value: provider,
-                          builder: (context, child) => FiltersPopUpPage()
+                        pageBuilder: ((context, animation, secondaryAnimation) => MultiProvider(
+                          providers: [
+                            ChangeNotifierProvider.value(value: provider,),
+                            ChangeNotifierProvider.value(value: wrapperHomePageProvider)
+                          ],
+                          child:  FiltersPopUpPage()
                         )
                       ));
                     },

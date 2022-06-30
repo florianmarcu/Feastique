@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feastique/config/config.dart';
 import 'package:feastique/models/models.dart';
@@ -6,6 +8,7 @@ import 'package:feastique/screens/place_page/place_provider.dart';
 import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 export 'package:provider/provider.dart';
 
 class DiscoverPageProvider with ChangeNotifier{
@@ -41,6 +44,7 @@ class DiscoverPageProvider with ChangeNotifier{
       "types": kFilters['types']!.map((e) => false).toList(),
       "ambiences": kFilters['ambiences']!.map((e) => false).toList(),
       "costs": kFilters['costs']!.map((e) => false).toList(),
+      "sorts": kFilters['sorts']!.map((e) => false).toList(),
     };
     print(city["id"] + "ID");
     /// Get all available places from Firestore
@@ -58,12 +62,16 @@ class DiscoverPageProvider with ChangeNotifier{
     _loading();
   }
 
-  void filter(Map<String, List<bool>> filters) async{
+  double distanceBetween(GeoPoint b,LocationData a) {
+    return sqrt(pow(a.latitude! - b.latitude, 2).toDouble() + pow(a.longitude! - b.longitude, 2));
+  }
+
+  void filter(Map<String, List<bool>> filters, WrapperHomePageProvider wrapperHomePageProvider) async{
     _loading();
 
     activeFilters = Map<String, List<bool>>.from(filters);
     
-    Map<String, List<String>> finalFilters = {"types" : [], "ambiences" : [], "costs": []};
+    Map<String, List<String>> finalFilters = {"types" : [], "ambiences" : [], "costs": [], "sorts": []};
     kFilters.forEach((key, list) {
       for(int i = 0; i < list.length; i++)
       if(filters[key]![i])
@@ -89,6 +97,9 @@ class DiscoverPageProvider with ChangeNotifier{
             break;
             case "costs":
               places.removeWhere((place) => place.cost.toString() != value);
+              break;
+            case "sorts":
+              places.sort((a,b) => distanceBetween(a.location, wrapperHomePageProvider.currentLocation!).compareTo(distanceBetween(b.location, wrapperHomePageProvider.currentLocation!)) );
             break;
           }
         }
@@ -108,6 +119,7 @@ class DiscoverPageProvider with ChangeNotifier{
       "types": kFilters['types']!.map((e) => false).toList(),
       "ambiences": kFilters['ambiences']!.map((e) => false).toList(),
       "costs": kFilters['costs']!.map((e) => false).toList(),
+      "sorts" : kFilters['sorts']!.map((e) => false).toList(),
     };
     /// Reinstantiate displayed places with all places
     places = List.from(allPlaces);

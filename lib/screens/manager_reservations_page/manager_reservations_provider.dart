@@ -29,7 +29,7 @@ class ManagerReservationsPageProvider with ChangeNotifier{
       .orderBy("date_start", descending: true)
       .get()
       .then((query) => pendingReservations = query.docs.map((doc) => reservationDataToReservation(doc.id, doc.data())).toList());
-      pendingReservations!.removeWhere((reservation) => reservation.accepted != null || !reservation.canceled);
+      pendingReservations!.removeWhere((reservation) => reservation.accepted != null || reservation.canceled);
 
       /// Get processed reservations   
       await FirebaseFirestore.instance.collection("users").doc(user.uid).collection("managed_places").doc(place.id).collection("reservations")

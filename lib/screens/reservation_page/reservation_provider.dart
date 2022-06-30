@@ -21,6 +21,7 @@ class ReservationPageProvider with ChangeNotifier{
   String? time;
   BitmapDescriptor? pin;
   Place? place;
+  List<Order>? pastOrders;
 
   ReservationPageProvider(this.reservation, this.image,){
     getPlace();
@@ -214,4 +215,6 @@ class ReservationPageProvider with ChangeNotifier{
 
     notifyListeners();
   }
+
+
 }

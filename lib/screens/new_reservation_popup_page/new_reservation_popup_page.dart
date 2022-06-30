@@ -4,6 +4,7 @@ import 'package:feastique/models/place/place.dart';
 import 'package:feastique/screens/new_reservation_popup_page/new_reservation_popup_provider.dart';
 import 'package:feastique/screens/reservation_page/reservation_page.dart';
 import 'package:feastique/screens/reservation_page/reservation_provider.dart';
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -46,12 +47,13 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
   @override
   Widget build(BuildContext context) {
     var provider = context.watch<NewReservationPopupProvider>();
+    var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
     var place = provider.place;
     var selectedDate = provider.selectedDate;
     var selectedDay = provider.selectedDay;
     var selectedHour = provider.selectedHour;
     var selectedPeopleNo = provider.selectedPeopleNo;
-    var selectedName = provider.selectedName;
+    var selectedName = wrapperHomePageProvider.currentUser!.displayName != null ? wrapperHomePageProvider.currentUser!.displayName : provider.selectedName;
     var selectedPhoneNo = provider.selectedPhoneNo;
     var selectedDetails = provider.selectedDetails;
     return Container(
@@ -324,7 +326,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                                 ? Colors.black
                                 : Colors.grey[600],
                             ),
-                            initialValue: selectedPhoneNo != "" ? selectedPhoneNo : null,
+                            initialValue: selectedName != "" ? selectedName : null,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(horizontal: 10),
                               filled: true,
@@ -804,8 +806,11 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                       var reservation = await provider.makeReservation(Provider.of<User?>(context, listen: false));
                       Navigator.popUntil(context, (route) => route.isFirst);
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                        ChangeNotifierProvider(
-                          create: (context) => ReservationPageProvider(reservation, place.image),
+                        MultiProvider(
+                          providers: [
+                            ChangeNotifierProvider(create: (context) => ReservationPageProvider(reservation, place.image),),
+                            ChangeNotifierProvider.value(value: wrapperHomePageProvider)
+                          ],
                           child: ReservationPage(),
                         )
                       ));

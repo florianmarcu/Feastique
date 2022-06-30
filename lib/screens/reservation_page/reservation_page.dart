@@ -5,13 +5,16 @@ import 'package:feastique/screens/reservation_page/reservation_provider.dart';
 import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 
+import 'components/past_orders_page.dart';
+import 'components/place_offers.dart';
+
 class ReservationPage extends StatelessWidget {
 
   final _scrollController = ScrollController(
     keepScrollOffset: true,
     initialScrollOffset: 0
   );
-  bool manager;
+  final bool manager;
   ReservationPage([this.manager = false]);
 
   @override
@@ -236,7 +239,7 @@ class ReservationPage extends StatelessWidget {
                               WidgetSpan(child: Image.asset(localAsset('time'), width: 16)),
                               WidgetSpan(child: SizedBox(width: 10)),
                               TextSpan(
-                                text: reservation.discount != null
+                                text: reservation.discount != null && reservation.discount != 0
                                   ? reservation.discount.toString() 
                                   : "fără reducere",
                                 style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
@@ -313,6 +316,34 @@ class ReservationPage extends StatelessWidget {
                 ],
               )
               : Container(),
+              SizedBox(height: 30,),
+              provider.place != null
+              ? PlaceOffers(provider.place!)
+              : Container(),
+              Container(height: MediaQuery.of(context).size.height*0.1,)
+              // reservation.claimed == true
+              // ? Center(
+              //   child: TextButton(
+              //     style: Theme.of(context).textButtonTheme.style!.copyWith(
+              //       //backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              //       padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 20))
+              //     ),
+              //     onPressed: () => Navigator.push(context, MaterialPageRoute(
+              //       builder: (context) => MultiProvider(
+              //         providers: [
+              //           ChangeNotifierProvider.value(value: provider,),
+              //           // !manager
+              //           // ? ChangeNotifierProvider<WrapperHomePageProvider>.value(value: wrapperHomePageProvider,)
+              //           // : ChangeNotifierProvider.value(value: null)
+              //         ],
+              //         child: PastOrdersPage()
+              //       ))
+              //     ),
+              //     child: Text("Comenzi", style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 13),),
+              //   ),
+              // )
+              // : Container(),
+            
               // Padding(
               //   padding: const EdgeInsets.all(15.0),
               //   child: Text(

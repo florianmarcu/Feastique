@@ -2,19 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'user.dart';
 export 'package:firebase_auth/firebase_auth.dart';
 
 /// A singleton class that handles the entire authentication process of the app
 class Authentication{
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseAuth auth = FirebaseAuth.instance;
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
-  static UserProfile? currentUser;
+  static User? currentUser;
 
   /// Auth state of the app as a stream
   static Stream<User?> get user{
     
-    return _auth.authStateChanges();
+    return auth.authStateChanges();
   }
 
   /// Creates a new user document in the Firestore for a new signed up user
@@ -38,7 +37,7 @@ class Authentication{
   
   static Future signInAnonimously() async{
     try{
-      UserCredential result = await _auth.signInAnonymously();
+      UserCredential result = await auth.signInAnonymously();
       return result;
     }
     catch(error){
@@ -58,7 +57,7 @@ class Authentication{
         idToken: googleAuth.idToken, 
         accessToken: googleAuth.accessToken
       );
-      UserCredential result = await _auth.signInWithCredential(credential);
+      UserCredential result = await auth.signInWithCredential(credential);
       if(result.user != null)
         updateUserData(result.user!,'email_and_password');
       return result;
@@ -78,7 +77,7 @@ class Authentication{
       final AuthCredential credential = FacebookAuthProvider.credential(
         facebookLoginResult.accessToken!.token
       );
-      UserCredential result = await _auth.signInWithCredential(credential);
+      UserCredential result = await auth.signInWithCredential(credential);
       if(result.user != null)
         updateUserData(result.user!,'facebook');
       return result;
@@ -92,7 +91,7 @@ class Authentication{
   // Sign in by email and password
   static Future signInWithEmailAndPassword(String email, String password) async{
     try{
-      UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      UserCredential result = await auth.signInWithEmailAndPassword(email: email, password: password);
       return result;
     }
     catch(error){
@@ -104,7 +103,7 @@ class Authentication{
   /// Register with email and password
   static Future registerWithEmailAndPassword(String email, String password) async{
     try{
-      UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential result = await auth.createUserWithEmailAndPassword(email: email, password: password);
       if(result.user != null)
         updateUserData(result.user!,'email_and_password');
       return result;
@@ -117,7 +116,7 @@ class Authentication{
   /// Sign out
   static Future signOut() async{
     try{
-      await _auth.signOut();
+      await auth.signOut();
     }
     catch(error){
       return(error);
@@ -126,7 +125,7 @@ class Authentication{
 
   Authentication._init(){
     user.listen((user) {
-      currentUser = userToUserProfile(user);
+      currentUser = user;
     });
   }
   static final Authentication _instance = Authentication._init();

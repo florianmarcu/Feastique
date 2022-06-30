@@ -1,5 +1,6 @@
 import 'package:feastique/config/constants.dart';
 import 'package:feastique/screens/discover_page/discover_provider.dart';
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 
 class FiltersPopUpPage extends StatefulWidget {
@@ -11,13 +12,14 @@ class FiltersPopUpPage extends StatefulWidget {
 class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
   
   final _filters = kFilters;
-  Map<String, List<bool>> _currSelectedFilters = {"types": [], "ambiences": [], "costs": []};
+  Map<String, List<bool>> _currSelectedFilters = {"types": [], "ambiences": [], "costs": [], "sorts": []};
   //var _prevFiltersSelected = false;
   var _currFiltersSelected = false;
 
   @override
   Widget build(BuildContext context) {
     var provider = context.watch<DiscoverPageProvider>();
+    var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
     var prevSelectedFilters = context.read<DiscoverPageProvider>().activeFilters;
     //_prevFiltersSelected = prevSelectedFilters['types'].fold(false, (prev, curr) => prev || curr) || prevSelectedFilters['ambiences'].fold(false, (prev, curr) => prev || curr) || prevSelectedFilters['costs'].fold(false, (prev, curr) => prev || curr);
     /// If the current filters are not initialized, initialize them with a copy of the previously selected filters
@@ -25,8 +27,13 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
       _currSelectedFilters['types'] = List.from(prevSelectedFilters['types']); 
       _currSelectedFilters['ambiences'] = List.from(prevSelectedFilters['ambiences']); 
       _currSelectedFilters['costs'] = List.from(prevSelectedFilters['costs']);
+      _currSelectedFilters['sorts'] = List.from(prevSelectedFilters['sorts']);
     }
-    _currFiltersSelected = _currSelectedFilters['types']!.fold(false, (prev, curr) => prev || curr) || _currSelectedFilters['ambiences']!.fold(false, (prev, curr) => prev || curr) || _currSelectedFilters['costs']!.fold(false, (prev, curr) => prev || curr);
+    _currFiltersSelected = 
+    _currSelectedFilters['types']!.fold(false, (prev, curr) => prev || curr) 
+    || _currSelectedFilters['ambiences']!.fold(false, (prev, curr) => prev || curr) 
+    || _currSelectedFilters['costs']!.fold(false, (prev, curr) => prev || curr)
+    || _currSelectedFilters['sorts']!.fold(false, (prev, curr) => prev || curr);
     print("$prevSelectedFilters SELECTED FILTERS");
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -39,7 +46,7 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
         : Theme.of(context).primaryColor.withOpacity(0.6),
         onPressed: _currFiltersSelected 
         ? () {
-          provider.filter({"types": _currSelectedFilters['types']!, "ambiences" : _currSelectedFilters['ambiences']!, "costs": _currSelectedFilters['costs']!});
+          provider.filter({"types": _currSelectedFilters['types']!, "ambiences" : _currSelectedFilters['ambiences']!, "costs": _currSelectedFilters['costs']! , "sorts": _currSelectedFilters['sorts']!}, wrapperHomePageProvider);
           Navigator.pop(context);
         } 
         : null,
@@ -214,10 +221,10 @@ class _FiltersPopUpPageState extends State<FiltersPopUpPage> {
                       backgroundColor: Theme.of(context).canvasColor,
                       labelStyle: Theme.of(context).textTheme.overline!,
                       label: Text("distanță"),
-                      selected: _currSelectedFilters['costs']![index],
+                      selected: _currSelectedFilters['sorts']![index],
                       onSelected: (selected){
                         setState(() {
-                          _currSelectedFilters['costs']![index] = selected;
+                          _currSelectedFilters['sorts']![index] = selected;
                         });
                       },
                     );

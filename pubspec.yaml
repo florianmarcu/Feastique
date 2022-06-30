@@ -76,6 +76,8 @@ flutter:
     - assets/icons/deactivate.png
     - assets/icons/important.png
     - assets/icons/item.png
+    - assets/icons/ingredients.png
+
 
   fonts:
     - family: Raleway

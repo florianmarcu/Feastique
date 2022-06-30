@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feastique/config/paths.dart';
@@ -25,6 +26,27 @@ class PlacePageProvider with ChangeNotifier{
 
   PlacePageProvider(this.place, this.wrapperHomePageProvider){
     getPin();
+  }
+
+  Future<Image> getSecondImage(String id) async{
+    var image = await FirebaseStorage.instance.ref("places/$id/1.jpg")
+    .getData();
+    return Image.memory(
+      image!,
+      alignment: FractionalOffset.topCenter,
+      fit: BoxFit.cover,
+      frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded) {
+          return child;
+        }
+        return AnimatedOpacity(
+          child: child,
+          opacity: frame == null ? 0 : 1,
+          duration: Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+        );
+      }
+    );
   }
 
   double distanceBetween(LocationData a, GeoPoint b){

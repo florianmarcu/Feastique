@@ -24,6 +24,9 @@ const Map<String, List<String>> kFilters = {
     "2",
     "3",
     "4"
+  ],
+  "sorts":[
+    "distance"
   ]
 };
 

@@ -1,5 +1,6 @@
 import 'package:authentication/authentication.dart';
 import 'package:feastique/screens/profile_page/components/cities_dialog.dart';
+import 'package:feastique/screens/profile_page/components/user_data_page.dart';
 import 'package:feastique/screens/profile_page/profile_provider.dart';
 import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
@@ -110,16 +111,29 @@ class ProfilePage extends StatelessWidget {
                   SizedBox(width: 50,),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(30),
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 100,
-                    width: 150,
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Datele mele", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),),
-                      ],
+                  child: MaterialButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => MultiProvider(
+                          providers: [
+                            ChangeNotifierProvider.value(value: provider),
+                            ChangeNotifierProvider.value(value: wrapperHomePageProvider)
+                          ],
+                          child: UserDataPage(),
+                        ),
+                      ), 
+                    ),
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 100,
+                      width: 150,
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Datele mele", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),),
+                        ],
+                      ),
                     ),
                   ),
                 ),

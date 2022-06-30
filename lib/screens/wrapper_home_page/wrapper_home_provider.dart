@@ -73,7 +73,7 @@ class WrapperHomePageProvider with ChangeNotifier{
 
     screens = <Widget>[
       ChangeNotifierProvider<HomePageProvider>(
-        create: (context) => HomePageProvider(),
+        create: (context) => HomePageProvider(currentUser),
         builder: (context, _) {
           return HomePage();
         }
@@ -91,7 +91,7 @@ class WrapperHomePageProvider with ChangeNotifier{
         }
       ),
       ChangeNotifierProvider<ProfilePageProvider>(
-        create: (context) => ProfilePageProvider(context, currentUser!),
+        create: (context) => ProfilePageProvider(context, currentUser!, currentUser!.phoneNumber, currentUser!.displayName),
         builder: (context, _) {
           return ProfilePage();
         }
@@ -122,7 +122,7 @@ class WrapperHomePageProvider with ChangeNotifier{
 
     screens = <Widget>[
       ChangeNotifierProvider<HomePageProvider>(
-        create: (context) => HomePageProvider(),
+        create: (context) => HomePageProvider(currentUser),
         builder: (context, _) {
           return HomePage();
         }
@@ -140,7 +140,7 @@ class WrapperHomePageProvider with ChangeNotifier{
         }
       ),
       ChangeNotifierProvider<ProfilePageProvider>(
-        create: (context) => ProfilePageProvider(context, currentUser!),
+        create: (context) => ProfilePageProvider(context, currentUser!, currentUser!.phoneNumber, currentUser!.displayName),
         builder: (context, _) {
           return ProfilePage();
         }

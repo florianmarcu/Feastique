@@ -1,3 +1,4 @@
+import 'package:feastique/config/config.dart';
 import 'package:feastique/config/format.dart';
 import 'package:feastique/screens/order_page/order_provider.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +61,44 @@ class PastOrdersList extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text("Comandă la ${formatDateToHourAndMinutes(order.dateCreated)}", style: Theme.of(context).textTheme.labelMedium),
+                                    Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text.rich( /// The 'Accepted' or 'Refused' symbol
+                                            TextSpan(
+                                              children: order.accepted != null
+                                              ? ( order.accepted!
+                                              ? [
+                                                WidgetSpan(child: Image.asset(localAsset('accepted'), width: 18, color: Colors.green)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: "Acceptată",
+                                                  style: TextStyle(
+                                                    color: Colors.green
+                                                  )
+                                                ),
+                                              ]
+                                              : [
+                                                WidgetSpan(child: Image.asset(localAsset('refused'), width: 18, color: Colors.red)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: "Refuzată",
+                                                  style: TextStyle(
+                                                    color: Colors.red
+                                                  )
+                                                ),
+                                              ])
+                                              : [
+                                                WidgetSpan(child: Image.asset(localAsset('waiting'), width: 18)),
+                                                WidgetSpan(child: SizedBox(width: 10)),
+                                                TextSpan(
+                                                  text: "În așteptare",
+                                                ),
+                                              ]
+                                            )
+                                          ),
+                                        ],
+                                      )
                                   ],
                                 ),
                               ),
