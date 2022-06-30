@@ -19,7 +19,7 @@ class PlaceMenu extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Text(
-              "Menu",
+              "Meniu",
               style: Theme.of(context).textTheme.headline6,
             ),
           ),
