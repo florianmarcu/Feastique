@@ -1,4 +1,7 @@
 import 'package:authentication/authentication.dart';
+import 'package:feastique/config/config.dart';
+import 'package:feastique/screens/manager_home_page/components/manager_analytics_page.dart';
+import 'package:feastique/screens/manager_home_page/components/manager_place_data_page.dart';
 import 'package:feastique/screens/manager_home_page/manager_home_page.dart';
 import 'package:feastique/screens/manager_home_page/manager_home_provider.dart';
 import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
@@ -28,27 +31,78 @@ class AppDrawer extends StatelessWidget {
             ),
             /// If the user is manager, allow him to see the manager panel
             user.isManager == true
-            ? MaterialButton(
-              onPressed: (){
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(
-                    builder: (context) => ChangeNotifierProvider(
-                      create: (_) => ManagerHomePageProvider(),
-                      child: ManagerHomePage()
-                    )
-                  )
-                );
-              },
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(width: 30,),
-                  Icon(Icons.settings),
-                  SizedBox(width: 10,),
-                  Text("Manager")
-                ],
-              ),
+            ? Column(
+              children: [
+                /// Reservations and Order button
+                MaterialButton(
+                  onPressed: (){
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context) => ChangeNotifierProvider(
+                          create: (_) => ManagerHomePageProvider(context),
+                          child: ManagerHomePage()
+                        )
+                      )
+                    );
+                  },
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(width: 30,),
+                      Image.asset(localAsset("reservation"),  width: 20,),
+                      SizedBox(width: 10,),
+                      Text("Rezervări și comenzi")
+                    ],
+                  ),
+                ),
+                /// Place data button
+                MaterialButton(
+                  onPressed: (){
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context) => ChangeNotifierProvider(
+                          create: (_) => ManagerHomePageProvider(context),
+                          child: ManagerPlaceDataPage()
+                        )
+                      )
+                    );
+                  },
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(width: 30,),
+                      Icon(Icons.settings),
+                      SizedBox(width: 10,),
+                      Text("Datele restaurantului")
+                    ],
+                  ),
+                ),
+                ///
+                MaterialButton(
+                  onPressed: (){
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context) => ChangeNotifierProvider(
+                          create: (_) => ManagerHomePageProvider(context),
+                          child: ManagerAnalyticsPage()
+                        )
+                      )
+                    );
+                  },
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(width: 30,),
+                      Image.asset(localAsset("analytics"),  width: 20,),
+                      SizedBox(width: 10,),
+                      Text("Analitice")
+                    ],
+                  ),
+                ),
+              ],
             )
             : Container(),
             Expanded(

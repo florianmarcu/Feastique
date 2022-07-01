@@ -84,6 +84,7 @@ class OrderPageProvider with ChangeNotifier{
           "content": item['item'].content,
           "ingredients": item['item'].ingredients,
           "alergens": item['item'].alergens,
+          "price" : int.tryParse(item['price'].toString().substring(0, item['price'].toString().length - 3))
         }
       }).toList(),
     };

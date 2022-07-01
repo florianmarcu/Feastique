@@ -48,9 +48,7 @@ class HomePageProvider with ChangeNotifier{
   Future<List<Place>?> getRecommendations() async{
     var place = await getFirstPlace();
     var types = place!.types!;
-    var places = <Place>[];
     var placesAsDocs = [];
-    var queries = [];
     for(int i = 0; i < types.length; i++){
       var query = await FirebaseFirestore.instance.collection("places")
       .get();
@@ -58,7 +56,7 @@ class HomePageProvider with ChangeNotifier{
         if(query.docs[j].data()['types'].contains(types[i]))
           placesAsDocs.add(query.docs[j]);
     }
-    int max = 0, secondMax = 0, thirdMax = 0 ;
+    int max = 0;
 
     var maxDoc, secondMaxDoc, thirdMaxDoc;
     print(placesAsDocs.length.toString() + " LUNG");
@@ -70,8 +68,6 @@ class HomePageProvider with ChangeNotifier{
             s += 1;
         }
         if (s >= max){
-          thirdMax = secondMax;
-          secondMax = max;
           max = s;
           thirdMaxDoc = secondMaxDoc;
           secondMaxDoc = maxDoc;

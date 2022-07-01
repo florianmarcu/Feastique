@@ -180,7 +180,7 @@ class PlaceDirectionsPage extends StatelessWidget {
               target: LatLng(
                 (userLocation.latitude! + placeLocation!.latitude) / 2, (userLocation.longitude! + placeLocation.longitude) / 2
               ),
-              zoom: provider.distanceBetween(userLocation, placeLocation) * 1250
+              zoom: 13
             ),
             myLocationEnabled: true,
             markers: provider.pin != null

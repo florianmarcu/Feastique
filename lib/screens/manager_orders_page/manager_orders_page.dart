@@ -21,21 +21,6 @@ class ManagerOrdersPage extends StatelessWidget {
               height: 100,
               child: LinearProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
             );
-          // else if(orders == [])
-          //   return Center(
-          //     child: Column(
-          //       mainAxisSize: MainAxisSize.min,
-          //       children: [
-          //         Image.asset(
-          //           localAsset("no-results-found"),
-          //           color: Colors.black54,
-          //           width: 70,
-          //         ),
-          //         SizedBox(height: 20,),
-          //         Text("Nu există comenzi :(", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 20, color: Theme.of(context).textTheme.headline6!.color!.withOpacity(0.54)))
-          //       ],
-          //     ),
-          //   );
           else {
             var order = orders[index];
             var totalCount = 0;

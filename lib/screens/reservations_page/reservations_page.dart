@@ -13,7 +13,8 @@ class ReservationsPage extends StatelessWidget {
     var pastReservations = provider.pastReservations;
     var upcomingReservations = provider.upcomingReservations;
     return Scaffold(
-      body: ScrollConfiguration(
+      body: !( wrapperHomePageProvider.currentUser != null && wrapperHomePageProvider.currentUser!.isAnonymous)
+      ? ScrollConfiguration(
         behavior: ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
         child: ListView(
           shrinkWrap: true,
@@ -381,6 +382,26 @@ class ReservationsPage extends StatelessWidget {
             SizedBox(height: 20,)
           ],
         ),
+      )
+      : Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              localAsset("no-results-found"),
+              color: Colors.black54,
+              width: 70,
+            ),
+            SizedBox(height: 20,),
+            Container(
+              child: Text(
+                "Pentru a face o rezervare, \ntrebuie să vă înregistrați.",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 20, color: Theme.of(context).textTheme.headline6!.color!.withOpacity(0.54))
+              ),
+            ),
+          ],
+        )
       ),
     );
   }

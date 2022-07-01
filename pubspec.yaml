@@ -77,6 +77,7 @@ flutter:
     - assets/icons/important.png
     - assets/icons/item.png
     - assets/icons/ingredients.png
+    - assets/icons/analytics.png
 
 
   fonts:

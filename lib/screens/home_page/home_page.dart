@@ -67,11 +67,7 @@ class HomePage extends StatelessWidget {
                           if(place == null)
                             return Container(height: 200, child: Center(child: CircularProgressIndicator.adaptive(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)));
                           else{
-                            if(place == null)
-                              return Text("Nu știm ce să-ți recomandăm, \ndeci încearcă ceva aleatoriu...");
-                            else{
-                              return RecommendedPlaceItem(place);
-                            }
+                            return RecommendedPlaceItem(place);
                           }
                         },
                       );
@@ -103,21 +99,17 @@ class HomePage extends StatelessWidget {
                           if(places == null)
                             return Container(height: 200, child: Center(child: CircularProgressIndicator.adaptive(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)));
                           else{
-                            if(places == null)
-                              return Center(child: Text("Nu știm ce să-ți recomandăm, \ndeci încearcă ceva aleatoriu..."),);
-                            else{
-                              return Container(
-                                padding: EdgeInsets.symmetric(vertical: 10),
-                                height: 120,
-                                child: ListView.separated(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: places.length,
-                                  separatorBuilder: (context, index) => SizedBox(width: 20),
-                                  itemBuilder:  (context, index) => AlternativePlaceItem(places[index]),
-                                ),
-                              );
-                            }
+                            return Container(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              height: 120,
+                              child: ListView.separated(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: places.length,
+                                separatorBuilder: (context, index) => SizedBox(width: 20),
+                                itemBuilder:  (context, index) => AlternativePlaceItem(places[index]),
+                              ),
+                            );
                           }
                         },
                       );

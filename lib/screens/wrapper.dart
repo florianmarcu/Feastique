@@ -24,11 +24,11 @@ class Wrapper extends StatelessWidget {
         color: Theme.of(context).canvasColor,
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        child: Container(
-          alignment: Alignment.bottomCenter,
-          height: 5,
-          width: MediaQuery.of(context).size.width,
-          child: LinearProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
+        child: Center(
+          // alignment: Alignment.bottomCenter,
+          // height: 5,
+          // width: MediaQuery.of(context).size.width,
+          child: CircularProgressIndicator.adaptive(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
         ), 
       );
     // Logged out

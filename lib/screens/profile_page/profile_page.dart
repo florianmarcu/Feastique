@@ -108,8 +108,9 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                  SizedBox(width: 50,),
-                ClipRRect(
+                SizedBox(width: 50,),
+                !provider.user.isAnonymous 
+                ? ClipRRect(
                   borderRadius: BorderRadius.circular(30),
                   child: MaterialButton(
                     padding: EdgeInsets.zero,
@@ -136,12 +137,25 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                   ),
+                )
+                : ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: MaterialButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => Authentication.signOut(),
+                    child: Container(
+                      height: 100,
+                      width: 150,
+                      color: Colors.white,
+                      child: Center(child: Text("Log In", style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 22),)),
+                    ),
+                  ),
                 ),
-                
               ],
             ),
             SizedBox(height: 20),
-            Row(
+            !provider.user.isAnonymous 
+            ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ClipRRect(
@@ -170,6 +184,7 @@ class ProfilePage extends StatelessWidget {
                 ),
               ],
             )
+          : Container()
           ],
         ),
       )

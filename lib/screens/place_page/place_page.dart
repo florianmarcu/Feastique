@@ -1,3 +1,4 @@
+import 'package:authentication/authentication.dart';
 import 'package:feastique/config/config.dart';
 import 'package:feastique/screens/new_reservation_popup_page/new_reservation_popup_page.dart';
 import 'package:feastique/screens/new_reservation_popup_page/new_reservation_popup_provider.dart';
@@ -50,7 +51,8 @@ class _PlacePageState extends State<PlacePage> {
         elevation: 0, 
         shape: ContinuousRectangleBorder(),
         backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () {
+        onPressed: !( wrapperHomePageProvider.currentUser != null && wrapperHomePageProvider.currentUser!.isAnonymous)
+        ?() {
           showModalBottomSheet(
             context: context, 
             // elevation: 0,
@@ -83,6 +85,36 @@ class _PlacePageState extends State<PlacePage> {
                 ),
               )
             ),
+          );
+        }
+        : (){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.6,
+                    child: Text("Pentru a face o rezervare, trebuie să vă înregistrați.")
+                  ),
+                  TextButton(
+                    style: Theme.of(context).textButtonTheme.style!.copyWith(
+                      padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 0, vertical: 0)),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent)
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Authentication.signOut();
+                      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                    },
+                    child: Text("Log In", style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                      decoration: TextDecoration.underline,
+                      fontSize: 15
+                    ),),
+                  )
+                ],
+              ),
+            )
           );
         },
         label: Container(

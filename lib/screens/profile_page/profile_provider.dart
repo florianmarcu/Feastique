@@ -36,8 +36,7 @@ class ProfilePageProvider with ChangeNotifier{
   }
   Future<void> updateData(BuildContext context, WrapperHomePageProvider wrapperHomePageProvider) async{
     _loading();
-    print("loading");
-    if(phoneNumber != null && displayName != ""){
+    if(phoneNumber != null && phoneNumber != ""){
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
         {
           "contact_phone_number": phoneNumber
