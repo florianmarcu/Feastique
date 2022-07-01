@@ -1,4 +1,3 @@
-import 'package:feastique/config/config.dart';
 import 'package:flutter/material.dart';
 
 class DealItemPopupPage extends StatelessWidget {

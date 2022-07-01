@@ -14,7 +14,7 @@ class PlaceMapPage extends StatelessWidget {
     var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
     var placeLocation = provider.place.location;
     var userLocation = wrapperHomePageProvider.currentLocation;
-    print(provider.distanceBetween(userLocation!, placeLocation));
+    // print(provider.distanceBetween(userLocation!, placeLocation));
     if(provider.distance == null && provider.time == null)
       provider.getTimeAndDistance(userLocation, placeLocation);
     if(userLocation != null && provider.polyline == null)
@@ -73,8 +73,8 @@ class PlaceMapPage extends StatelessWidget {
                     //           WidgetSpan(child: SizedBox(width: 10,)),
                     //           WidgetSpan(child: Image.asset(localAsset('google-maps'), width: 18, ))
                     //         ]
-                    //       ) 
-                          
+                    //       )
+
                     //     ),
                     // ),
                     SizedBox(height: 10,),
@@ -106,21 +106,21 @@ class PlaceMapPage extends StatelessWidget {
                           //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                           //       color: Theme.of(context).highlightColor,
                           //       padding: EdgeInsets.zero,
-                          //       child: Text("w"), 
+                          //       child: Text("w"),
                           //       onPressed: (){}
                           //     ),
                           //     MaterialButton(
                           //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                           //       color: Theme.of(context).highlightColor,
                           //       padding: EdgeInsets.zero,
-                          //       child: Text("w"), 
+                          //       child: Text("w"),
                           //       onPressed: (){}
                           //     ),
                           //     MaterialButton(
                           //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                           //       padding: EdgeInsets.zero,
                           //       color: Theme.of(context).highlightColor,
-                          //       child: Text("w"), 
+                          //       child: Text("w"),
                           //       onPressed: (){}
                           //     ),
                           //   ],
@@ -142,8 +142,8 @@ class PlaceMapPage extends StatelessWidget {
                               // WidgetSpan(child: SizedBox(width: 10,)),
                               // WidgetSpan(child: Image.asset(localAsset('google-maps'), width: 18, ))
                             ]
-                          ) 
-                          
+                          )
+
                         ),
                         onPressed: () => wrapperHomePageProvider.getLocation()
                       ),
@@ -165,7 +165,7 @@ class PlaceMapPage extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
             ],
           ),
         ),
@@ -225,7 +225,7 @@ class PlaceMapPage extends StatelessWidget {
               height: 5,
               width: MediaQuery.of(context).size.width,
               child: LinearProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor), backgroundColor: Colors.transparent,)
-            ), 
+            ),
             bottom: MediaQuery.of(context).padding.bottom,
           )
           : Container(),

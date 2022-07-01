@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feastique/models/models.dart';
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 export 'package:provider/provider.dart';
@@ -8,8 +9,9 @@ class ManagerOrdersPageProvider with ChangeNotifier{
   List<Order>? orders;
   BuildContext context;
   bool isLoading = false;
+  WrapperHomePageProvider wrapperHomePageProvider;
 
-  ManagerOrdersPageProvider(this.context){
+  ManagerOrdersPageProvider(this.context, this.wrapperHomePageProvider){
     getData();
   }
 

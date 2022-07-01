@@ -1,5 +1,4 @@
 import 'package:feastique/config/config.dart';
-import 'package:feastique/config/format.dart';
 import 'package:feastique/screens/order_page/order_provider.dart';
 import 'package:flutter/material.dart';
 

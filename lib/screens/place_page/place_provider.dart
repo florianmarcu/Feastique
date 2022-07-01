@@ -190,6 +190,7 @@ class PlacePageProvider with ChangeNotifier{
   }
 
   bool checkLocationEnabled(BuildContext context, LocationData? currentLocation){
+    print(currentLocation.toString() + "LOCATIE");
     if(currentLocation == null){
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(

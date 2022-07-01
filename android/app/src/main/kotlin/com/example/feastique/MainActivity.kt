@@ -1,4 +1,4 @@
-package com.example.feastique
+package com.feastique.feastique
 
 import io.flutter.embedding.android.FlutterActivity
 

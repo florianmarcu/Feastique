@@ -808,7 +808,7 @@ class _NewReservationPopupPageState extends State<NewReservationPopupPage> {
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>
                         MultiProvider(
                           providers: [
-                            ChangeNotifierProvider(create: (context) => ReservationPageProvider(reservation, place.image),),
+                            ChangeNotifierProvider(create: (context) => ReservationPageProvider(reservation, place.image,wrapperHomePageProvider),),
                             ChangeNotifierProvider.value(value: wrapperHomePageProvider)
                           ],
                           child: ReservationPage(),

@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
     var user = context.watch<WrapperHomePageProvider>().currentUser!;
     return ClipRRect(
       borderRadius: BorderRadius.only(topRight: Radius.circular(50), bottomRight: Radius.circular(50)),
@@ -40,7 +41,7 @@ class AppDrawer extends StatelessWidget {
                       context, 
                       MaterialPageRoute(
                         builder: (context) => ChangeNotifierProvider(
-                          create: (_) => ManagerHomePageProvider(context),
+                          create: (_) => ManagerHomePageProvider(context, wrapperHomePageProvider),
                           child: ManagerHomePage()
                         )
                       )
@@ -63,7 +64,7 @@ class AppDrawer extends StatelessWidget {
                       context, 
                       MaterialPageRoute(
                         builder: (context) => ChangeNotifierProvider(
-                          create: (_) => ManagerHomePageProvider(context),
+                          create: (_) => ManagerHomePageProvider(context, wrapperHomePageProvider),
                           child: ManagerPlaceDataPage()
                         )
                       )
@@ -86,7 +87,7 @@ class AppDrawer extends StatelessWidget {
                       context, 
                       MaterialPageRoute(
                         builder: (context) => ChangeNotifierProvider(
-                          create: (_) => ManagerHomePageProvider(context),
+                          create: (_) => ManagerHomePageProvider(context, wrapperHomePageProvider),
                           child: ManagerAnalyticsPage()
                         )
                       )

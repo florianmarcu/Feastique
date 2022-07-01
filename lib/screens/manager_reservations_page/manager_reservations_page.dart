@@ -2,6 +2,7 @@ import 'package:feastique/config/config.dart';
 import 'package:feastique/screens/manager_reservations_page/manager_reservations_provider.dart';
 import 'package:feastique/screens/reservation_page/reservation_page.dart';
 import 'package:feastique/screens/reservation_page/reservation_provider.dart';
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
 
 class ManagerReservationsPage extends StatefulWidget {
@@ -14,7 +15,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
   @override
   Widget build(BuildContext context) {
     var provider = context.watch<ManagerReservationsPageProvider>();
-    //var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
+    var wrapperHomePageProvider = context.watch<WrapperHomePageProvider>();
     var pendingReservations = provider.pendingReservations;
     var pastReservations = provider.pastReservations;
     var activeReservations = provider.activeReservations;
@@ -77,7 +78,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                         padding: EdgeInsets.zero,
                         onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>
                           ChangeNotifierProvider(
-                            create: (context) => ReservationPageProvider(reservation, image),
+                            create: (context) => ReservationPageProvider(reservation, image, wrapperHomePageProvider),
                             child: ReservationPage(true),
                           )
                         )),
@@ -205,7 +206,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                         padding: EdgeInsets.zero,
                         onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>
                           ChangeNotifierProvider(
-                            create: (context) => ReservationPageProvider(reservation, image),
+                            create: (context) => ReservationPageProvider(reservation, image, wrapperHomePageProvider),
                             child: ReservationPage(true),
                           )
                         )).whenComplete(() => provider.getData()),
@@ -390,7 +391,7 @@ class _ManagerReservationsPageState extends State<ManagerReservationsPage> {
                         padding: EdgeInsets.zero,
                         onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>
                           ChangeNotifierProvider(
-                            create: (context) => ReservationPageProvider(reservation, image),
+                            create: (context) => ReservationPageProvider(reservation, image, wrapperHomePageProvider),
                             child: ReservationPage(true),
                           )
                         )),

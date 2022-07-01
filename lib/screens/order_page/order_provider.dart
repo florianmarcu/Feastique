@@ -73,6 +73,7 @@ class OrderPageProvider with ChangeNotifier{
     var placeOrderRef = reservation.placeReservationRef!.collection("orders").doc(userOrderRef.id);
     var orderItems = List.from(items!);
     orderItems.removeWhere((item) => item['count'] == 0);
+    print(int.tryParse(orderItems[0]['item'].price.toString().substring(0, orderItems[0]['item'].price.toString().length - 3)));
     var orderData = {
       'date_created' : FieldValue.serverTimestamp(),
       'details': "",
@@ -84,7 +85,7 @@ class OrderPageProvider with ChangeNotifier{
           "content": item['item'].content,
           "ingredients": item['item'].ingredients,
           "alergens": item['item'].alergens,
-          "price" : int.tryParse(item['price'].toString().substring(0, item['price'].toString().length - 3))
+          "price" : int.tryParse(orderItems[0]['item'].price.toString().substring(0, orderItems[0]['item'].price.toString().length - 3))
         }
       }).toList(),
     };

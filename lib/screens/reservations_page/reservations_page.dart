@@ -70,7 +70,7 @@ class ReservationsPage extends StatelessWidget {
                         ChangeNotifierProvider.value(
                           value: wrapperHomePageProvider,
                           child: ChangeNotifierProvider(
-                            create: (context) => ReservationPageProvider(reservation, image),
+                            create: (context) => ReservationPageProvider(reservation, image, wrapperHomePageProvider),
                             child: ReservationPage(),
                           ),
                         )
@@ -230,7 +230,7 @@ class ReservationsPage extends StatelessWidget {
                       onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => 
                         MultiProvider(
                           providers: [
-                            ChangeNotifierProvider(create: (context) => ReservationPageProvider(reservation, image),),
+                            ChangeNotifierProvider(create: (context) => ReservationPageProvider(reservation, image, wrapperHomePageProvider),),
                             ChangeNotifierProvider.value(value: wrapperHomePageProvider)
                           ],
                           child: ReservationPage(),

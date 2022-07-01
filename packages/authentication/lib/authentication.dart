@@ -71,8 +71,8 @@ class Authentication{
   // Sign in with Google
   static Future signInWithFacebook() async{
     try{
-      final LoginResult facebookLoginResult = await FacebookAuth.instance.expressLogin(
-        //permissions: ['email'],
+      final LoginResult facebookLoginResult = await FacebookAuth.instance.login(
+        permissions: ['email', 'public_profile'],
       );
       final AuthCredential credential = FacebookAuthProvider.credential(
         facebookLoginResult.accessToken!.token

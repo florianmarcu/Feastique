@@ -5,12 +5,14 @@ import 'package:feastique/screens/manager_orders_page/manager_orders_page.dart';
 import 'package:feastique/screens/manager_orders_page/manager_orders_provider.dart';
 import 'package:feastique/screens/manager_reservations_page/manager_reservations_page.dart';
 import 'package:feastique/screens/manager_reservations_page/manager_reservations_provider.dart';
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class ManagerHomePageProvider with ChangeNotifier{
   int selectedScreenIndex = 0;
   PageController pageController = PageController(initialPage: 0);
+  WrapperHomePageProvider wrapperHomePageProvider;
   Place? place;
   bool isLoading = false;
   Image? image;
@@ -23,35 +25,48 @@ class ManagerHomePageProvider with ChangeNotifier{
   int seatedLastMonth = 0;
 
   
-  List<Widget> screens = <Widget>[
-    ChangeNotifierProvider<ManagerReservationsPageProvider>(
-      create: (context) => ManagerReservationsPageProvider(context),
-      builder: (context, _) {
-        return ManagerReservationsPage();
-      }
-    ),
-    ChangeNotifierProvider<ManagerOrdersPageProvider>(
-      create: (context) => ManagerOrdersPageProvider(context),
-      builder: (context, _) {
-        return ManagerOrdersPage();
-      }
-    ),
-  ];
+  List<Widget>? screens;
 
-  List<BottomNavigationBarItem> screenLabels = <BottomNavigationBarItem>[
-    BottomNavigationBarItem(
-      label: "Rezervări",
-      icon: Image.asset(localAsset("reservation"), width: 20,)
-    ),
-    BottomNavigationBarItem(
-      label: "Comenzi",
-      icon: Image.asset(localAsset("orders"), width: 20,)
-    ),
-  ];
+  List<BottomNavigationBarItem>? screenLabels;
 
-  ManagerHomePageProvider(BuildContext context){
+  ManagerHomePageProvider(BuildContext context, this.wrapperHomePageProvider){
+    initData(wrapperHomePageProvider);
     getPlace(context);
     getAnalytics(context);
+  }
+
+  void initData(WrapperHomePageProvider wrapperHomePageProvider){
+    screens = <Widget>[
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<ManagerReservationsPageProvider>(create: (context) => ManagerReservationsPageProvider(context, wrapperHomePageProvider),),
+          ChangeNotifierProvider.value(value: wrapperHomePageProvider)
+        ],
+        builder: (context, _) {
+          return ManagerReservationsPage();
+        }
+      ),
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<ManagerOrdersPageProvider>(create: (context) => ManagerOrdersPageProvider(context, wrapperHomePageProvider),),
+          ChangeNotifierProvider.value(value: wrapperHomePageProvider)
+        ],
+        builder: (context, _) {
+          return ManagerOrdersPage();
+        }
+      ),
+    ];
+    screenLabels = <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        label: "Rezervări",
+        icon: Image.asset(localAsset("reservation"), width: 20,)
+      ),
+      BottomNavigationBarItem(
+        label: "Comenzi",
+        icon: Image.asset(localAsset("orders"), width: 20,)
+      ),
+    ];
+    notifyListeners();
   }
 
   Future<void> getAnalytics(BuildContext context) async{

@@ -15,7 +15,7 @@ class ManagerHomePage extends StatelessWidget {
         automaticallyImplyLeading: false,
         //toolbarHeight: 70,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(bottomLeft: Radius.elliptical(210, 30), bottomRight: Radius.elliptical(210, 30))),
-        title: Center(child: Text(provider.screenLabels[provider.selectedScreenIndex].label!, style: Theme.of(context).textTheme.headline4,)),
+        title: Center(child: Text(provider.screenLabels![provider.selectedScreenIndex].label!, style: Theme.of(context).textTheme.headline4,)),
         // bottom: PreferredSize(
         //   preferredSize: Size(MediaQuery.of(context).size.width, 80),
         //   child: Row(children: [
@@ -26,7 +26,7 @@ class ManagerHomePage extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: provider.selectedScreenIndex,
-        items: provider.screenLabels,
+        items: provider.screenLabels!,
         onTap: (index) => 
         // provider.updateSelectedScreenIndex(index),
         provider.pageController.animateToPage(index, duration: Duration(milliseconds: 200), curve: Curves.easeIn)
@@ -40,7 +40,7 @@ class ManagerHomePage extends StatelessWidget {
       body: SizedBox.expand(
         child: PageView(
           physics: NeverScrollableScrollPhysics(),
-          children: provider.screens,
+          children: provider.screens!,
           controller: provider.pageController,
           onPageChanged: (index) => provider.updateSelectedScreenIndex(index),
         ),

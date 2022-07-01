@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:feastique/config/config.dart';
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +17,14 @@ class ReservationPageProvider with ChangeNotifier{
   Reservation reservation;
   Future<Image> image;
   bool isLoading = false;
+  WrapperHomePageProvider wrapperHomePageProvider;
   Polyline? polyline;
   String? distance;
   String? time;
   BitmapDescriptor? pin;
   Place? place;
 
-  ReservationPageProvider(this.reservation, this.image,){
+  ReservationPageProvider(this.reservation, this.image, this.wrapperHomePageProvider){
     getPlace();
     getPin();
   }
@@ -68,12 +70,15 @@ class ReservationPageProvider with ChangeNotifier{
   // Launches both Uber app and Place's Menu
   Future<void> launchUber(BuildContext context, LocationData? currentLocation, [bool universalLinks = false]) async {
 
+    print("data");
     if(!checkLocationEnabled(context, currentLocation))
       return;
 
     var data = (await FirebaseFirestore.instance.collection("places").doc(reservation.placeId).get());
+    print(data);
     var place = docToPlace(data);
 
+  print("url");
     String url = "https://m.uber.com/ul/?client_id=LNvSpVc4ZskDaV1rDZe8hGZy02dPfN84&action=setPickup&pickup[latitude]=" 
     + "${currentLocation!.latitude}"+
     "&pickup[longitude]=" 
@@ -93,6 +98,7 @@ class ReservationPageProvider with ChangeNotifier{
     "&product_id="
     +"a1111c8c-c720-46c3-8534-2fcdd730040d"
     ;
+    print(url);
     if (await canLaunchUrlString(url)) {
       await launchUrlString(url, mode: LaunchMode.externalNonBrowserApplication);
     } else {
@@ -110,6 +116,7 @@ class ReservationPageProvider with ChangeNotifier{
   }
 
   bool checkLocationEnabled(BuildContext context, LocationData? currentLocation){
+    print(currentLocation.toString() + "LOCATIE");
     if(currentLocation == null){
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -125,7 +132,7 @@ class ReservationPageProvider with ChangeNotifier{
                   padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 0, vertical: 0)),
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent)
                 ),
-                onPressed: () => {},
+                onPressed: () => wrapperHomePageProvider.getLocation(),
                 child: Text("Permite", style: Theme.of(context).textTheme.subtitle1!.copyWith(
                   decoration: TextDecoration.underline,
                   fontSize: 15

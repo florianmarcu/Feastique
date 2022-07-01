@@ -4,8 +4,6 @@ import 'package:feastique/screens/reservation_page/components/place_directions_p
 import 'package:feastique/screens/reservation_page/reservation_provider.dart';
 import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:flutter/material.dart';
-
-import 'components/past_orders_page.dart';
 import 'components/place_offers.dart';
 
 class ReservationPage extends StatelessWidget {
@@ -215,6 +213,19 @@ class ReservationPage extends StatelessWidget {
                             ]
                           )
                         ),
+                        SizedBox(height: 20),
+                        Text.rich( /// The Name
+                          TextSpan(
+                            children: [
+                              WidgetSpan(child: Icon(Icons.person, size: 20)),
+                              WidgetSpan(child: SizedBox(width: 10)),
+                              TextSpan(
+                                text: reservation.guestName.length < 20 ?  reservation.guestName : reservation.guestName.substring(0,20),
+                                style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
+                              ),
+                            ]
+                          )
+                        ),
                       ],
                     ),                    
                     Column(///PEOPLE_NNUMBER
@@ -242,6 +253,19 @@ class ReservationPage extends StatelessWidget {
                                 text: reservation.discount != null && reservation.discount != 0
                                   ? reservation.discount.toString() 
                                   : "fără reducere",
+                                style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
+                              ),
+                            ]
+                          )
+                        ),
+                        SizedBox(height: 20,),
+                        Text.rich( /// The phone number 
+                          TextSpan(
+                            children: [
+                              WidgetSpan(child: Image.asset(localAsset('phone'), width: 16)),
+                              WidgetSpan(child: SizedBox(width: 10)),
+                              TextSpan(
+                                text: reservation.contactPhoneNumber,
                                 style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
                               ),
                             ]

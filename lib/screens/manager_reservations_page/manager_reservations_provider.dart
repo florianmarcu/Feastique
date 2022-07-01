@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feastique/models/models.dart';
+import 'package:feastique/screens/wrapper_home_page/wrapper_home_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -11,8 +12,9 @@ class ManagerReservationsPageProvider with ChangeNotifier{
   List<Reservation>? pendingReservations;
   List<Reservation>? activeReservations;
   BuildContext context;
+  WrapperHomePageProvider wrapperHomePageProvider;
 
-  ManagerReservationsPageProvider(this.context){
+  ManagerReservationsPageProvider(this.context, this.wrapperHomePageProvider){
     getData();
   }
 

@@ -3,8 +3,9 @@ class MenuItem{
   String content;
   List<dynamic> ingredients;
   List<dynamic> alergens;
+  String price;
 
-  MenuItem({required this.title, required this.content, required this.ingredients, required this.alergens});
+  MenuItem({required this.title, required this.content, required this.ingredients, required this.alergens, required this.price});
 }
 
 MenuItem menuItemDataToMenuItem(Map<String, dynamic> data){
@@ -13,5 +14,6 @@ MenuItem menuItemDataToMenuItem(Map<String, dynamic> data){
     content: data["content"],
     ingredients: data["ingredients"],
     alergens: data["alergens"],
+    price: data['price']
   );
 }
