@@ -34,12 +34,14 @@ Future<UserProfile?> userToUserProfile(User? user) async{
     if(!user.isAnonymous)
       await FirebaseFirestore.instance.collection('users').doc(userProfile.uid).get()
       .then((doc){
-        userProfile.isManager = doc.data()!.containsKey('manager') && doc.data()!['manager'] == true;
-        if(doc.data()!.containsKey('contact_phone_number')){
-          userProfile.phoneNumber = doc.data()!['contact_phone_number'];
-        }
-        if(doc.data()!.containsKey('display_name')){
-          userProfile.displayName = doc.data()!['display_name'];
+        if(doc.data() != null){
+          userProfile.isManager = doc.data()!.containsKey('manager') && doc.data()!['manager'] == true;
+          if(doc.data()!.containsKey('contact_phone_number')){
+            userProfile.phoneNumber = doc.data()!['contact_phone_number'];
+          }
+          if(doc.data()!.containsKey('display_name')){
+            userProfile.displayName = doc.data()!['display_name'];
+          }
         }
       });
     

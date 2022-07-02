@@ -102,299 +102,302 @@ class ReservationPage extends StatelessWidget {
           ),
         ),
       ),
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          SliverList(
-            delegate: SliverChildListDelegate([
-              Stack( /// The place's image
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(bottomLeft: Radius.elliptical(150,30), bottomRight: Radius.elliptical(200,50)),
-                    child: Container(
-                      height: 220 + MediaQuery.of(context).padding.top,
-                      color: Theme.of(context).primaryColor,
+      body: ScrollConfiguration(
+        behavior: ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            SliverList(
+              delegate: SliverChildListDelegate([
+                Stack( /// The place's image
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.elliptical(150,30), bottomRight: Radius.elliptical(200,50)),
+                      child: Container(
+                        height: 220 + MediaQuery.of(context).padding.top,
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
-                  ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(bottomLeft: Radius.elliptical(150,30), bottomRight: Radius.elliptical(200,50)),
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 200 + MediaQuery.of(context).padding.top,
-                          width: MediaQuery.of(context).size.width,
-                          child: FittedBox(
-                            fit: BoxFit.fill,
-                            child: FutureBuilder<Image>(
-                              future: provider.image,
-                              builder: (context, image){  
-                                if(!image.hasData)
-                                  return Container(
-                                    width: 400,
-                                    height: 200,
-                                    color: Colors.transparent,
-                                  );
-                                else 
-                                  return image.data!;
-                              }
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.elliptical(150,30), bottomRight: Radius.elliptical(200,50)),
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: 200 + MediaQuery.of(context).padding.top,
+                            width: MediaQuery.of(context).size.width,
+                            child: FittedBox(
+                              fit: BoxFit.fill,
+                              child: FutureBuilder<Image>(
+                                future: provider.image,
+                                builder: (context, image){  
+                                  if(!image.hasData)
+                                    return Container(
+                                      width: 400,
+                                      height: 200,
+                                      color: Colors.transparent,
+                                    );
+                                  else 
+                                    return image.data!;
+                                }
+                              ),
                             ),
                           ),
-                        ),
-                        reservation.canceled
-                        ? Container(
-                          height:  200 + MediaQuery.of(context).padding.top,
-                          width: MediaQuery.of(context).size.width,
-                          color: Colors.black54,
-                          child: Center(
-                            child: Text("Anulată", style: Theme.of(context).textTheme.headline4),
-                          ),
-                        )
-                        : Container(),
-                        reservation.active == true
+                          reservation.canceled
                           ? Container(
                             height:  200 + MediaQuery.of(context).padding.top,
                             width: MediaQuery.of(context).size.width,
                             color: Colors.black54,
                             child: Center(
-                              child: Text("Rezervare activă", style: Theme.of(context).textTheme.headline4),
+                              child: Text("Anulată", style: Theme.of(context).textTheme.headline4),
                             ),
                           )
-                          : Container()
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Text(
-                  "Rezervare la",
-                  style: Theme.of(context).textTheme.headline6
-                ),
-              ),
-              Padding( /// The place's name
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Text(
-                  "${reservation.placeName}",
-                  style: Theme.of(context).textTheme.headline3
-                ),
-              ),
-              SizedBox(height: 15,),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(/// TIME, DATE 
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text.rich( /// The Date
-                          TextSpan(
-                            children: [
-                              WidgetSpan(child: Image.asset(localAsset('calendar'), width: 17)),
-                              WidgetSpan(child: SizedBox(width: 10)),
-                              TextSpan(
-                                text: formatDateToDay(reservation.dateStart),
-                                style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
+                          : Container(),
+                          reservation.active == true
+                            ? Container(
+                              height:  200 + MediaQuery.of(context).padding.top,
+                              width: MediaQuery.of(context).size.width,
+                              color: Colors.black54,
+                              child: Center(
+                                child: Text("Rezervare activă", style: Theme.of(context).textTheme.headline4),
                               ),
-                            ]
-                          )
-                        ),
-                        SizedBox(height: 20),
-                        Text.rich( /// The Time 
-                          TextSpan(
-                            children: [
-                              WidgetSpan(child: Image.asset(localAsset('time'), width: 17)),
-                              WidgetSpan(child: SizedBox(width: 10)),
-                              TextSpan(
-                                text: formatDateToHourAndMinutes(reservation.dateStart),
-                                style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
-                              ),
-                            ]
-                          )
-                        ),
-                        SizedBox(height: 20),
-                        Text.rich( /// The Name
-                          TextSpan(
-                            children: [
-                              WidgetSpan(child: Icon(Icons.person, size: 20)),
-                              WidgetSpan(child: SizedBox(width: 10)),
-                              TextSpan(
-                                text: reservation.guestName.length < 20 ?  reservation.guestName : reservation.guestName.substring(0,20),
-                                style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
-                              ),
-                            ]
-                          )
-                        ),
-                      ],
-                    ),                    
-                    Column(///PEOPLE_NNUMBER
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text.rich( /// The People No
-                          TextSpan(
-                            children: [
-                              WidgetSpan(child: Image.asset(localAsset('user'), width: 16)),
-                              WidgetSpan(child: SizedBox(width: 10)),
-                              TextSpan(
-                                text: reservation.peopleNo.toString(),
-                                style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
-                              ),
-                            ]
-                          )
-                        ),
-                        SizedBox(height: 20,),
-                        Text.rich( /// The Discount 
-                          TextSpan(
-                            children: [
-                              WidgetSpan(child: Image.asset(localAsset('time'), width: 16)),
-                              WidgetSpan(child: SizedBox(width: 10)),
-                              TextSpan(
-                                text: reservation.discount != null && reservation.discount != 0
-                                  ? reservation.discount.toString() 
-                                  : "fără reducere",
-                                style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
-                              ),
-                            ]
-                          )
-                        ),
-                        SizedBox(height: 20,),
-                        Text.rich( /// The phone number 
-                          TextSpan(
-                            children: [
-                              WidgetSpan(child: Image.asset(localAsset('phone'), width: 16)),
-                              WidgetSpan(child: SizedBox(width: 10)),
-                              TextSpan(
-                                text: reservation.contactPhoneNumber,
-                                style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
-                              ),
-                            ]
-                          )
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text.rich( /// The Date
-                      TextSpan(
-                        children: [
-                          WidgetSpan(child: Image.asset(localAsset('important'), width: 16)),
-                          WidgetSpan(child: SizedBox(width: 10)),
-                          TextSpan(
-                            text: "Informații importante",
-                            style: Theme.of(context).textTheme.headline6
-                          ),
-                        ]
-                      )
-                    ),
-                    SizedBox(
-                      height: 10
-                    ),
-                    Text("Discount-urile se aplică doar la meniul de mâncare, fără băuturi")
-                  ],
-                ),
-              ),
-              !manager
-              ? Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton.icon(
-                    style: Theme.of(context).textButtonTheme.style!.copyWith(
-                      //backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                      padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 20))
-                    ),
-                    onPressed: () => Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => MultiProvider(
-                        providers: [
-                          ChangeNotifierProvider.value(value: provider,),
-                          !manager
-                          ? ChangeNotifierProvider<WrapperHomePageProvider>.value(value: wrapperHomePageProvider,)
-                          : ChangeNotifierProvider.value(value: null)
+                            )
+                            : Container()
                         ],
-                        child: PlaceDirectionsPage()
-                      ))
-                    ),
-                    icon: Image.asset(localAsset("map"), width: 20,),
-                    label: Text("Cum ajung?", style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 13),),
-                  ),
-                  SizedBox(width: 30,),
-                  SizedBox(
-                    width: 80,
-                    child: TextButton(
-                      style: Theme.of(context).textButtonTheme.style!.copyWith(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)
                       ),
-                      onPressed: () => provider.launchUber(context, wrapperHomePageProvider.currentLocation),
-                      //icon: Image.asset(asset("map"), width: 20,),
-                      child: Text("Uber", style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 13),),
                     ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text(
+                    "Rezervare la",
+                    style: Theme.of(context).textTheme.headline6
                   ),
-                ],
-              )
-              : Container(),
-              SizedBox(height: 30,),
-              provider.place != null
-              ? PlaceOffers(provider.place!)
-              : Container(),
-              Container(height: MediaQuery.of(context).size.height*0.1,)
-              // reservation.claimed == true
-              // ? Center(
-              //   child: TextButton(
-              //     style: Theme.of(context).textButtonTheme.style!.copyWith(
-              //       //backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-              //       padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 20))
-              //     ),
-              //     onPressed: () => Navigator.push(context, MaterialPageRoute(
-              //       builder: (context) => MultiProvider(
-              //         providers: [
-              //           ChangeNotifierProvider.value(value: provider,),
-              //           // !manager
-              //           // ? ChangeNotifierProvider<WrapperHomePageProvider>.value(value: wrapperHomePageProvider,)
-              //           // : ChangeNotifierProvider.value(value: null)
-              //         ],
-              //         child: PastOrdersPage()
-              //       ))
-              //     ),
-              //     child: Text("Comenzi", style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 13),),
-              //   ),
-              // )
-              // : Container(),
-            
-              // Padding(
-              //   padding: const EdgeInsets.all(15.0),
-              //   child: Text(
-              //     reservation.accepted == null
-              //     ? "Rezervare în așteptare"
-              //     : (reservation.accepted == true 
-              //       ? "Rezervare acceptată"
-              //       : "Rezervare refuzată"
-              //     ),
-              //     style: Theme.of(context).textTheme.headline3
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(15.0),
-              //   child: Text(
-              //     reservation.accepted == null
-              //     ? "Rezervarea va fi în scurt timp confirmată"
-              //     : (reservation.accepted == true 
-              //       ? "Rezervare acceptată"
-              //       : "Rezervare refuzată"
-              //     ),
-              //     style: Theme.of(context).textTheme.headline6
-              //   ),
-              // ),
-            ]),
-          ),
-        ],
+                ),
+                Padding( /// The place's name
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    "${reservation.placeName}",
+                    style: Theme.of(context).textTheme.headline3
+                  ),
+                ),
+                SizedBox(height: 15,),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(/// TIME, DATE 
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text.rich( /// The Date
+                            TextSpan(
+                              children: [
+                                WidgetSpan(child: Image.asset(localAsset('calendar'), width: 17)),
+                                WidgetSpan(child: SizedBox(width: 10)),
+                                TextSpan(
+                                  text: formatDateToDay(reservation.dateStart),
+                                  style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
+                                ),
+                              ]
+                            )
+                          ),
+                          SizedBox(height: 20),
+                          Text.rich( /// The Time 
+                            TextSpan(
+                              children: [
+                                WidgetSpan(child: Image.asset(localAsset('time'), width: 17)),
+                                WidgetSpan(child: SizedBox(width: 10)),
+                                TextSpan(
+                                  text: formatDateToHourAndMinutes(reservation.dateStart),
+                                  style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
+                                ),
+                              ]
+                            )
+                          ),
+                          SizedBox(height: 20),
+                          Text.rich( /// The Name
+                            TextSpan(
+                              children: [
+                                WidgetSpan(child: Icon(Icons.person, size: 20)),
+                                WidgetSpan(child: SizedBox(width: 10)),
+                                TextSpan(
+                                  text: reservation.guestName.length < 20 ?  reservation.guestName : reservation.guestName.substring(0,20),
+                                  style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
+                                ),
+                              ]
+                            )
+                          ),
+                        ],
+                      ),                    
+                      Column(///PEOPLE_NNUMBER
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text.rich( /// The People No
+                            TextSpan(
+                              children: [
+                                WidgetSpan(child: Image.asset(localAsset('user'), width: 16)),
+                                WidgetSpan(child: SizedBox(width: 10)),
+                                TextSpan(
+                                  text: reservation.peopleNo.toString(),
+                                  style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
+                                ),
+                              ]
+                            )
+                          ),
+                          SizedBox(height: 20,),
+                          Text.rich( /// The Discount 
+                            TextSpan(
+                              children: [
+                                WidgetSpan(child: Image.asset(localAsset('time'), width: 16)),
+                                WidgetSpan(child: SizedBox(width: 10)),
+                                TextSpan(
+                                  text: reservation.discount != null && reservation.discount != 0
+                                    ? reservation.discount.toString() 
+                                    : "fără reducere",
+                                  style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
+                                ),
+                              ]
+                            )
+                          ),
+                          SizedBox(height: 20,),
+                          Text.rich( /// The phone number 
+                            TextSpan(
+                              children: [
+                                WidgetSpan(child: Image.asset(localAsset('phone'), width: 16)),
+                                WidgetSpan(child: SizedBox(width: 10)),
+                                TextSpan(
+                                  text: reservation.contactPhoneNumber,
+                                  style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 15)
+                                ),
+                              ]
+                            )
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text.rich( /// The Date
+                        TextSpan(
+                          children: [
+                            WidgetSpan(child: Image.asset(localAsset('important'), width: 16)),
+                            WidgetSpan(child: SizedBox(width: 10)),
+                            TextSpan(
+                              text: "Informații importante",
+                              style: Theme.of(context).textTheme.headline6
+                            ),
+                          ]
+                        )
+                      ),
+                      SizedBox(
+                        height: 10
+                      ),
+                      Text("Discount-urile se aplică doar la meniul de mâncare, fără băuturi")
+                    ],
+                  ),
+                ),
+                !manager
+                ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton.icon(
+                      style: Theme.of(context).textButtonTheme.style!.copyWith(
+                        //backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 20))
+                      ),
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => MultiProvider(
+                          providers: [
+                            ChangeNotifierProvider.value(value: provider,),
+                            !manager
+                            ? ChangeNotifierProvider<WrapperHomePageProvider>.value(value: wrapperHomePageProvider,)
+                            : ChangeNotifierProvider.value(value: null)
+                          ],
+                          child: PlaceDirectionsPage()
+                        ))
+                      ),
+                      icon: Image.asset(localAsset("map"), width: 20,),
+                      label: Text("Cum ajung?", style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 13),),
+                    ),
+                    SizedBox(width: 30,),
+                    SizedBox(
+                      width: 80,
+                      child: TextButton(
+                        style: Theme.of(context).textButtonTheme.style!.copyWith(
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)
+                        ),
+                        onPressed: () => provider.launchUber(context, wrapperHomePageProvider.currentLocation),
+                        //icon: Image.asset(asset("map"), width: 20,),
+                        child: Text("Uber", style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 13),),
+                      ),
+                    ),
+                  ],
+                )
+                : Container(),
+                SizedBox(height: 30,),
+                provider.place != null
+                ? PlaceOffers(provider.place!)
+                : Container(),
+                Container(height: MediaQuery.of(context).size.height*0.1,)
+                // reservation.claimed == true
+                // ? Center(
+                //   child: TextButton(
+                //     style: Theme.of(context).textButtonTheme.style!.copyWith(
+                //       //backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                //       padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 20))
+                //     ),
+                //     onPressed: () => Navigator.push(context, MaterialPageRoute(
+                //       builder: (context) => MultiProvider(
+                //         providers: [
+                //           ChangeNotifierProvider.value(value: provider,),
+                //           // !manager
+                //           // ? ChangeNotifierProvider<WrapperHomePageProvider>.value(value: wrapperHomePageProvider,)
+                //           // : ChangeNotifierProvider.value(value: null)
+                //         ],
+                //         child: PastOrdersPage()
+                //       ))
+                //     ),
+                //     child: Text("Comenzi", style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 13),),
+                //   ),
+                // )
+                // : Container(),
+              
+                // Padding(
+                //   padding: const EdgeInsets.all(15.0),
+                //   child: Text(
+                //     reservation.accepted == null
+                //     ? "Rezervare în așteptare"
+                //     : (reservation.accepted == true 
+                //       ? "Rezervare acceptată"
+                //       : "Rezervare refuzată"
+                //     ),
+                //     style: Theme.of(context).textTheme.headline3
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(15.0),
+                //   child: Text(
+                //     reservation.accepted == null
+                //     ? "Rezervarea va fi în scurt timp confirmată"
+                //     : (reservation.accepted == true 
+                //       ? "Rezervare acceptată"
+                //       : "Rezervare refuzată"
+                //     ),
+                //     style: Theme.of(context).textTheme.headline6
+                //   ),
+                // ),
+              ]),
+            ),
+          ],
+        ),
       )
     );
   }

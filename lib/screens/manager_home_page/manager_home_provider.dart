@@ -83,7 +83,7 @@ class ManagerHomePageProvider with ChangeNotifier{
           seatedLastMonth += int.parse(query.docs[i].data()['number_of_guests'].toString());
         }
       seatedPeopleNoAllTime += int.parse(query.docs[i].data()['number_of_guests'].toString());
-      var query1 = await query.docs[i].reference.collection("orders").get();
+      var query1 = await query.docs[i].reference.collection("orders").where("accepted", isEqualTo: true).get();
       for(int j = 0; j < query1.docs.length; j++){
         print(query1.docs[j].data());
         double sum = 0;
