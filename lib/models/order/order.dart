@@ -1,6 +1,6 @@
 import 'package:feastique/models/models.dart';
 
-class Order{
+class TableOrder{
   String id;
   Reservation reservation;
   List items;
@@ -9,11 +9,11 @@ class Order{
   bool? accepted;
   bool canceled;
 
-  Order({required this.id, required this.reservation, required this.items, required this.dateCreated, required this.details, required this.accepted, required this.canceled});
+  TableOrder({required this.id, required this.reservation, required this.items, required this.dateCreated, required this.details, required this.accepted, required this.canceled});
 }
 
-  Order orderDataToOrder(Reservation reservation, String id,  Map<String, dynamic> data){
-    return Order(
+  TableOrder orderDataToOrder(Reservation reservation, String id,  Map<String, dynamic> data){
+    return TableOrder(
       id: id, 
       reservation: reservation,
       items: data['items'],

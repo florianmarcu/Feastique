@@ -9,7 +9,7 @@ export 'package:provider/provider.dart';
 class OrderPageProvider with ChangeNotifier{
   
   Reservation reservation;
-  List<Order>? pastOrders;
+  List<TableOrder>? pastOrders;
   List<Map<String,dynamic>>? items;
   Image? image;
   bool isLoading = false;
@@ -123,7 +123,7 @@ class OrderPageProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void> cancelOrder(Order order) async{
+  Future<void> cancelOrder(TableOrder order) async{
     _loading();
 
     await order.reservation.placeReservationRef!.collection("orders").doc(order.id)

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 export 'package:provider/provider.dart';
 
 class ManagerOrdersPageProvider with ChangeNotifier{
-  List<Order>? orders;
+  List<TableOrder>? orders;
   BuildContext context;
   bool isLoading = false;
   WrapperHomePageProvider wrapperHomePageProvider;
@@ -45,7 +45,7 @@ class ManagerOrdersPageProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void> acceptOrder(Order order) async{
+  Future<void> acceptOrder(TableOrder order) async{
     _loading();
     
     await order.reservation.placeReservationRef!.collection("orders").doc(order.id)
@@ -68,7 +68,7 @@ class ManagerOrdersPageProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void> refuseOrder(Order order) async{
+  Future<void> refuseOrder(TableOrder order) async{
     _loading();
 
     await order.reservation.placeReservationRef!.collection("orders").doc(order.id)

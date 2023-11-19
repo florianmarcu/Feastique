@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class OrderItemPage extends StatelessWidget {
 
-  final Order order;
+  final TableOrder order;
 
   OrderItemPage(this.order);
 
